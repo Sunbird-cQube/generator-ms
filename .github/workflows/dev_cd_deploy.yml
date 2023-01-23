@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: adding db creds
-      run: sed -i 's|"postgres_host"|"${{secrets.DB_HOST}}"|g;s|"db_port"|"${{secrets.DB_PORT}}"|g;s|"database"|"${{secrets.DATABASE}}"|g;s|"cqube_user"|"${{secrets.DB_USER}}"|g;s|"tibil@123"|"${{secrets.DB_PASSWORD}}"|g' config.ini
+      run: sed -i 's|"postgres_host"|"${{secrets.DB_HOST}}"|g;s|"db_port"|"${{secrets.DB_PORT}}"|g;s|"database"|"${{secrets.DATABASE}}"|g;s|"qube_user"|"${{secrets.DB_USER}}"|g;s|"tibil@123"|"${{secrets.DB_PASSWORD}}"|g' config.ini
       shell: bash  
     - name: Docker Login
       uses: docker/login-action@v2
