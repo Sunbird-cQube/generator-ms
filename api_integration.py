@@ -190,10 +190,9 @@ class APIsIntegrator:
             print({"message": re['message'], "Scheduler": payload})
             time.sleep(0.5)
     def static_processor_group_creation(self):
-        url = f'{self.generator_host}:{self.generator_port}/static_processor_group_creation'
+        url = f'{self.generator_host}:{self.generator_port}/api/static_processor_group_creation'
         response = requests.request("POST", url, headers=self.headers)
-        re = response.json()
-        print({"message": re['message']})
+        print(response)
 
 # Creating the object of the class
 obj = APIsIntegrator()
