@@ -1,0 +1,7 @@
+transformer_template,dimension_name,scheduler
+Dataset_Dimension,dimension_master,0 0/1 * 1/1 * ? *
+Dataset_Dimension,dimension_school,0 0/1 * 1/1 * ? *
+Dataset_Dimension,dimension_cluster,0 0/1 * 1/1 * ? *
+Dataset_Dimension,dimension_block,0 0/1 * 1/1 * ? *
+Dataset_Dimension,dimension_district,0 0/1 * 1/1 * ? *
+Dataset_Dimension,dimension_state,0 0/1 * 1/1 * ? *
