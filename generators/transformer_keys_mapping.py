@@ -170,7 +170,7 @@ def collect_dataset_keys(request, Response):
                                 'InputCols': ','.join(DatasetArray),'ConflictCols': ','.join(Dataset['group_by']),
                                 'IncrementFormat': ','.join(IncrementFormat),'ReplaceFormat': ','.join(ReplaceFormat),
                                 'UpdateCols': ','.join(UpdateCols * 2),'UpdateCol': ','.join(UpdateCols),
-                                "KeyFile": EventName + '.csv','DatasetName':DatasetName})
+                                "KeyFile": EventName + '*.csv','DatasetName':DatasetName})
 
                             print(Template, '::::::::::::Template::::::::::::')
 
