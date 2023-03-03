@@ -1,12 +1,10 @@
 import pandas as pd
 from db_connection import *
-from file_tracker_status import *
 from datetime import date
 
 con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):
-    file_check('{KeyFile}','event')
     df_event= pd.read_csv(os.path.dirname(root_path)+"processing_data/{KeyFile}")
     df_dataset = pd.read_sql('select * from {Table};', con=con)
     {DateFilter}
@@ -35,7 +33,6 @@ def aggTransformer(valueCols={ValueCols}):
             print(query)
             cur.execute(query)
             con.commit()
-        status_track('{KeyFile}', 'event', 'Completed_{DatasetName}')
 
     except Exception as error:
         print(error)

@@ -1,10 +1,8 @@
 import pandas as pd
 from db_connection import *
-from file_tracker_status import *
 con,cur=db_connection()
 
 def filterTransformer(valueCols={ValueCols}):
-    file_check('{KeyFile}','event')
     df_event = pd.read_csv(os.path.dirname(root_path)+"processing_data/{KeyFile}")
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}',con=con).drop_duplicates()  ### reading DimensionDataset from Database
     df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
@@ -27,7 +25,6 @@ def filterTransformer(valueCols={ValueCols}):
             print(query)
             cur.execute(query)
             con.commit()
-        status_track('{KeyFile}', 'event', 'Completed_{DatasetName}')
 
     except Exception as error:
         print(error)
