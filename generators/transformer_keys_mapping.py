@@ -21,7 +21,7 @@ CeatedTransformersList = []
 def KeysMapping(InputKeys, Template, Transformer, Response):
     if os.path.exists(root_path + '/transformers/python_files/' + Transformer):
         os.remove(root_path + '/transformers/python_files/' + Transformer)
-    with open(root_path + '/templates/' + Template, 'r') as fs:
+    with open(root_path + '/templates/transformer_templates/' + Template, 'r') as fs:
         valueOfTemplate = fs.readlines()
     if len(InputKeys) != 0:
         for valueOfTemplate in valueOfTemplate:
@@ -143,11 +143,15 @@ def collect_dataset_keys(request, Response):
                                 DatasetCasting.append('df_agg.update(df_agg[' + json.dumps(string_col_list) + '].applymap("\'{}\'".format))')
                             DateFilter = []
                             YearFilter = []
+                            DateList=[]
+                            YearList=[]
                             for i in DatasetArray:
                                 if 'date' in i.casefold():
-                                    DateFilter.append('df_dataset = df_dataset.loc[df_dataset[' + json.dumps(i) + '] == str(date.today())]')
+                                    DateList.append('date_list = df_event['+json.dumps(i)+'].drop_duplicates().values.tolist()')
+                                    DateFilter.append('df_dataset = df_dataset.loc[df_dataset[' + json.dumps(i) + '].isin(date_list)]')
                                 elif 'year' in i.casefold():
-                                    YearFilter.append('df_dataset = df_dataset.loc[df_dataset[' + json.dumps(i) + '] == str((date.today()).year)]')
+                                    YearList.append('date_list = df_event['+json.dumps(i)+'].drop_duplicates().values.tolist()')
+                                    YearFilter.append('df_dataset = df_dataset.loc[df_dataset[' + json.dumps(i) + '].isin(date_list)]')
                             UpdateCols = []
                             ReplaceFormat = []
                             IncrementFormat = []
@@ -163,14 +167,16 @@ def collect_dataset_keys(request, Response):
                                     PercentageIncrement.append('main_table.' + i + '::numeric+{}::numeric')
                             agg_col =Dataset['aggregate']['properties']['columns']['items']['properties']['column']
                             AggCols = (dict(zip(agg_col, (fun * len(agg_col)))))
-                            InputKeys.update({'Values': '{}','DatasetCasting':','.join(DatasetCasting),'ValueCols': DatasetArray,'DateFilter':','.join(DateFilter),'YearFilter': ','.join(YearFilter),
+                            print(DateList,':::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
+                            InputKeys.update({'Values': '{}','DatasetCasting':','.join(DatasetCasting),'ValueCols': DatasetArray,'DateFilter':','.join(DateFilter),
+                                'YearFilter': ','.join(YearFilter),'DateList':','.join(DateList),'YearList':','.join(YearList),
                                 'GroupBy': Dataset['group_by'],'AggCols': AggCols,'DimensionTable':Dimensions['table']['pattern'],
                                 'DimensionCols': ','.join(Dimensions['column']),'DimColCast':json.dumps(Dimensions['column']),'MergeOnCol': Dimensions['merge_on_col']['pattern'],
                                  'TargetTable': Dataset['aggregate']['properties']['target_table']['pattern'],
                                 'InputCols': ','.join(DatasetArray),'ConflictCols': ','.join(Dataset['group_by']),
                                 'IncrementFormat': ','.join(IncrementFormat),'ReplaceFormat': ','.join(ReplaceFormat),
                                 'UpdateCols': ','.join(UpdateCols * 2),'UpdateCol': ','.join(UpdateCols),
-                                "KeyFile": EventName + '.csv','DatasetName':DatasetName})
+                                "KeyFile": EventName + '*.csv','DatasetName':DatasetName})
 
                             print(Template, '::::::::::::Template::::::::::::')
 

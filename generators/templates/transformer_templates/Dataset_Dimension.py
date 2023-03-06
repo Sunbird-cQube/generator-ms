@@ -1,13 +1,13 @@
 import pandas as pd
 from db_connection import *
-from file_tracker_status import *
+import glob
+file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 
 con,cur=db_connection()
 
 
 def Datainsert(valueCols={ValueCols}):
-    file_check('{KeyFile}','dimension')
-    df_data=pd.read_csv(os.path.dirname(root_path)+"processing_data/{KeyFile}")
+    df_data = pd.concat(pd.read_csv(file) for file in path)
     df_snap = df_data[valueCols]
     print(df_snap)
     try:
@@ -20,7 +20,6 @@ def Datainsert(valueCols={ValueCols}):
             print(query)
             cur.execute(query)
             con.commit()
-         status_track('{KeyFile}', 'dimension', 'Completed_{DimensionName}')
 
     except Exception as error:
         print(error)

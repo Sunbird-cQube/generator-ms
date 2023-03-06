@@ -1,6 +1,8 @@
 import configparser
 import os
 import psycopg2 as pg
+path=os.path.dirname(os.path.abspath(__file__))
+root_path=os.path.dirname(os.path.dirname(os.path.dirname(path)))
 
 configuartion_path = os.path.dirname(os.path.abspath(__file__)) + "/config.ini"
 config = configparser.ConfigParser()
@@ -11,7 +13,6 @@ host = config['CREDs']['db_host']
 user = config['CREDs']['db_user']
 password = config['CREDs']['db_password']
 database = config['CREDs']['database']
-
 
 def db_connection():
     con = pg.connect(database=database, user=user, password=password, host=host, port=port)
