@@ -3,10 +3,7 @@ import os
 import psycopg2 as pg
 path=os.path.dirname(os.path.abspath(__file__))
 root_path=os.path.dirname(os.path.dirname(os.path.dirname(path)))
-
-path=os.path.dirname(os.path.abspath(__file__))
-root_path=os.path.dirname(os.path.dirname(os.path.dirname(path)))
-
+ 
 configuartion_path = os.path.dirname(os.path.abspath(__file__)) + "/config.ini"
 config = configparser.ConfigParser()
 config.read(configuartion_path);

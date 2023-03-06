@@ -72,10 +72,10 @@ def collect_dimension_keys(request, Response):
                             InputKeys.update({'ValueCols':DimensionArray, "KeyFile": Dimension + '_*.csv',
                                  'TargetTable':TargetTable,'InputCols': ','.join(DimensionArray),'Values': '{}',"DimensionName":DimensionName})
                         else:
-                            return Response(json.dumps({"Message": "Invalid transformer type", "TransformerType": TranformerType,"Dataset": DimensionName}))
+                            return Response(json.dumps({"Message": "Invalid transformer type", "TransformerType": TranformerType,"DimensionName": DimensionName}))
                             print(Transformer,':transformer:::::::::::')
                         KeysMapping(InputKeys, Template, Transformer, Response)
-            else:
+            else:           
                 return Response(json.dumps({"Message": "No dimension found " + Dimension}))
     except Exception as error:
         print(error)
