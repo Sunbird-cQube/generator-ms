@@ -7,6 +7,7 @@ con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):
     df_event = pd.concat(pd.read_csv(file) for file in file_list)
+    df_event=df_event.apply(lambda x: x.str.replace("'","") if x.dtype == 'object' else x)
     {DateList}
     {YearList}
     df_dataset = pd.read_sql('select * from {Table};', con=con)

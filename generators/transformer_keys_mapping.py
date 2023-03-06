@@ -164,7 +164,6 @@ def collect_dataset_keys(request, Response):
                                     PercentageIncrement.append('main_table.' + i + '::numeric+{}::numeric')
                             agg_col =Dataset['aggregate']['properties']['columns']['items']['properties']['column']
                             AggCols = (dict(zip(agg_col, (fun * len(agg_col)))))
-                            print(DateList,':::::::::::::::::::::::::::::::::::::::::::::::::::::::::::')
                             InputKeys.update({'Values': '{}','DatasetCasting':','.join(DatasetCasting),'ValueCols': DatasetArray,'DateFilter':','.join(DateFilter),
                                 'YearFilter': ','.join(YearFilter),'DateList':','.join(DateList),'YearList':','.join(YearList),
                                 'GroupBy': Dataset['group_by'],'AggCols': AggCols,'DimensionTable':Dimensions['table']['pattern'],
