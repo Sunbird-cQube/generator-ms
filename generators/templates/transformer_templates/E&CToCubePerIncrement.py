@@ -36,6 +36,10 @@ def aggTransformer(valueCols={ValueCols}):
             print(query)
             cur.execute(query)
             con.commit()
+<<<<<<< HEAD:generators/templates/transformer_templates/E&CToCubePerIncrement.py
+=======
+
+>>>>>>> 8323bd199f9bbcdeea9cd7d8b7d60bbf040e00eb:generators/templates/E&CToCubePerIncrement.py
     except Exception as error:
         print(error)
     finally:

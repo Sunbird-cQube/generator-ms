@@ -2,7 +2,6 @@ import pandas as pd
 from db_connection import *
 import glob
 file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
-
 con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):

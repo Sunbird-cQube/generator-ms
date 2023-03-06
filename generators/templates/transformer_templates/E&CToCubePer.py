@@ -7,13 +7,24 @@ con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):
     df_event = pd.concat(pd.read_csv(file) for file in path)
+    {DateList}
+    {YearList}
+    df_dataset = pd.read_sql('select * from {Table};', con=con)
+    {DateFilter}
+    {YearFilter}
+    string_list = [col for col, dt in df_dataset.dtypes.items() if dt == object]
+    df_dataset.update(df_dataset[string_list].applymap("'{Values}'".format))
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}', con=con).drop_duplicates()
     df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
     event_dimension_merge = df_event.merge(df_dimension, on=['{MergeOnCol}'], how='inner')
-    df_agg = event_dimension_merge.groupby({GroupBy}, as_index=False).agg({AggCols})
-    df_agg['{NumeratorCol}']=df_agg['{AggColOne}']
-    df_agg['{DenominatorCol}']=df_agg['{AggColTwo}']
-    df_agg['percentage'] = ((df_agg['{NumeratorCol}'] / df_agg['{DenominatorCol}']) * 100)  ### Calculating Percentage
+    event_dimension_merge = event_dimension_merge.groupby({GroupBy}, as_index=False).agg({AggCols})
+    event_dimension_merge['{RenameCol}'] = event_dimension_merge['{eventCol}']
+    merge_col_list = []
+    for i in event_dimension_merge.columns.to_list():
+        if i in df_dataset.columns.to_list():
+            merge_col_list.append(i)
+    df_agg = event_dimension_merge.merge(df_dataset, on=merge_col_list, how='inner')
+    df_agg['percentage'] = ((df_agg['count_category_wise_schools'] / df_agg['count_school_statistics_total_schools']) * 100)  ### Calculating Percentage
     df_snap = df_agg[valueCols]
     print(df_snap)
     try:
@@ -33,21 +44,5 @@ def aggTransformer(valueCols={ValueCols}):
             cur.close()
         if con is not None:
             con.close()
+
 aggTransformer()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

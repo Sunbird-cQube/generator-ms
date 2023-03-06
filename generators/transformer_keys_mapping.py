@@ -69,13 +69,10 @@ def collect_dimension_keys(request, Response):
                         TargetTable = record['input']['properties']['target_table']['pattern']
 
                         if TransformerType == 'Dataset_Dimension':
-                            InputKeys.update({'ValueCols':DimensionArray, "KeyFile": Dimension + '.csv',
-                                                  'TargetTable':TargetTable,
-                                                  'InputCols': ','.join(DimensionArray),
-                                                  'Values': '{}',"DimensionName":DimensionName})
+                            InputKeys.update({'ValueCols':DimensionArray, "KeyFile": Dimension + '_*.csv',
+                                 'TargetTable':TargetTable,'InputCols': ','.join(DimensionArray),'Values': '{}',"DimensionName":DimensionName})
                         else:
-                            return Response(json.dumps({"Message": "Invalid transformer type", "TransformerType": TranformerType,
-                                     "Dataset": DimensionName}))
+                            return Response(json.dumps({"Message": "Invalid transformer type", "TransformerType": TranformerType,"Dataset": DimensionName}))
                             print(Transformer,':transformer:::::::::::')
                         KeysMapping(InputKeys, Template, Transformer, Response)
             else:
@@ -176,7 +173,7 @@ def collect_dataset_keys(request, Response):
                                 'InputCols': ','.join(DatasetArray),'ConflictCols': ','.join(Dataset['group_by']),
                                 'IncrementFormat': ','.join(IncrementFormat),'ReplaceFormat': ','.join(ReplaceFormat),
                                 'UpdateCols': ','.join(UpdateCols * 2),'UpdateCol': ','.join(UpdateCols),
-                                "KeyFile": EventName + '*.csv','DatasetName':DatasetName})
+                                "KeyFile": EventName + '_*.csv','DatasetName':DatasetName})
 
                             print(Template, '::::::::::::Template::::::::::::')
 

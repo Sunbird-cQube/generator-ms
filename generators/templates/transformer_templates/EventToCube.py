@@ -11,15 +11,13 @@ def aggTransformer(valueCols={ValueCols}):
     df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
     event_dimension_merge = df_event.merge(df_dimension, on=['{MergeOnCol}'], how='inner')
     df_agg = event_dimension_merge.groupby({GroupBy}, as_index=False).agg({AggCols})
-    df_agg['{NumeratorCol}']=df_agg['{AggColOne}']
-    df_agg['{DenominatorCol}']=df_agg['{AggColTwo}']
-    df_agg['percentage'] = ((df_agg['{NumeratorCol}'] / df_agg['{DenominatorCol}']) * 100)  ### Calculating Percentage
-    df_snap = df_agg[valueCols]
+    col_list = df_agg.columns.to_list()
+    df_snap = df_agg[col_list]
     print(df_snap)
     try:
          for index,row in df_snap.iterrows():
             values = []
-            for i in valueCols:
+            for i in col_list:
               values.append(row[i])
             query = ''' INSERT INTO {TargetTable}({InputCols}) VALUES ({Values}) ON CONFLICT ({ConflictCols}) DO UPDATE SET {ReplaceFormat};'''\
             .format(','.join(map(str,values)))
@@ -33,6 +31,7 @@ def aggTransformer(valueCols={ValueCols}):
             cur.close()
         if con is not None:
             con.close()
+
 aggTransformer()
 
 
