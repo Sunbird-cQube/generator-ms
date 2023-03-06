@@ -21,7 +21,7 @@ CeatedTransformersList = []
 def KeysMapping(InputKeys, Template, Transformer, Response):
     if os.path.exists(root_path + '/transformers/python_files/' + Transformer):
         os.remove(root_path + '/transformers/python_files/' + Transformer)
-    with open(root_path + '/templates/' + Template, 'r') as fs:
+    with open(root_path + '/templates/transformer_templates/' + Template, 'r') as fs:
         valueOfTemplate = fs.readlines()
     if len(InputKeys) != 0:
         for valueOfTemplate in valueOfTemplate:

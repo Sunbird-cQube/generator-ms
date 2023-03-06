@@ -7,7 +7,7 @@ import glob
 root_path=os.path.dirname(os.path.abspath(__file__))
 ##### Getting todays Date
 todays_date = date.today()
-SpecTemplatePath=glob.glob(root_path+'/templates/*.json')
+SpecTemplatePath=glob.glob(root_path+'/templates/spec_templates/*.json')
 SpecTemplateList=[spec.split('/')[-1].split('.')[0] for spec in SpecTemplatePath]
 print(SpecTemplateList)
 CreatedSpecList = []
@@ -23,7 +23,7 @@ def KeysMaping(Program, InputKeys, SpecTemplate, SpecFile, Response):
     if os.path.exists(root_path + '/' + Program + '/' + SpecFile):
         os.remove(root_path + '/' + Program + '/' + SpecFile)
     #### reading grammar template
-    with open(root_path + '/templates/' + SpecTemplate, 'r') as fs:
+    with open(root_path + '/templates/spec_templates/' + SpecTemplate, 'r') as fs:
         ValueOfTemplate = fs.readlines()
     if (len(InputKeys) != 0):
         ### iterating lines in the template
