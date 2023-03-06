@@ -157,7 +157,6 @@ def DimensionSpec(request, Response):
             ColumnsDataType = []
             if len(DimensionColumn)!=len(DataTypes):
                 return Response(json.dumps({'message':'Length of dataset columns and datatypes are mismatching '+DimensionName}))
-
             for dimension_col in DimensionColumn:
                 if (dimension_col.casefold() == 'grade') | (dimension_col.casefold() == 'class'):
                     ColumnsDataType.append({"type":DimensionDict[dimension_col].strip(), "shouldnotnull": True, "minimum": 1, "maximum": 12})

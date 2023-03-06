@@ -4,7 +4,7 @@ import glob
 file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 
 con,cur=db_connection()
-
+    
 def aggTransformer(valueCols={ValueCols}):
     df_event = pd.concat(pd.read_csv(file) for file in path)
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}', con=con).drop_duplicates()
