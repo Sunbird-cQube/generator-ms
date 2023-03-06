@@ -5,7 +5,7 @@ file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):
-    df_event = pd.concat(pd.read_csv(file) for file in path)
+    df_event = pd.concat(pd.read_csv(file) for file in file_list)
     {DateList}
     {YearList}
     df_dataset = pd.read_sql('select * from {Table};', con=con)

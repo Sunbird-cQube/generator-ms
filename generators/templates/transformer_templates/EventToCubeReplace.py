@@ -6,7 +6,7 @@ file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 con,cur=db_connection()
     
 def aggTransformer(valueCols={ValueCols}):
-    df_event = pd.concat(pd.read_csv(file) for file in path)
+    df_event = pd.concat(pd.read_csv(file) for file in file_list)
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}', con=con).drop_duplicates()
     df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
     event_dimension_merge = df_event.merge(df_dimension, on=['{MergeOnCol}'], how='inner')
