@@ -69,7 +69,7 @@ def collect_dimension_keys(request, Response):
                         TargetTable = record['input']['properties']['target_table']['pattern']
 
                         if TransformerType == 'Dataset_Dimension':
-                            InputKeys.update({'ValueCols':DimensionArray, "KeyFile": Dimension + '.csv',
+                            InputKeys.update({'ValueCols':DimensionArray, "KeyFile": Dimension + '_*.csv',
                                                   'TargetTable':TargetTable,
                                                   'InputCols': ','.join(DimensionArray),
                                                   'Values': '{}',"DimensionName":DimensionName})
@@ -170,7 +170,7 @@ def collect_dataset_keys(request, Response):
                                 'InputCols': ','.join(DatasetArray),'ConflictCols': ','.join(Dataset['group_by']),
                                 'IncrementFormat': ','.join(IncrementFormat),'ReplaceFormat': ','.join(ReplaceFormat),
                                 'UpdateCols': ','.join(UpdateCols * 2),'UpdateCol': ','.join(UpdateCols),
-                                "KeyFile": EventName + '*.csv','DatasetName':DatasetName})
+                                "KeyFile": EventName + '_*.csv','DatasetName':DatasetName})
 
                             print(Template, '::::::::::::Template::::::::::::')
 
