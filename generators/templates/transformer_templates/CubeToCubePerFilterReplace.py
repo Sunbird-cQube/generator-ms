@@ -6,7 +6,8 @@ file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 con,cur=db_connection()
 
 def filterTransformer(valueCols={ValueCols}):
-    df_event = pd.concat(pd.read_csv(file) for file in path)
+    df_event = pd.concat(pd.read_csv(file) for file in file_list)
+    df_event=df_event.apply(lambda x: x.str.replace("'","") if x.dtype == 'object' else x)
     {DateList}
     {YearList}
     df_dataset = pd.read_sql('select * from {Table}', con=con)                                     ### reading dataset from database
@@ -21,8 +22,8 @@ def filterTransformer(valueCols={ValueCols}):
     df_filter['{NumeratorCol}'] = df_filter['{AggCol}']
     df_agg = df_filter.merge(df_total, on={GroupBy}, how='inner')  ### merging aggregated DataFrames
     df_agg['percentage'] = ((df_agg['{NumeratorCol}'] / df_agg['{DenominatorCol}']) * 100)  ### Calculating Percentage
-    string_list = [col for col, dt in df_agg.dtypes.items() if dt == object]
-    df_agg.update(df_agg[string_list].applymap("'{Values}'".format))
+    string_cols = df_agg.select_dtypes(include=['object']).columns
+    df_agg.update(df_agg[string_cols].applymap("'{Values}'".format))
     df_snap = df_agg[valueCols]
     print(df_snap)
     try:

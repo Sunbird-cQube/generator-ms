@@ -6,16 +6,17 @@ file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 con,cur=db_connection()
 
 def aggTransformer(valueCols={ValueCols}):
-    df_event = pd.concat(pd.read_csv(file) for file in path)
+    df_event = pd.concat(pd.read_csv(file) for file in file_list)
     {DateList}
     {YearList}
     df_dataset = pd.read_sql('select * from {Table};', con=con)
+    dataset_string_cols = df_dataset.select_dtypes(include=['object']).columns
+    df_dataset.update(df_dataset[dataset_string_cols].applymap("'{Values}'".format))
     {DateFilter}
     {YearFilter}
-    string_list = [col for col, dt in df_dataset.dtypes.items() if dt == object]
-    df_dataset.update(df_dataset[string_list].applymap("'{Values}'".format))
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}', con=con).drop_duplicates()
-    df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
+    dimension_string_cols = df_dimension.select_dtypes(include=['object']).columns
+    df_dimension.update(df_dimension[dimension_string_cols].applymap("'{Values}'".format))
     event_dimension_merge = df_event.merge(df_dimension, on=['{MergeOnCol}'], how='inner')
     event_dimension_merge = event_dimension_merge.groupby({GroupBy}, as_index=False).agg({AggCols})
     event_dimension_merge['{RenameCol}'] = event_dimension_merge['{eventCol}']

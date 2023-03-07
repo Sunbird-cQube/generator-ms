@@ -6,9 +6,10 @@ file_list=glob.glob(os.path.dirname(root_path) + "processing_data/{KeyFile}")
 con,cur=db_connection()
 
 def filterTransformer(valueCols={ValueCols}):
-    df_event = pd.concat(pd.read_csv(file) for file in path)
+    df_event = pd.concat(pd.read_csv(file) for file in file_list)
     df_dimension = pd.read_sql('select {DimensionCols} from {DimensionTable}',con=con).drop_duplicates()  ### reading DimensionDataset from Database
-    df_dimension.update(df_dimension[{DimColCast}].applymap("'{Values}'".format))
+    string_cols = df_dimension.select_dtypes(include=['object']).columns
+    df_dimension.update(df_dimension[string_cols].applymap("'{Values}'".format))
     event_dimension_merge = df_event.merge(df_dimension, on=['{MergeOnCol}'],how='inner')  ### mapping dataset with dimension
     df_total = event_dimension_merge.groupby({GroupBy}, as_index=False).agg({AggCols})  ### aggregation before filter
     df_total['{DenominatorCol}'] = df_total['{AggCol}'] ### renaming dataset columns
