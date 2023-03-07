@@ -22,8 +22,8 @@ def filterTransformer(valueCols={ValueCols}):
     df_filter['{NumeratorCol}'] = df_filter['{AggCol}']
     df_agg = df_filter.merge(df_total, on={GroupBy}, how='inner')  ### merging aggregated DataFrames
     df_agg['percentage'] = ((df_agg['{NumeratorCol}'] / df_agg['{DenominatorCol}']) * 100)  ### Calculating Percentage
-    string_list = [col for col, dt in df_agg.dtypes.items() if dt == object]
-    df_agg.update(df_agg[string_list].applymap("'{Values}'".format))
+    string_cols = df_agg.select_dtypes(include=['object']).columns
+    df_agg.update(df_agg[string_cols].applymap("'{Values}'".format))
     df_snap = df_agg[valueCols]
     print(df_snap)
     try:

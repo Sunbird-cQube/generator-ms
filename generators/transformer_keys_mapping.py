@@ -129,15 +129,6 @@ def collect_dataset_keys(request, Response):
                             NumeratorCol = Dataset['aggregate']['properties']['numerator_col']['pattern']
                             DenominatorCol = Dataset['aggregate']['properties']['denominator_col']['pattern']
                             fun = Dataset['aggregate']['properties']['function']
-                            df = pd.json_normalize(Dataset['items']['items']['properties'])
-                            DatasetCasting = []
-                            string_col_list = []
-                            for cols in DatasetArray:
-                                col = cols + '.type'
-                                if (df[col] == "string").item():
-                                    string_col_list.append(cols)
-                            if len(string_col_list) != 0:
-                                DatasetCasting.append('df_agg.update(df_agg[' + json.dumps(string_col_list) + '].applymap("\'{}\'".format))')
                             DateFilter = []
                             YearFilter = []
                             DateList=[]
@@ -164,10 +155,10 @@ def collect_dataset_keys(request, Response):
                                     PercentageIncrement.append('main_table.' + i + '::numeric+{}::numeric')
                             agg_col =Dataset['aggregate']['properties']['columns']['items']['properties']['column']
                             AggCols = (dict(zip(agg_col, (fun * len(agg_col)))))
-                            InputKeys.update({'Values': '{}','DatasetCasting':','.join(DatasetCasting),'ValueCols': DatasetArray,'DateFilter':','.join(DateFilter),
+                            InputKeys.update({'Values': '{}','ValueCols': DatasetArray,'DateFilter':','.join(DateFilter),
                                 'YearFilter': ','.join(YearFilter),'DateList':','.join(DateList),'YearList':','.join(YearList),
                                 'GroupBy': Dataset['group_by'],'AggCols': AggCols,'DimensionTable':Dimensions['table']['pattern'],
-                                'DimensionCols': ','.join(Dimensions['column']),'DimColCast':json.dumps(Dimensions['column']),'MergeOnCol': Dimensions['merge_on_col']['pattern'],
+                                'DimensionCols': ','.join(Dimensions['column']),'MergeOnCol': Dimensions['merge_on_col']['pattern'],
                                  'TargetTable': Dataset['aggregate']['properties']['target_table']['pattern'],
                                 'InputCols': ','.join(DatasetArray),'ConflictCols': ','.join(Dataset['group_by']),
                                 'IncrementFormat': ','.join(IncrementFormat),'ReplaceFormat': ','.join(ReplaceFormat),
