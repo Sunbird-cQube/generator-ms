@@ -1,4 +1,6 @@
 import configparser
+import random
+
 import requests
 import os
 
@@ -9,10 +11,8 @@ config.read(configuartion_path);
 
 nifi_host = config['CREDs']['nifi_host']
 nifi_port = config['CREDs']['nifi_port']
-nifi_schedule_latest_code = config['CREDs']['processing_time']
-s3_access_key = config['CREDs']['s3_access_key']
-s3_secret_key = config['CREDs']['s3_secret_key']
-s3_input_bucket = config['CREDs']['s3_input_bucket']
+processing_time = config['CREDs']['processing_time']
+plugin_time = config['CREDs']['plugin_time']
 header = {"Content-Type": "application/json"}
 
 def get_nifi_root_pg():
@@ -21,7 +21,7 @@ def get_nifi_root_pg():
     if res.status_code == 200:
         global nifi_root_pg_id
         nifi_root_pg_id = res.json()['component']['id']
-        print(nifi_root_pg_id)
+        # print(nifi_root_pg_id)
         return res.json()['component']['id']
     else:
         return res.text
@@ -93,15 +93,66 @@ def instantiate_template(processor_group):
         "originY": -1529.7644241816233,
         "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('Plugin'):
-        template_id = get_template_id('Plugin to Split CSV')
+    elif processor_group.__contains__('Student'):
+        template_id = get_template_id('Plugin Student Attendance aws')
         data = {
             "templateId": template_id,
-            "originX": -1100.5854405025766,
-            "originY": -1700.7644241816233,
+            "originX": -1200,
+            "originY": -1600,
             "disconnectedNodeAcknowledged": "false"
         }
 
+    elif processor_group.__contains__('Teachers'):
+        template_id = get_template_id('Plugin Teachers Attendance aws')
+        data = {
+            "templateId": template_id,
+            "originX": -1200,
+            "originY": -1600,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('Rev-and-monitor'):
+        template_id = get_template_id('Plugin Rev-and-monitor aws')
+        data = {
+            "templateId": template_id,
+            "originX": -1250,
+            "originY": -1550,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
+    if get_import_template.ok:
+        print(f"Successfully instantiated the {processor_group} in nifi canvas")
+    else:
+        print(f"Failed to instantiate the {processor_group} in nifi canvas ", get_import_template.text)
+
+def instantiate_template_local(processor_group):
+    # Instantiates template
+    root_pg_id = get_nifi_root_pg()
+    data = {}
+    if processor_group.__contains__('Student'):
+        template_id = get_template_id('Plugin Student Attendance local')
+        data = {
+            "templateId": template_id,
+            "originX": -1200,
+            "originY": -1600,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
+    elif processor_group.__contains__('Teachers'):
+        template_id = get_template_id('Plugin Teachers Attendance local')
+        data = {
+            "templateId": template_id,
+            "originX": -1200,
+            "originY": -1600,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('Rev-and-monitor'):
+        template_id = get_template_id('Plugin Rev-and-monitor local')
+        data = {
+            "templateId": template_id,
+            "originX": -1250,
+            "originY": -1550,
+            "disconnectedNodeAcknowledged": "false"
+        }
     get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
     if get_import_template.ok:
         print(f"Successfully instantiated the {processor_group} in nifi canvas")
@@ -138,8 +189,8 @@ def update_controller_service_property(processor_group_name, controller_name):
                     "name": controller_name,
                     "properties":
                         {
-                            "Access Key": s3_access_key,
-                            "Secret Key": s3_secret_key
+                            "Access Key": config['CREDs']['s3_access_key'],
+                            "Secret Key": config['CREDs']['s3_secret_key']
                         }
                 }
 
@@ -195,14 +246,14 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
-                if processor_name == 'Lists3' or processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
+                if processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
                     update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "Bucket": s3_input_bucket
+                                    "Bucket": config['CREDs']['s3_input_bucket']
                                 },
                             },
                             "state": "STOPPED"
@@ -219,8 +270,77 @@ def update_processor_property(processor_group_name, processor_name):
                             "id": i['component']['id'],
                             "name": i['component']['name'],
                             "config": {
-                                "schedulingPeriod": nifi_schedule_latest_code,
+                                "schedulingPeriod": processing_time,
                                 "schedulingStrategy": "CRON_DRIVEN"
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+                elif processor_name == 'Lists3':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": plugin_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "Bucket": config['CREDs']['s3_input_bucket']
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+
+                elif processor_name == 'Lists3_local':
+                    endpoint_url = config['CREDs']['minio_end_point']
+                    port = config['CREDs']['minio_port']
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": plugin_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "Bucket": config['CREDs']['minio_bucket'],
+                                    "Access Key": config['CREDs']['minio_access_key'],
+                                    "Secret Key": config['CREDs']['minio_secret_key'],
+                                    "Endpoint Override URL": f"{endpoint_url}:{port}"
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local':
+                    endpoint_url = config['CREDs']['minio_end_point']
+                    port = config['CREDs']['minio_port']
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "Bucket": config['CREDs']['minio_bucket'],
+                                    "Access Key": config['CREDs']['minio_access_key'],
+                                    "Secret Key": config['CREDs']['minio_secret_key'],
+                                    "Endpoint Override URL": f"{endpoint_url}:{port}"
+                                },
                             },
                             "state": "STOPPED"
                         },
@@ -257,16 +377,72 @@ def start_processor_group(processor_group_name,state):
     else:
         return start_response.text
 
+def plugins_aws():
+    upload_template('Plugin_Rev-and-monitor_aws.xml')
+    instantiate_template('Plugin_Rev-and-monitor_aws.xml')
+    controller_service_disable('Plugin Rev-and-monitor aws')
+    update_controller_service_property('Plugin Rev-and-monitor aws', 'aws_rev-mon')
+    controller_service_enable('Plugin Rev-and-monitor aws')
+
+    upload_template('Plugin_Student_Attendance_aws.xml')
+    instantiate_template('Plugin_Student_Attendance_aws.xml')
+    controller_service_disable('Plugin Student Attendance aws')
+    update_controller_service_property('Plugin Student Attendance aws', 'aws_credentials_students')
+    controller_service_enable('Plugin Student Attendance aws')
+
+    upload_template('Plugin_Teachers_Attendance_aws.xml')
+    instantiate_template('Plugin_Teachers_Attendance_aws.xml')
+    controller_service_disable('Plugin Teachers Attendance aws')
+    update_controller_service_property('Plugin Teachers Attendance aws', 'aws_credentials_teachers')
+    controller_service_enable('Plugin Teachers Attendance aws')
+
+    processors = ['Lists3', 'FetchS3Object', 'Puts3Processing1', 'Puts3Processing2', 'Puts3Processing3']
+    for i in processors:
+        update_processor_property('Plugin Student Attendance aws', i)
+        update_processor_property('Plugin Teachers Attendance aws', i)
+    update_processor_property('Plugin Rev-and-monitor aws', 'Lists3')
+    update_processor_property('Plugin Rev-and-monitor aws', 'Puts3Processing')
+
+    processor_list = ['Plugin Student Attendance aws','Plugin Student Attendance aws','Plugin Rev-and-monitor aws']
+    for i in processor_list:
+        start_processor_group(i, 'RUNNING')
+
+
+def plugins_local():
+    upload_template('Plugin_Rev-and-monitor_local.xml')
+    instantiate_template_local('Plugin_Rev-and-monitor_local.xml')
+
+    upload_template('Plugin_Student_Attendance_local.xml')
+    instantiate_template_local('Plugin_Student_Attendance_local.xml')
+    controller_service_disable('Plugin Student Attendance local')
+    controller_service_enable('Plugin Student Attendance local')
+
+    upload_template('Plugin_Teachers_Attendance_local.xml')
+    instantiate_template_local('Plugin_Teachers_Attendance_local.xml')
+    controller_service_disable('Plugin Teachers Attendance local')
+    controller_service_enable('Plugin Teachers Attendance local')
+
+    processors = ['Lists3_local', 'FetchS3Object_local', 'Puts3Processing1_local', 'Puts3Processing2_local', 'Puts3Processing3_local']
+    for i in processors:
+        update_processor_property('Plugin Student Attendance local', i)
+        update_processor_property('Plugin Teachers Attendance local', i)
+    update_processor_property('Plugin Rev-and-monitor local', 'Lists3_local')
+    update_processor_property('Plugin Rev-and-monitor local', 'Puts3Processing_local')
+    processor_group_list = ['Plugin Teachers Attendance local', 'Plugin Student Attendance local',
+                            'Plugin Rev-and-monitor local']
+    for i in processor_group_list:
+        update_processor_property(i, 'RUNNING')
+
+
+
 if __name__ == '__main__':
-    upload_template('Plugin_to_Split_CSV.xml')
-    instantiate_template('Plugin_to_Split_CSV.xml')
+    if config['CREDs']['storage_type'] == 'aws':
+        plugins_aws()
+
+    if config['CREDs']['storage_type'] == 'local':
+        plugins_local()
+
     upload_template('Run_Latest_Code.xml')
     instantiate_template('Run_Latest_Code.xml')
     update_processor_property('Run Latest Code','GenerateFlowFile')
-    controller_service_disable('Plugin to Split CSV')
-    update_controller_service_property('Plugin to Split CSV', 'AWSCredentialsProviderControllerService')
-    controller_service_enable('Plugin to Split CSV')
-    processors = ['Lists3','FetchS3Object', 'FetchS3Object','Puts3Processing1','Puts3Processing2','Puts3Processing3']
-    for i in processors:
-        update_processor_property('Plugin to Split CSV',i)
-    start_processor_group('Run Latest Code', 'RUNNING')
+    start_processor_group('Run Latest Code','RUNNING')
