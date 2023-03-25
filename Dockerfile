@@ -7,6 +7,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
-#WORKDIR /python_app/adapter 	
-#CMD [ "bash", "VSK_data_transformation.sh"]
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
+WORKDIR /python_app/static_processor_group
+CMD [ "python3", "add_nifi_template.py"]
