@@ -9,7 +9,7 @@ config.read(configuartion_path);
 
 nifi_host = config['CREDs']['nifi_host']
 nifi_port = config['CREDs']['nifi_port']
-nifi_schedule_latest_code = config['CREDs']['nifi_schedule_latest_code']
+nifi_schedule_latest_code = config['CREDs']['processing_time']
 s3_access_key = config['CREDs']['s3_access_key']
 s3_secret_key = config['CREDs']['s3_secret_key']
 s3_input_bucket = config['CREDs']['s3_input_bucket']
