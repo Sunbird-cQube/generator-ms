@@ -339,6 +339,8 @@ def update_processor_property(processor_group_name, processor_name):
                                 "schedulingStrategy": "CRON_DRIVEN",
                                 "properties": {
                                     "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "Access Key": config['CREDs']['s3_access_key'],
+                                    "Secret Key": config['CREDs']['s3_secret_key'],
                                     "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
 
                                 },
@@ -527,9 +529,9 @@ def run_latest_local():
 
 if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'aws':
-        # plugins_aws()
+        plugins_aws()
         run_latest_aws()
 
     if config['CREDs']['storage_type'] == 'local':
-        # plugins_local()
+        plugins_local()
         run_latest_local()
