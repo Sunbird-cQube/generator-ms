@@ -80,6 +80,34 @@ def get_template_id(processor_group):
             template_id = template['template']['id']
             return template_id
 
+def instantiate_template_codes(processor_group):
+    # Instantiates template
+    root_pg_id = get_nifi_root_pg()
+    data = {}
+    if processor_group.__contains__('aws'):
+        template_id = get_template_id('Run Latest Code aws')
+        data = {
+            "templateId": template_id,
+            "originX": -1120,
+            "originY": -1080,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('local'):
+        template_id = get_template_id('Run Latest Code local')
+        data = {
+            "templateId": template_id,
+            "originX": -1120,
+            "originY": -1080,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    get_import_template = requests.post(
+        f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
+    if get_import_template.ok:
+        print(f"Successfully instantiated the {processor_group} in nifi canvas")
+    else:
+        print(f"Failed to instantiate the {processor_group} in nifi canvas ", get_import_template.text)
+
+
 
 def instantiate_template(processor_group):
     # Instantiates template
@@ -301,6 +329,29 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
+                elif processor_name == 'ListS3Files':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": processing_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
+
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+
 
                 elif processor_name == 'Lists3_local':
                     endpoint_url = config['CREDs']['minio_end_point']
@@ -327,6 +378,33 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
+                elif processor_name == 'ListLocal':
+                    endpoint_url = config['CREDs']['minio_end_point']
+                    port = config['CREDs']['minio_port']
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": plugin_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "Bucket": config['CREDs']['minio_bucket'],
+                                    "Access Key": config['CREDs']['minio_access_key'],
+                                    "Secret Key": config['CREDs']['minio_secret_key'],
+                                    "Endpoint Override URL": f"{endpoint_url}:{port}",
+                                    "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+
                 elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
@@ -433,16 +511,25 @@ def plugins_local():
     for i in processor_group_list:
         update_processor_property(i, 'RUNNING')
 
+def run_latest_aws():
+    upload_template('Run_Latest_Code_aws.xml')
+    instantiate_template_codes('Run_Latest_Code_aws.xml')
+    update_processor_property('Run Latest Code aws', 'ListS3Files')
+    start_processor_group('Run Latest Code aws', 'RUNNING')
+
+def run_latest_local():
+    upload_template('Run_Latest_Code_local.xml')
+    instantiate_template_codes('Run_Latest_Code_local.xml')
+    update_processor_property('Run Latest Code local', 'ListLocal')
+    start_processor_group('Run Latest Code local', 'RUNNING')
+
 
 
 if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'aws':
-        plugins_aws()
+        # plugins_aws()
+        run_latest_aws()
 
     if config['CREDs']['storage_type'] == 'local':
-        plugins_local()
-
-    upload_template('Run_Latest_Code.xml')
-    instantiate_template('Run_Latest_Code.xml')
-    update_processor_property('Run Latest Code','GenerateFlowFile')
-    start_processor_group('Run Latest Code','RUNNING')
+        # plugins_local()
+        run_latest_local()
