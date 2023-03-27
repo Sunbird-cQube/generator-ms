@@ -336,7 +336,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "id": i['component']['id'],
                             "name": i['component']['name'],
                             "config": {
-                                "schedulingPeriod": plugin_time,
+                                "schedulingPeriod": processing_time,
                                 "schedulingStrategy": "CRON_DRIVEN",
                                 "properties": {
                                     "Bucket": config['CREDs']['s3_input_bucket']
@@ -552,9 +552,9 @@ def run_latest_local():
 
 if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'aws':
-        # plugins_aws()
+        plugins_aws()
         run_latest_aws()
 
     if config['CREDs']['storage_type'] == 'local':
-        # plugins_local()
+        plugins_local()
         run_latest_local()
