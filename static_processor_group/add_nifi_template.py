@@ -274,7 +274,28 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
-                if processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
+                if processor_name == 'FetchS3Object_aws':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "Access Key": config['CREDs']['s3_access_key'],
+                                    "Secret Key": config['CREDs']['s3_secret_key']
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+
+                elif processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
                     update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
@@ -339,6 +360,8 @@ def update_processor_property(processor_group_name, processor_name):
                                 "schedulingStrategy": "CRON_DRIVEN",
                                 "properties": {
                                     "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "Access Key": config['CREDs']['s3_access_key'],
+                                    "Secret Key": config['CREDs']['s3_secret_key'],
                                     "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
 
                                 },
@@ -515,12 +538,14 @@ def run_latest_aws():
     upload_template('Run_Latest_Code_aws.xml')
     instantiate_template_codes('Run_Latest_Code_aws.xml')
     update_processor_property('Run Latest Code aws', 'ListS3Files')
+    update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
     start_processor_group('Run Latest Code aws', 'RUNNING')
 
 def run_latest_local():
     upload_template('Run_Latest_Code_local.xml')
     instantiate_template_codes('Run_Latest_Code_local.xml')
     update_processor_property('Run Latest Code local', 'ListLocal')
+    update_processor_property('Run Latest Code local', 'FetchS3Object_local')
     start_processor_group('Run Latest Code local', 'RUNNING')
 
 
