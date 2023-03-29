@@ -427,7 +427,7 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
-                elif processor_name == 'ListLocal':
+                elif processor_name == 'Listlocal':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -530,7 +530,7 @@ def plugins_aws():
     update_processor_property('Plugin Rev-and-monitor aws', 'Lists3')
     update_processor_property('Plugin Rev-and-monitor aws', 'Puts3Processing')
 
-    processor_list = ['Plugin Student Attendance aws','Plugin Student Attendance aws','Plugin Rev-and-monitor aws']
+    processor_list = ['Plugin Student Attendance aws','Plugin Teachers Attendance aws','Plugin Rev-and-monitor aws']
     for i in processor_list:
         start_processor_group(i, 'RUNNING')
 
@@ -570,13 +570,19 @@ def run_latest_aws():
 def run_latest_local():
     upload_template('Run_Latest_Code_local.xml')
     instantiate_template_codes('Run_Latest_Code_local.xml')
-    update_processor_property('Run Latest Code local', 'ListLocal')
+    update_processor_property('Run Latest Code local', 'Listlocal')
     update_processor_property('Run Latest Code local', 'FetchS3Object_local')
     start_processor_group('Run Latest Code local', 'RUNNING')
 
+def adapters():
+    upload_template('Run_adapters.xml')
+    instantiate_template('Run_adapters.xml')
+    update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
+    start_processor_group('Run_adapters', 'RUNNING')
 
 
 if __name__ == '__main__':
+    adapters()
     if config['CREDs']['storage_type'] == 'aws':
         plugins_aws()
         run_latest_aws()
@@ -584,6 +590,5 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
-    upload_template('Run_adapters.xml')
-    instantiate_template('Run_adapters.xml')
-    update_processor_property('Run_adapters','GenerateFlowFile_adapter')
+
+
