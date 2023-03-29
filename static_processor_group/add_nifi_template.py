@@ -113,7 +113,7 @@ def instantiate_template(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
-    if processor_group.__contains__('adaptors'):
+    if processor_group.__contains__('adapters'):
         template_id = get_template_id('Run_adapters')
         data = {
             "templateId": template_id,
