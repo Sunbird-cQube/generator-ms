@@ -986,7 +986,7 @@
                             </entry>
                             <entry>
 <key>prefix</key>
-<value>process_input/${now():format('dd-MMM-yyyy')}/</value>
+<value>process_input/</value>
                             </entry>
                             <entry>
 <key>use-versions</key>
@@ -1002,8 +1002,8 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 10 12 * * ?</schedulingPeriod>
-                        <schedulingStrategy>CRON_DRIVEN</schedulingStrategy>
+                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
                     <executionNodeRestricted>true</executionNodeRestricted>
@@ -1186,7 +1186,7 @@
                             </entry>
                             <entry>
 <key>directory</key>
-<value>/opt/nifi/nifi-current/ChakshuGautam-cQube-POCs-f01e666/impl/c-qube/ingest/programs/</value>
+<value>/opt/nifi/nifi-current/ChakshuGautam-cQube-POCs-483ac96/impl/c-qube/ingest/programs/</value>
                             </entry>
                             <entry>
 <key>filename</key>
@@ -1655,5 +1655,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>03/29/2023 12:47:23 IST</timestamp>
+    <timestamp>03/29/2023 15:26:02 IST</timestamp>
 </template>
