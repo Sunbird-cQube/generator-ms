@@ -114,7 +114,7 @@ def instantiate_template(processor_group):
     root_pg_id = get_nifi_root_pg()
     data = {}
     if processor_group.__contains__('adaptors'):
-        template_id = get_template_id('Run_adaptors')
+        template_id = get_template_id('Run_adapters')
         data = {
             "templateId": template_id,
             "originX": -1067.5854405025766,
@@ -288,7 +288,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "id": i['component']['id'],
                             "name": i['component']['name'],
                             "config": {
-                                "schedulingPeriod": config['CREDs']['adaptor_schedule_time'],
+                                "schedulingPeriod": config['CREDs']['adapter_schedule_time'],
                                 "schedulingStrategy": "CRON_DRIVEN"
                             },
                             "state": "STOPPED"
@@ -584,6 +584,6 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
-    upload_template('Run_adaptors.xml')
-    instantiate_template('Run_adaptors.xml')
-    update_processor_property('Run_adaptors','GenerateFlowFile_adapter')
+    upload_template('Run_adapters.xml')
+    instantiate_template('Run_adapters.xml')
+    update_processor_property('Run_adapters','GenerateFlowFile_adapter')
