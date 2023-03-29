@@ -113,6 +113,14 @@ def instantiate_template(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
+    if processor_group.__contains__('adaptors'):
+        template_id = get_template_id('Run_adapters')
+        data = {
+            "templateId": template_id,
+            "originX": -1067.5854405025766,
+            "originY": -1529.7644241816233,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('Code'):
         template_id = get_template_id('Run Latest Code')
         data = {
@@ -274,6 +282,24 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'GenerateFlowFile_adapter':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": config['CREDs']['adapter_schedule_time'],
+                                "schedulingStrategy": "CRON_DRIVEN"
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
+
                 if processor_name == 'FetchS3Object_aws':
                     update_processor_property_body = {
                         "component": {
@@ -558,3 +584,6 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
+    upload_template('Run_adapters.xml')
+    instantiate_template('Run_adapters.xml')
+    update_processor_property('Run_adapters','GenerateFlowFile_adapter')
