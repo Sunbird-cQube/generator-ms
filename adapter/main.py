@@ -131,8 +131,7 @@ class CollectData:
     #___________________________Upload the file to the cloud folder_______________________
 
     def upload_file(self,csv_data,output_file):
-
-        csv_bytes = csv_data.to_csv().encode('utf-8')
+        csv_bytes = csv_data.to_csv(index=False).encode('utf-8')
         csv_buffer = io.BytesIO(csv_bytes)
 
         if self.env == 'azure': ## uploading file to Azure blob container
