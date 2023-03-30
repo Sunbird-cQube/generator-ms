@@ -388,7 +388,7 @@ def update_processor_property(processor_group_name, processor_name):
                                     "Bucket": config['CREDs']['s3_input_bucket'],
                                     "Access Key": config['CREDs']['s3_access_key'],
                                     "Secret Key": config['CREDs']['s3_secret_key'],
-                                    "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
+                                    "prefix": "process_input/"
 
                                 },
                             },
