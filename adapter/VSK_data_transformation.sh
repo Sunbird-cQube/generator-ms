@@ -10,7 +10,6 @@ python NISHTHA_tot_courses_medium.py nishtha diksha_nishtha_tot-courses-medium.z
 python NAS_all_dashboard.py nas nas_all-dashboard.zip
 python NAS_program_started.py nas nas_program-started.zip
 python PGI_all_dashboard.py pgi pgi_all-dashboard.zip
-python PGI_performance.py pgi  pgi_state-wise-performance.zip
 python PM_Poshan.py pm-poshan pm-poshan_access-across-india.zip
 python UDISE_all_dashboard.py udise udise-all-dashboard.zip
 python UDISE_program_started.py udise udise_program-started.zip
