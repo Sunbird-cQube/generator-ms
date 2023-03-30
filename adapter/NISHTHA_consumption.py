@@ -32,7 +32,7 @@ def program_dimension_data():
     obj.upload_file(df_snap, 'nishthaprogram-dimension.data.csv')
 
 def district_dimension():
-    df_snap = df_data[['State Code','State Name','District Code','User District_Old','Latitude', 'Longitude']]
+    df_snap = df_data[['State Code','State','District Code','User District_Old','Latitude', 'Longitude']]
     df_snap.columns = ['state_id','state_name','district_id','district_name','latitude','longitude']
     obj.upload_file(df_snap, 'district-dimension.data.csv')
 
