@@ -14,6 +14,3 @@ python PGI_performance.py pgi  pgi_state-wise-performance.zip
 python PM_Poshan.py pm-poshan pm-poshan_access-across-india.zip
 python UDISE_all_dashboard.py udise udise-all-dashboard.zip
 python UDISE_program_started.py udise udise_program-started.zip
-
-
-
