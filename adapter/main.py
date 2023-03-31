@@ -68,7 +68,7 @@ class CollectData:
             #__________________ Minio Bucket Connection_________________
             try:
                 self.minio_client = Minio(endpoint=self.minio_endpoint+':'+self.minio_port,access_key=self.minio_username,secret_key=self.minio_password,secure=False)  # set this to True if your Minio instance is secured with SSL/TLS
-                self.minio_object_list=self.minio_client.list_objects(self.minio_bucket, prefix=self.minio_input_folder, recursive=True)
+                self.minio_object_list=self.minio_client.list_objects(self.minio_bucket,prefix=self.minio_input_folder, recursive=True)
             except Exception:
                 print(f'Message : Failed to connect to {self.minio_bucket} bucket')
         else:
@@ -118,13 +118,14 @@ class CollectData:
                 print(f"Message : The folder {self.s3_input_folder} does not exist in the bucket {self.s3_bucket}.")
 
         elif self.env == 'local': ## Reading file from local Minio
-            if not self.minio_object_list:
-                object_data = self.minio_client.get_object(self.minio_bucket, self.minio_input_folder)
-                data=io.BytesIO(object_data.read())
-                df_snap=self.data_parser(data)
-                return df_snap
-            else:
-                return print(f'Message : Folder {self.minio_input_folder} does not exist')
+            for obj in self.minio_object_list:
+                if  obj.object_name:
+                    object_data = self.minio_client.get_object(self.minio_bucket, self.minio_input_folder)
+                    data=io.BytesIO(object_data.read())
+                    df_snap=self.data_parser(data)
+                    return df_snap
+                else:
+                    return print(f'Message : Folder {self.minio_input_folder} does not exist')
         else:
             print(f'Message : Storage type {self.env} is not valid')
 
