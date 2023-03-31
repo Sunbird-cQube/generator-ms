@@ -23,7 +23,7 @@ def course_dimension():
     df_snap = df_data[['Course Name']].drop_duplicates()
     df_snap['course_id'] = range(1, len(df_snap) + 1)
     df_snap = df_snap[['course_id', 'Course Name']]
-    df_snap.columns = ['course_id', 'course_id']
+    df_snap.columns = ['course_id', 'course_name']
     obj.upload_file(df_snap, 'coursenishtha-dimension.data.csv')
 
 def state_dimension():
