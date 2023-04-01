@@ -442,7 +442,7 @@ def update_processor_property(processor_group_name, processor_name):
                                     "Access Key": config['CREDs']['minio_access_key'],
                                     "Secret Key": config['CREDs']['minio_secret_key'],
                                     "Endpoint Override URL": f"{endpoint_url}:{port}",
-                                    "prefix": "process_input/${now():format('dd-MMM-yyyy')}/"
+                                    "prefix": "process_input/"
                                 },
                             },
                             "state": "STOPPED"
@@ -588,7 +588,7 @@ if __name__ == '__main__':
         run_latest_aws()
 
     if config['CREDs']['storage_type'] == 'local':
-        plugins_local()
+        # plugins_local()
         run_latest_local()
 
 
