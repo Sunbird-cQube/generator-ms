@@ -588,7 +588,7 @@ if __name__ == '__main__':
         run_latest_aws()
 
     if config['CREDs']['storage_type'] == 'local':
-        # plugins_local()
+        plugins_local()
         run_latest_local()
 
 
