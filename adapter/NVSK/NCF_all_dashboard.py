@@ -16,6 +16,14 @@ def category_event_data():
     df_snap.columns = ['state_id','category_name', 'category_value']
     obj.upload_file(df_snap, 'categoryncf-event.data.csv')
 
+def category_dimension_data():
+    df_data = category_event_data()
+    df_data = df_data[['category_name']].drop_duplicates()
+    df_data['category_id'] = range(1, len(df_data) + 1)
+    df_snap = df_data[['category_id', 'category_name']]
+    obj.upload_file(df_snap, 'categoryncf-dimension.data.csv')
+
 if df_data is not None:
     category_event_data()
+    category_dimension_data()
 
