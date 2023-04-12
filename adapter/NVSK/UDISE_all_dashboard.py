@@ -7,7 +7,7 @@ df_data=obj.get_file()
 def students_event_data():
     df_snap = df_data[['State Code','District Code','Number of Students']]
     df_snap.columns=['state_id','district_id','no_of_students']
-    obj.upload_file(df_snap, 'students-event.data.csv')
+    obj.upload_file(df_snap, 'noofstudents-event.data.csv')
 
 def category_event_data():
     df_melt = df_data.melt(id_vars=['District Code', 'State Code'],

@@ -103,7 +103,9 @@ dist
 # TernJS port file
 .tern-port
 # config
-adapter/config.ini
+adapter/VSK/config.ini
 .idea
 /adapter/__pycache__
+/adapter/VSK/__pycache__/*
+/adapter/NVSK/__pycache__/*
 test_adapter.py

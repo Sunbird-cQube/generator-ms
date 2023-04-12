@@ -3,3 +3,4 @@ configparser
 pandas
 azure-storage-blob
 minio
+oci
