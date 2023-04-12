@@ -19,8 +19,6 @@ def total_qr_count():
     df_snap.columns = ['state_id', 'total_qr_count']
     obj.upload_file(df_snap, 'etbtotalqrcount-event.data.csv')
 
-
-
 if df_data is not None:
     qr_coverage()
     qr_covered()
