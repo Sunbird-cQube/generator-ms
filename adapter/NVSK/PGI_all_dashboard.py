@@ -14,7 +14,7 @@ def category_event_data():
     obj.upload_file(df_snap, 'category-event.data.csv')
     return df_snap
 
-def category_dimenstion_data():
+def category_dimension_data():
     df_data=category_event_data()
     df_data=df_data[['category_name']].drop_duplicates()
     df_data['category_id']= range(1, len(df_data) + 1)
@@ -23,4 +23,4 @@ def category_dimenstion_data():
 
 if df_data is not None:
     category_event_data()
-    category_dimenstion_data()
+    category_dimension_data()
