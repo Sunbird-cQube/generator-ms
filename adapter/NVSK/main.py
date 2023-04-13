@@ -22,8 +22,7 @@ class CollectData:
         '''
         self.program      = sys.argv[1]
         self.input_file   = sys.argv[2]
-        # self.date_today = datetime.now().strftime('%d-%b-%Y')
-        self.date_today = '11-Apr-2023'
+        self.date_today = datetime.now().strftime('%d-%b-%Y')
         self.env          = config['CREDs']['storage_type']
         self.input_folder = 'emission/' + self.date_today+'/'+self.input_file
         self.output_folder = 'process_input/' + self.program + '/' + self.date_today
