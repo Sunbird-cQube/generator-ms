@@ -24,4 +24,6 @@ python3 NCERT_program_started.py ncert diksha_quiz_program-started.zip
 python3 NCERT_quiz_participation.py ncert diksha_quiz_state-participation.zip
 python3 NCERT_quiz_started_plan.py ncert diksha_quiz-started-plan.zip
 python3 NCF_all_dashboard.py ncf ncf_all-dashboard.zip
+python3 NCF_language.py ncf language_wise_count.zip
+python3 NCF_state_wise.py ncf state_wise_count.zip
 python3 NIPUN_Barath_textbook.py nipun_barath nipunbharat_lo-covered-by-textbook.zip
