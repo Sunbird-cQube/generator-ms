@@ -4,6 +4,7 @@ import io
 import sys
 import boto3
 import zipfile
+import oci
 import configparser
 import pandas as pd
 from minio import Minio
@@ -23,13 +24,13 @@ class CollectData:
         self.input_file   = sys.argv[2]
         self.date_today = datetime.now().strftime('%d-%b-%Y')
         self.env          = config['CREDs']['storage_type']
+        self.input_folder = 'emission/' + self.date_today+'/'+self.input_file
+        self.output_folder = 'process_input/' + self.program + '/' + self.date_today
 
         if self.env == 'azure':
             # ______________AZURE Blob Config keys______________________
             self.azure_connection_string = config['CREDs']['azure_connection_string']
             self.azure_container         = config['CREDs']['azure_container']
-            self.azure_input_folder      = 'emission/'+self.date_today+'/'+self.input_file
-            self.azure_output_folder     = 'process_input/' + self.program + '/' + self.date_today
 
             # ___________________AZURE Blob Connection___________________________
             try:
@@ -43,14 +44,12 @@ class CollectData:
             self.aws_access_key     = config['CREDs']['aws_access_key']
             self.aws_secret_key     = config['CREDs']['aws_secret_key']
             self.s3_bucket          = config['CREDs']['s3_bucket']
-            self.s3_input_folder    = 'emission/' + self.date_today+'/'+self.input_file
-            self.s3_output_folder   = 'process_input/' + self.program + '/' + self.date_today
 
             #__________________S3 Bucket Connection ____________________
             try:
                 self.s3 = boto3.client('s3', aws_access_key_id=self.aws_access_key,
                                        aws_secret_access_key=self.aws_secret_key)
-                self.s3_objects_list = self.s3.list_objects_v2(Bucket=self.s3_bucket, Prefix=self.s3_input_folder)
+                self.s3_objects_list = self.s3.list_objects_v2(Bucket=self.s3_bucket, Prefix=self.input_folder)
             except Exception:
                 print(f'Message : Failed to connect to {self.s3_bucket} bucket')
 
@@ -62,15 +61,28 @@ class CollectData:
             self.minio_username   = config['CREDs']['minio_username']
             self.minio_password  = config['CREDs']['minio_password']
             self.minio_bucket       = config['CREDs']['minio_bucket']
-            self.minio_input_folder = 'emission/' + self.date_today+'/'+self.input_file
-            self.minio_output_folder= 'process_input/'+ self.program + '/' + self.date_today
 
             #__________________ Minio Bucket Connection_________________
             try:
                 self.minio_client = Minio(endpoint=self.minio_endpoint+':'+self.minio_port,access_key=self.minio_username,secret_key=self.minio_password,secure=False)  # set this to True if your Minio instance is secured with SSL/TLS
-                self.minio_object_list=self.minio_client.list_objects(self.minio_bucket,prefix=self.minio_input_folder, recursive=True)
+                self.minio_object_list=self.minio_client.list_objects(self.minio_bucket,prefix=self.input_folder, recursive=True)
             except Exception:
                 print(f'Message : Failed to connect to {self.minio_bucket} bucket')
+
+        elif self.env == 'oracle':
+            #_________________ Oracle DB config Keys ____________________
+            self.config = oci.config.from_file('~/.oci/config')
+            self.oracle_storage_client = oci.object_storage.ObjectStorageClient(self.config)
+            self.namespace = self.oracle_storage_client.get_namespace().data
+            self.oracle_bucket=config['CREDs']['oracle_bucket']
+            #_________________ Oracle DB connection _____________________
+            try:
+                self.file_contents = self.oracle_storage_client.get_object(self.namespace, self.oracle_bucket, self.input_folder)
+            except oci.exceptions.ServiceError as e:
+                if e.status == 404:
+                    print(f"The object {self.input_folder} does not exist in the bucket {self.oracle_bucket}.")
+                else:
+                    raise e
         else:
             print(f'Message : Storage type {self.env} is not valid')
 
@@ -99,33 +111,40 @@ class CollectData:
     def  get_file(self):
 
         if self.env == 'azure': ## reading frile from Azure cloud
-            blobs_list = self.container_client.list_blobs(name_starts_with=self.azure_input_folder)
+            blobs_list = self.container_client.list_blobs(name_starts_with=self.input_folder)
             if any(blobs_list):
-                blob_client = self.container_client.get_blob_client(blob=self.azure_input_folder)
+                blob_client = self.container_client.get_blob_client(blob=self.input_folder)
                 data=io.BytesIO(blob_client.download_blob().readall())
                 df_snap=self.data_parser(data)
                 return df_snap
             else:
-                print(f'Message : The folder {self.azure_input_folder} not exists in azure blob container.')
+                print(f'Message : The folder {self.input_folder} not exists in azure blob container.')
 
         elif self.env == 'aws': ## Reading file from AWS cloud
             if 'Contents' in self.s3_objects_list:
-                file_bytes =self.s3.get_object(Bucket=self.s3_bucket, Key=self.s3_input_folder)
+                file_bytes =self.s3.get_object(Bucket=self.s3_bucket, Key=self.input_folder)
                 data=io.BytesIO(file_bytes['Body'].read())
                 df_snap=self.data_parser(data)
                 return df_snap
             else:
-                print(f"Message : The folder {self.s3_input_folder} does not exist in the bucket {self.s3_bucket}.")
+                print(f"Message : The folder {self.input_folder} does not exist in the bucket {self.s3_bucket}.")
 
         elif self.env == 'local': ## Reading file from local Minio
             for obj in self.minio_object_list:
                 if  obj.object_name:
-                    object_data = self.minio_client.get_object(self.minio_bucket, self.minio_input_folder)
+                    object_data = self.minio_client.get_object(self.minio_bucket, self.input_folder)
                     data=io.BytesIO(object_data.read())
                     df_snap=self.data_parser(data)
                     return df_snap
                 else:
-                    return print(f'Message : Folder {self.minio_input_folder} does not exist')
+                    return print(f'Message : Folder {self.input_folder} does not exist')
+        elif self.env == 'oracle':
+            list_objects_response = self.oracle_storage_client.list_objects(self.namespace, self.oracle_bucket)
+            for object_summary in list_objects_response.data.objects:
+                if object_summary.name == self.input_folder:
+                    data = io.BytesIO(self.file_contents.data.content)
+                    df_snap = self.data_parser(data)
+                    return df_snap
         else:
             print(f'Message : Storage type {self.env} is not valid')
 
@@ -136,17 +155,19 @@ class CollectData:
         csv_buffer = io.BytesIO(csv_bytes)
 
         if self.env == 'azure': ## uploading file to Azure blob container
-            blob_client=self.container_client.get_blob_client(blob=self.azure_output_folder+'/'+output_file)
+            blob_client=self.container_client.get_blob_client(blob=self.output_folder+'/'+output_file)
             blob_client.upload_blob(csv_buffer, overwrite=False)
-            print(f"Message : File {output_file} uploaded successfully to the folder {self.azure_output_folder}.")
+            print(f"Message : File {output_file} uploaded successfully to the folder {self.output_folder}.")
 
         elif self.env == 'aws': ## uploading file to AWS bucket
-            self.s3.put_object(Body=csv_buffer,Bucket=self.s3_bucket,Key=self.s3_output_folder+'/'+output_file)
-            print(f"Message : File {output_file} uploaded successfully to the folder {self.s3_output_folder}.")
+            self.s3.put_object(Body=csv_buffer,Bucket=self.s3_bucket,Key=self.output_folder+'/'+output_file)
+            print(f"Message : File {output_file} uploaded successfully to the folder {self.output_folder}.")
 
         elif self.env == 'local': ## uploading file to local Minio
-            self.minio_client.put_object(bucket_name=self.minio_bucket,object_name=self.minio_output_folder+'/'+output_file,data=csv_buffer,length=len(csv_bytes),content_type='application/csv')
-            print(f"Message : File {output_file} uploaded successfully to the folder {self.minio_output_folder}.")
-
+            self.minio_client.put_object(bucket_name=self.minio_bucket,object_name=self.output_folder+'/'+output_file,data=csv_buffer,length=len(csv_bytes),content_type='application/csv')
+            print(f"Message : File {output_file} uploaded successfully to the folder {self.output_folder}.")
+        elif self.env == 'oracle':
+            self.oracle_storage_client.put_object(self.namespace,self.oracle_bucket,self.output_folder+'/'+output_file,csv_buffer)
+            print(f"Message : File {output_file} uploaded successfully to the folder {self.output_folder}.")
         else:
             print(f'Message : Storage type {self.env} is not valid')

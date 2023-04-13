@@ -4,7 +4,6 @@ obj=CollectData()
 program=obj.program
 df_data=obj.get_file()
 
-
 def total_live_tb():
     df_snap = df_data[['State Code','Total Live TB']]
     df_snap.columns = ['state_id','total_live_tb']
@@ -20,7 +19,6 @@ def state_energised_etb():
     df_snap.columns = ['state_id','state_energised_etb']
     obj.upload_file(df_snap, 'stateenergisedetb-event.data.csv')
 
-
 def total_physical_textbooks():
     df_snap = df_data[['State Code','Total Physical textbooks excluding adopted (Curriculum+Supplementary)']]
     df_snap.columns = ['state_id','total_physical_textbooks_excl_adopted_curr_supp']
@@ -35,8 +33,6 @@ def etb_coverage():
     df_snap = df_data[['State Code','ETB Coverage']]
     df_snap.columns = ['state_id','etb_coverage']
     obj.upload_file(df_snap, 'etbcoverage-event.data.csv')
-
-
 
 if df_data is not None:
     total_live_tb()

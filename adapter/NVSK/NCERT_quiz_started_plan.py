@@ -1,5 +1,4 @@
 from main import CollectData
-import re
 
 obj=CollectData()
 program=obj.program
@@ -14,7 +13,6 @@ def certificate_issued():
     df_snap = df_data[['Collection Name', 'Medium','Certificate Issued (100% completion)']]
     df_snap.columns = ['quiz_name', 'medium','certificate_issued_100_perc_completion']
     obj.upload_file(df_snap, 'certificateissued-event.data.csv')
-
 
 def completion_perc():
     df_snap = df_data[['Collection Name', 'Medium', 'Completion %']]

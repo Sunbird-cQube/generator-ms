@@ -1,10 +1,8 @@
 from main import CollectData
-import re
 
 obj=CollectData()
 program=obj.program
 df_data=obj.get_file()
-
 
 def category_event_data():
     df_melt = df_data.melt(id_vars=['State Code'],
@@ -15,7 +13,6 @@ def category_event_data():
     df_snap.columns = ['state_id','category_name', 'category_value']
     obj.upload_file(df_snap, 'categorymicro-event.data.csv')
     return df_snap
-
 
 def category_dimenstion_data():
     df_data = category_event_data()

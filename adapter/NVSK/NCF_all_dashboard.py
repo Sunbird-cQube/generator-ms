@@ -1,10 +1,8 @@
 from main import CollectData
-import re
 
 obj=CollectData()
 program=obj.program
 df_data=obj.get_file()
-
 
 def category_event_data():
     df_melt = df_data.melt(id_vars=['State Code'],

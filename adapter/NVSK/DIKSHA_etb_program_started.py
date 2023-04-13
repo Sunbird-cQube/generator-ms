@@ -9,6 +9,5 @@ def energised_textbooks():
     df_snap.columns = ['state_id','energised_textbooks_state_and_ncert_adopted']
     obj.upload_file(df_snap, 'energisedtextbooks-event.data.csv')
 
-
 if df_data is not None:
     energised_textbooks()

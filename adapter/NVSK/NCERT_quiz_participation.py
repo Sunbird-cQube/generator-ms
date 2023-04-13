@@ -1,16 +1,13 @@
 from main import CollectData
-import re
 
 obj=CollectData()
 program=obj.program
 df_data=obj.get_file()
 
-
 def total_enrollments():
     df_snap = df_data[['State Code', 'Quiz Name','Total Enrollments']]
     df_snap.columns = ['state_id','quiz_name','total_enrollments']
     obj.upload_file(df_snap, 'totalenrollments-event.data.csv')
-
 
 def quiz_dimension():
     df_snap = df_data[['Quiz Name']].drop_duplicates()
