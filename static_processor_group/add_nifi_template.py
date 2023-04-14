@@ -117,24 +117,24 @@ def instantiate_template(processor_group):
         template_id = get_template_id('Run_adapters')
         data = {
             "templateId": template_id,
-            "originX": -1067.5854405025766,
-            "originY": -1529.7644241816233,
+            "originX": -1296,
+            "originY": -1072,
             "disconnectedNodeAcknowledged": "false"
         }
     if processor_group.__contains__('Code'):
         template_id = get_template_id('Run Latest Code')
         data = {
         "templateId": template_id,
-        "originX": -1067.5854405025766,
-        "originY": -1529.7644241816233,
+        "originX": -1296,
+        "originY": -784,
         "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Student'):
         template_id = get_template_id('Plugin Student Attendance aws')
         data = {
             "templateId": template_id,
-            "originX": -1200,
-            "originY": -1600,
+            "originX": -1520,
+            "originY": -1608,
             "disconnectedNodeAcknowledged": "false"
         }
 
@@ -142,16 +142,32 @@ def instantiate_template(processor_group):
         template_id = get_template_id('Plugin Teachers Attendance aws')
         data = {
             "templateId": template_id,
-            "originX": -1200,
-            "originY": -1600,
+            "originX": -1024,
+            "originY": -1608,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('Rev-and-monitor'):
-        template_id = get_template_id('Plugin Rev-and-monitor aws')
+    elif processor_group.__contains__('block-review'):
+        template_id = get_template_id('block-review-meetings-aws')
         data = {
             "templateId": template_id,
-            "originX": -1250,
-            "originY": -1550,
+            "originX": -1296,
+            "originY": -1360,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('cluster-review'):
+        template_id = get_template_id('cluster-review-meetings-aws')
+        data = {
+            "templateId": template_id,
+            "originX": -808,
+            "originY": -1360,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('district-review'):
+        template_id = get_template_id('district-review-meetings-aws')
+        data = {
+            "templateId": template_id,
+            "originX": -1752,
+            "originY": -1360,
             "disconnectedNodeAcknowledged": "false"
         }
     get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
@@ -168,8 +184,8 @@ def instantiate_template_local(processor_group):
         template_id = get_template_id('Plugin Student Attendance local')
         data = {
             "templateId": template_id,
-            "originX": -1200,
-            "originY": -1600,
+            "originX": -1520,
+            "originY": -1608,
             "disconnectedNodeAcknowledged": "false"
         }
 
@@ -177,16 +193,32 @@ def instantiate_template_local(processor_group):
         template_id = get_template_id('Plugin Teachers Attendance local')
         data = {
             "templateId": template_id,
-            "originX": -1200,
-            "originY": -1600,
+            "originX": -1024,
+            "originY": -1608,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('Rev-and-monitor'):
-        template_id = get_template_id('Plugin Rev-and-monitor local')
+    elif processor_group.__contains__('block-review'):
+        template_id = get_template_id('block-review-meetings-local')
         data = {
             "templateId": template_id,
-            "originX": -1250,
-            "originY": -1550,
+            "originX": -1296,
+            "originY": -1360,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('cluster-review'):
+        template_id = get_template_id('cluster-review-meetings-local')
+        data = {
+            "templateId": template_id,
+            "originX": -808,
+            "originY": -1360,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('district-review'):
+        template_id = get_template_id('district-review-meetings-local')
+        data = {
+            "templateId": template_id,
+            "originX": -1752,
+            "originY": -1360,
             "disconnectedNodeAcknowledged": "false"
         }
     get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
@@ -321,7 +353,7 @@ def update_processor_property(processor_group_name, processor_name):
                         "disconnectedNodeAcknowledged": "false"
                     }
 
-                elif processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
+                elif processor_name == 'FetchS3_dist_rev_aws' or processor_name == 'Puts3_dist_rev_aws' or processor_name == 'FetchS3_block_rev_aws' or processor_name == 'Puts3_block_rev_aws' or processor_name == 'FetchS3_cluster_rev_aws' or processor_name == 'Puts3_cluster_rev_aws' or processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
                     update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
@@ -454,7 +486,7 @@ def update_processor_property(processor_group_name, processor_name):
                         "disconnectedNodeAcknowledged": "false"
                     }
 
-                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local':
+                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local' or processor_name == 'Lists3_dist_rev_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local'or processor_name == 'Lists3_block_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'Lists3_cluster_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -505,11 +537,24 @@ def start_processor_group(processor_group_name,state):
         return start_response.text
 
 def plugins_aws():
-    upload_template('Plugin_Rev-and-monitor_aws.xml')
-    instantiate_template('Plugin_Rev-and-monitor_aws.xml')
-    controller_service_disable('Plugin Rev-and-monitor aws')
-    update_controller_service_property('Plugin Rev-and-monitor aws', 'aws_rev-mon')
-    controller_service_enable('Plugin Rev-and-monitor aws')
+    upload_template('block-review-meetings-aws.xml')
+    upload_template('cluster-review-meetings-aws.xml')
+    upload_template('district-review-meetings-aws.xml')
+    instantiate_template('block-review-meetings-aws.xml')
+    instantiate_template('cluster-review-meetings-aws.xml')
+    instantiate_template('district-review-meetings-aws.xml')
+
+    controller_service_disable('block-review-meetings-aws')
+    update_controller_service_property('block-review-meetings-aws', 'aws_rev-mon')
+    controller_service_enable('block-review-meetings-aws')
+
+    controller_service_disable('district-review-meetings-aws')
+    update_controller_service_property('district-review-meetings-aws', 'aws_rev-mon')
+    controller_service_enable('district-review-meetings-aws')
+
+    controller_service_disable('cluster-review-meetings-aws')
+    update_controller_service_property('cluster-review-meetings-aws', 'aws_rev-mon')
+    controller_service_enable('cluster-review-meetings-aws')
 
     upload_template('Plugin_Student_Attendance_aws.xml')
     instantiate_template('Plugin_Student_Attendance_aws.xml')
@@ -527,17 +572,40 @@ def plugins_aws():
     for i in processors:
         update_processor_property('Plugin Student Attendance aws', i)
         update_processor_property('Plugin Teachers Attendance aws', i)
-    update_processor_property('Plugin Rev-and-monitor aws', 'Lists3')
-    update_processor_property('Plugin Rev-and-monitor aws', 'Puts3Processing')
+    update_processor_property('block-review-meetings-aws', 'Lists3')
+    update_processor_property('block-review-meetings-aws','FetchS3_block_rev_aws')
+    update_processor_property('block-review-meetings-aws','Puts3_block_rev_aws')
 
-    processor_list = ['Plugin Student Attendance aws','Plugin Teachers Attendance aws','Plugin Rev-and-monitor aws']
+    update_processor_property('district-review-meetings-aws', 'Lists3')
+    update_processor_property('district-review-meetings-aws', 'FetchS3_dist_rev_aws')
+    update_processor_property('district-review-meetings-aws', 'Puts3_dist_rev_aws')
+
+    update_processor_property('cluster-review-meetings-aws', 'Lists3')
+    update_processor_property('cluster-review-meetings-aws', 'FetchS3_cluster_rev_aws')
+    update_processor_property('cluster-review-meetings-aws', 'Puts3_cluster_rev_aws')
+
+    processor_list = ['Plugin Student Attendance aws','Plugin Teachers Attendance aws','district-review-meetings-aws','block-review-meetings-aws','cluster-review-meetings-aws']
     for i in processor_list:
         start_processor_group(i, 'RUNNING')
 
 
 def plugins_local():
-    upload_template('Plugin_Rev-and-monitor_local.xml')
-    instantiate_template_local('Plugin_Rev-and-monitor_local.xml')
+    upload_template('block-review-meetings-local.xml')
+    upload_template('cluster-review-meetings-local.xml')
+    upload_template('district-review-meetings-local.xml')
+
+    instantiate_template_local('block-review-meetings-local.xml')
+    instantiate_template_local('cluster-review-meetings-local.xml')
+    instantiate_template_local('district-review-meetings-local.xml')
+    update_processor_property('district-review-meetings-local', 'Lists3_dist_rev_local')
+    update_processor_property('district-review-meetings-local', 'FetchS3_dist_rev_local')
+    update_processor_property('district-review-meetings-local', 'Puts3_dist_rev_local')
+    update_processor_property('block-review-meetings-local','Lists3_block_rev_local')
+    update_processor_property('block-review-meetings-local','FetchS3_block_rev_local')
+    update_processor_property('block-review-meetings-local','Puts3_block_rev_local')
+    update_processor_property('cluster-review-meetings-local', 'Lists3_cluster_rev_local')
+    update_processor_property('cluster-review-meetings-local', 'FetchS3_cluster_rev_local')
+    update_processor_property('cluster-review-meetings-local', 'Puts3_cluster_rev_local')
 
     upload_template('Plugin_Student_Attendance_local.xml')
     instantiate_template_local('Plugin_Student_Attendance_local.xml')
@@ -553,12 +621,9 @@ def plugins_local():
     for i in processors:
         update_processor_property('Plugin Student Attendance local', i)
         update_processor_property('Plugin Teachers Attendance local', i)
-    update_processor_property('Plugin Rev-and-monitor local', 'Lists3_local')
-    update_processor_property('Plugin Rev-and-monitor local', 'Puts3Processing_local')
-    processor_group_list = ['Plugin Teachers Attendance local', 'Plugin Student Attendance local',
-                            'Plugin Rev-and-monitor local']
+    processor_group_list = ['Plugin Teachers Attendance local', 'Plugin Student Attendance local','district-review-meetings-local','block-review-meetings-local','cluster-review-meetings-local']
     for i in processor_group_list:
-        update_processor_property(i, 'RUNNING')
+        start_processor_group(i, 'RUNNING')
 
 def run_latest_aws():
     upload_template('Run_Latest_Code_aws.xml')
