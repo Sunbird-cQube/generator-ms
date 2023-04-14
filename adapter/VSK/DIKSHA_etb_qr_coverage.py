@@ -17,7 +17,7 @@ def qr_code_linked_to_content():
 def total_qr_codes():
     df_snap = df_data[['Textbook ID','Grade', 'Subject', 'Medium','Total QR Codes']]
     df_snap.columns = ['textbook_id','grade_diksha','subject_diksha', 'medium','total_qr_codes']
-    obj.upload_file(df_snap, 'totalqrcode-event.data.csv')
+    obj.upload_file(df_snap, 'totalqrcodes-event.data.csv')
 
 def textbook_dimension():
     df_snap = df_data[['Textbook ID', 'Textbook Name']].drop_duplicates()
