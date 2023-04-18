@@ -71,7 +71,7 @@ class CollectData:
 
         elif self.env == 'oracle':
             #_________________ Oracle DB config Keys ____________________
-            self.config = oci.config.from_file('~/.oci/config')
+            self.config = oci.config.from_file()
             self.oracle_storage_client = oci.object_storage.ObjectStorageClient(self.config)
             self.namespace = self.oracle_storage_client.get_namespace().data
             self.oracle_bucket=config['CREDs']['oracle_bucket']
