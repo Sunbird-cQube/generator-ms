@@ -361,6 +361,7 @@
                     <properties>
                         <entry>
                             <key>default-credentials</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Access Key</key>
@@ -376,6 +377,7 @@
                         </entry>
                         <entry>
                             <key>anonymous-credentials</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Assume Role ARN</key>
@@ -385,6 +387,7 @@
                         </entry>
                         <entry>
                             <key>Session Time</key>
+                            <value>3600</value>
                         </entry>
                         <entry>
                             <key>assume-role-external-id</key>
@@ -410,6 +413,7 @@
                         <group>org.apache.nifi</group>
                         <version>1.12.1</version>
                     </bundle>
+                    <comments></comments>
                     <descriptors>
                         <entry>
                             <key>Schema Write Strategy</key>
@@ -563,21 +567,25 @@
                     <properties>
                         <entry>
                             <key>Schema Write Strategy</key>
+                            <value>no-schema</value>
                         </entry>
                         <entry>
                             <key>schema-cache</key>
                         </entry>
                         <entry>
                             <key>schema-protocol-version</key>
+                            <value>1</value>
                         </entry>
                         <entry>
                             <key>schema-access-strategy</key>
+                            <value>inherit-record-schema</value>
                         </entry>
                         <entry>
                             <key>schema-registry</key>
                         </entry>
                         <entry>
                             <key>schema-name</key>
+                            <value>${schema.name}</value>
                         </entry>
                         <entry>
                             <key>schema-version</key>
@@ -587,6 +595,7 @@
                         </entry>
                         <entry>
                             <key>schema-text</key>
+                            <value>${avro.schema}</value>
                         </entry>
                         <entry>
                             <key>Date Format</key>
@@ -599,18 +608,23 @@
                         </entry>
                         <entry>
                             <key>CSV Format</key>
+                            <value>custom</value>
                         </entry>
                         <entry>
                             <key>Value Separator</key>
+                            <value>,</value>
                         </entry>
                         <entry>
                             <key>Include Header Line</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>Quote Character</key>
+                            <value>"</value>
                         </entry>
                         <entry>
                             <key>Escape Character</key>
+                            <value>\</value>
                         </entry>
                         <entry>
                             <key>Comment Marker</key>
@@ -620,18 +634,23 @@
                         </entry>
                         <entry>
                             <key>Trim Fields</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>Quote Mode</key>
+                            <value>MINIMAL</value>
                         </entry>
                         <entry>
                             <key>Record Separator</key>
+                            <value>\n</value>
                         </entry>
                         <entry>
                             <key>Include Trailing Delimiter</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>csvutils-character-set</key>
+                            <value>UTF-8</value>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
@@ -645,6 +664,7 @@
                         <group>org.apache.nifi</group>
                         <version>1.12.1</version>
                     </bundle>
+                    <comments></comments>
                     <descriptors>
                         <entry>
                             <key>schema-access-strategy</key>
@@ -779,12 +799,14 @@
                     <properties>
                         <entry>
                             <key>schema-access-strategy</key>
+                            <value>infer-schema</value>
                         </entry>
                         <entry>
                             <key>schema-registry</key>
                         </entry>
                         <entry>
                             <key>schema-name</key>
+                            <value>${schema.name}</value>
                         </entry>
                         <entry>
                             <key>schema-version</key>
@@ -794,9 +816,11 @@
                         </entry>
                         <entry>
                             <key>schema-text</key>
+                            <value>${avro.schema}</value>
                         </entry>
                         <entry>
                             <key>csv-reader-csv-parser</key>
+                            <value>commons-csv</value>
                         </entry>
                         <entry>
                             <key>Date Format</key>
@@ -809,24 +833,31 @@
                         </entry>
                         <entry>
                             <key>CSV Format</key>
+                            <value>custom</value>
                         </entry>
                         <entry>
                             <key>Value Separator</key>
+                            <value>,</value>
                         </entry>
                         <entry>
                             <key>Record Separator</key>
+                            <value>\n</value>
                         </entry>
                         <entry>
                             <key>Skip Header Line</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>ignore-csv-header</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Quote Character</key>
+                            <value>"</value>
                         </entry>
                         <entry>
                             <key>Escape Character</key>
+                            <value>\</value>
                         </entry>
                         <entry>
                             <key>Comment Marker</key>
@@ -836,9 +867,11 @@
                         </entry>
                         <entry>
                             <key>Trim Fields</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>csvutils-character-set</key>
+                            <value>UTF-8</value>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
@@ -848,7 +881,7 @@
                     <id>0acecb33-4a45-3f7a-0000-000000000000</id>
                     <parentGroupId>966793aa-b46d-327b-0000-000000000000</parentGroupId>
                     <position>
-                        <x>-248.0</x>
+                        <x>-232.0</x>
                         <y>496.0</y>
                     </position>
                     <bundle>
@@ -1100,11 +1133,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/teachersmarked-event.data.csv</value>
+<value>process_input/teacher-attendance/${now():format("dd-MMM-yyyy")}/teachersmarked-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -1258,7 +1291,7 @@
                     <id>6012409d-a158-38ac-0000-000000000000</id>
                     <parentGroupId>966793aa-b46d-327b-0000-000000000000</parentGroupId>
                     <position>
-                        <x>-224.0</x>
+                        <x>-232.0</x>
                         <y>256.0</y>
                     </position>
                     <bundle>
@@ -1510,11 +1543,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/totalteacher-event.data.csv</value>
+<value>process_input/teacher-attendance/${now():format("dd-MMM-yyyy")}/totalteacher-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -1806,7 +1839,7 @@
                         <properties>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Object Key</key>
@@ -1971,15 +2004,15 @@
                             </entry>
                             <entry>
 <key>teachers_attendance_marked</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_id,teachers_attendance_marked FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_state,teachers_attendance_marked FROM FLOWFILE</value>
                             </entry>
                             <entry>
 <key>teachers_attendance_present</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_id,teachers_marked_present FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_state,teachers_marked_present FROM FLOWFILE</value>
                             </entry>
                             <entry>
 <key>total_teachers</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_id,total_teachers FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,schoolcategory_id,grade_state,total_teachers FROM FLOWFILE</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2017,7 +2050,7 @@
                     <id>7e92ed2e-7530-30b9-0000-000000000000</id>
                     <parentGroupId>966793aa-b46d-327b-0000-000000000000</parentGroupId>
                     <position>
-                        <x>-248.0</x>
+                        <x>-232.0</x>
                         <y>712.0</y>
                     </position>
                     <bundle>
@@ -2269,11 +2302,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/teacherspresent-event.data.csv</value>
+<value>process_input/teacher-attendance/${now():format("dd-MMM-yyyy")}/teacherspresent-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -2663,7 +2696,7 @@
                         <properties>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Region</key>
@@ -2731,7 +2764,7 @@
                             </entry>
                             <entry>
 <key>prefix</key>
-<value>combined_input/school-attendance/${now():format("dd-MMM-yyyy")}/teacher</value>
+<value>combined_input/teacher-attendance/${now():format("dd-MMM-yyyy")}/teacher</value>
                             </entry>
                             <entry>
 <key>use-versions</key>
@@ -2747,7 +2780,7 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 0 22 * * ?</schedulingPeriod>
+                        <schedulingPeriod>0 32 10 * * ?</schedulingPeriod>
                         <schedulingStrategy>CRON_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
@@ -2768,5 +2801,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>03/25/2023 15:40:44 IST</timestamp>
+    <timestamp>04/20/2023 16:47:02 IST</timestamp>
 </template>
