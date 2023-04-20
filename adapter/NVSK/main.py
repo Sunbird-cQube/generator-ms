@@ -88,7 +88,8 @@ class CollectData:
 
     #___________________________Column renaming after reading file from colud__________
         self.rep_list = []
-    def column_rename(self,df):
+    def column_rename(self,data):
+        df=pd.read_csv(data)
         for col in df.columns.tolist():
             x=re.sub(r'^[\d.\s]+|[\d.\s]+$]+','',col)
             self.rep_list.append(x)
@@ -96,15 +97,6 @@ class CollectData:
         df_snap=df[col_list]
         df_snap.columns=self.rep_list
         return df_snap
-
-    #__________________________Parsing the buffer data_________________________________
-
-    def data_parser(self,data):
-        with zipfile.ZipFile(data) as myzip:
-            with myzip.open(myzip.namelist()[0]) as myfile:
-                df = pd.read_csv(myfile)
-                df_snap = self.column_rename(df)
-                return df_snap
 
     #_____________________________Read the File from Cloud_____________________________
 
@@ -115,7 +107,7 @@ class CollectData:
             if any(blobs_list):
                 blob_client = self.container_client.get_blob_client(blob=self.input_folder)
                 data=io.BytesIO(blob_client.download_blob().readall())
-                df_snap=self.data_parser(data)
+                df_snap=self.column_rename(data)
                 return df_snap
             else:
                 print(f'Message : The folder {self.input_folder} not exists in azure blob container.')
@@ -124,7 +116,7 @@ class CollectData:
             if 'Contents' in self.s3_objects_list:
                 file_bytes =self.s3.get_object(Bucket=self.s3_bucket, Key=self.input_folder)
                 data=io.BytesIO(file_bytes['Body'].read())
-                df_snap=self.data_parser(data)
+                df_snap=self.column_rename(data)
                 return df_snap
             else:
                 print(f"Message : The folder {self.input_folder} does not exist in the bucket {self.s3_bucket}.")
@@ -134,7 +126,7 @@ class CollectData:
                 if  obj.object_name:
                     object_data = self.minio_client.get_object(self.minio_bucket, self.input_folder)
                     data=io.BytesIO(object_data.read())
-                    df_snap=self.data_parser(data)
+                    df_snap=self.column_rename(data)
                     return df_snap
                 else:
                     return print(f'Message : Folder {self.input_folder} does not exist')
@@ -143,7 +135,7 @@ class CollectData:
             for object_summary in list_objects_response.data.objects:
                 if object_summary.name == self.input_folder:
                     data = io.BytesIO(self.file_contents.data.content)
-                    df_snap = self.data_parser(data)
+                    df_snap = self.column_rename(data)
                     return df_snap
         else:
             print(f'Message : Storage type {self.env} is not valid')
