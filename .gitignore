@@ -104,6 +104,7 @@ dist
 .tern-port
 # config
 adapter/VSK/config.ini
+adapter/NVSK/config.ini
 .idea
 /adapter/__pycache__
 /adapter/VSK/__pycache__/*
