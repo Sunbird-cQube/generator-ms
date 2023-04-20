@@ -271,6 +271,7 @@
                         <group>org.apache.nifi</group>
                         <version>1.12.1</version>
                     </bundle>
+                    <comments></comments>
                     <descriptors>
                         <entry>
                             <key>schema-access-strategy</key>
@@ -405,12 +406,14 @@
                     <properties>
                         <entry>
                             <key>schema-access-strategy</key>
+                            <value>infer-schema</value>
                         </entry>
                         <entry>
                             <key>schema-registry</key>
                         </entry>
                         <entry>
                             <key>schema-name</key>
+                            <value>${schema.name}</value>
                         </entry>
                         <entry>
                             <key>schema-version</key>
@@ -420,9 +423,11 @@
                         </entry>
                         <entry>
                             <key>schema-text</key>
+                            <value>${avro.schema}</value>
                         </entry>
                         <entry>
                             <key>csv-reader-csv-parser</key>
+                            <value>commons-csv</value>
                         </entry>
                         <entry>
                             <key>Date Format</key>
@@ -435,24 +440,31 @@
                         </entry>
                         <entry>
                             <key>CSV Format</key>
+                            <value>custom</value>
                         </entry>
                         <entry>
                             <key>Value Separator</key>
+                            <value>,</value>
                         </entry>
                         <entry>
                             <key>Record Separator</key>
+                            <value>\n</value>
                         </entry>
                         <entry>
                             <key>Skip Header Line</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>ignore-csv-header</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Quote Character</key>
+                            <value>"</value>
                         </entry>
                         <entry>
                             <key>Escape Character</key>
+                            <value>\</value>
                         </entry>
                         <entry>
                             <key>Comment Marker</key>
@@ -462,9 +474,11 @@
                         </entry>
                         <entry>
                             <key>Trim Fields</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>csvutils-character-set</key>
+                            <value>UTF-8</value>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
@@ -564,6 +578,7 @@
                     <properties>
                         <entry>
                             <key>default-credentials</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Access Key</key>
@@ -579,6 +594,7 @@
                         </entry>
                         <entry>
                             <key>anonymous-credentials</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>Assume Role ARN</key>
@@ -588,6 +604,7 @@
                         </entry>
                         <entry>
                             <key>Session Time</key>
+                            <value>3600</value>
                         </entry>
                         <entry>
                             <key>assume-role-external-id</key>
@@ -613,6 +630,7 @@
                         <group>org.apache.nifi</group>
                         <version>1.12.1</version>
                     </bundle>
+                    <comments></comments>
                     <descriptors>
                         <entry>
                             <key>Schema Write Strategy</key>
@@ -766,21 +784,25 @@
                     <properties>
                         <entry>
                             <key>Schema Write Strategy</key>
+                            <value>no-schema</value>
                         </entry>
                         <entry>
                             <key>schema-cache</key>
                         </entry>
                         <entry>
                             <key>schema-protocol-version</key>
+                            <value>1</value>
                         </entry>
                         <entry>
                             <key>schema-access-strategy</key>
+                            <value>inherit-record-schema</value>
                         </entry>
                         <entry>
                             <key>schema-registry</key>
                         </entry>
                         <entry>
                             <key>schema-name</key>
+                            <value>${schema.name}</value>
                         </entry>
                         <entry>
                             <key>schema-version</key>
@@ -790,6 +812,7 @@
                         </entry>
                         <entry>
                             <key>schema-text</key>
+                            <value>${avro.schema}</value>
                         </entry>
                         <entry>
                             <key>Date Format</key>
@@ -802,18 +825,23 @@
                         </entry>
                         <entry>
                             <key>CSV Format</key>
+                            <value>custom</value>
                         </entry>
                         <entry>
                             <key>Value Separator</key>
+                            <value>,</value>
                         </entry>
                         <entry>
                             <key>Include Header Line</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>Quote Character</key>
+                            <value>"</value>
                         </entry>
                         <entry>
                             <key>Escape Character</key>
+                            <value>\</value>
                         </entry>
                         <entry>
                             <key>Comment Marker</key>
@@ -823,18 +851,23 @@
                         </entry>
                         <entry>
                             <key>Trim Fields</key>
+                            <value>true</value>
                         </entry>
                         <entry>
                             <key>Quote Mode</key>
+                            <value>MINIMAL</value>
                         </entry>
                         <entry>
                             <key>Record Separator</key>
+                            <value>\n</value>
                         </entry>
                         <entry>
                             <key>Include Trailing Delimiter</key>
+                            <value>false</value>
                         </entry>
                         <entry>
                             <key>csvutils-character-set</key>
+                            <value>UTF-8</value>
                         </entry>
                     </properties>
                     <state>ENABLED</state>
@@ -924,15 +957,15 @@
                             </entry>
                             <entry>
 <key>students_attendance_marked</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_id,schoolcategory_id,gender,students_attendance_marked FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_state,schoolcategory_id,gender,students_attendance_marked FROM FLOWFILE</value>
                             </entry>
                             <entry>
 <key>students_attendance_present</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_id,schoolcategory_id,gender,students_marked_present FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_state,schoolcategory_id,gender,students_marked_present FROM FLOWFILE</value>
                             </entry>
                             <entry>
 <key>total_students</key>
-<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_id,schoolcategory_id,gender,total_students FROM FLOWFILE</value>
+<value>SELECT "date",district_id,block_id,cluster_id,school_id,grade_state,schoolcategory_id,gender,total_students FROM FLOWFILE</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1108,7 +1141,7 @@
                         <properties>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Object Key</key>
@@ -1116,7 +1149,7 @@
                             </entry>
                             <entry>
 <key>Region</key>
-<value>ap-south-1</value>
+<value>us-east-1</value>
                             </entry>
                             <entry>
 <key>Access Key</key>
@@ -1362,11 +1395,11 @@
                         <properties>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Region</key>
-<value>ap-south-1</value>
+<value>us-east-1</value>
                             </entry>
                             <entry>
 <key>Access Key</key>
@@ -1430,7 +1463,7 @@
                             </entry>
                             <entry>
 <key>prefix</key>
-<value>combined_input/school-attendance/${now():format("dd-MMM-yyyy")}/student</value>
+<value>combined_input/student-attendance/${now():format("dd-MMM-yyyy")}/</value>
                             </entry>
                             <entry>
 <key>use-versions</key>
@@ -1446,7 +1479,7 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 0 22 * * ?</schedulingPeriod>
+                        <schedulingPeriod>0 32 10 * * ?</schedulingPeriod>
                         <schedulingStrategy>CRON_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
@@ -1716,11 +1749,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/studentsmarked-event.data.csv</value>
+<value>process_input/student-attendance/${now():format("dd-MMM-yyyy")}/studentsmarked-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -1757,7 +1790,7 @@
                             </entry>
                             <entry>
 <key>Region</key>
-<value>ap-south-1</value>
+<value>us-east-1</value>
                             </entry>
                             <entry>
 <key>Communications Timeout</key>
@@ -2126,11 +2159,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/totalstudents-event.data.csv</value>
+<value>process_input/student-attendance/${now():format("dd-MMM-yyyy")}/totalstudents-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -2167,7 +2200,7 @@
                             </entry>
                             <entry>
 <key>Region</key>
-<value>ap-south-1</value>
+<value>us-east-1</value>
                             </entry>
                             <entry>
 <key>Communications Timeout</key>
@@ -2604,11 +2637,11 @@
                         <properties>
                             <entry>
 <key>Object Key</key>
-<value>process_input/school-attendance/${now():format("dd-MMM-yyyy")}/studentspresent-event.data.csv</value>
+<value>process_input/student-attendance/${now():format("dd-MMM-yyyy")}/studentspresent-event.data.csv</value>
                             </entry>
                             <entry>
 <key>Bucket</key>
-<value>input-bucket</value>
+<value>testing-bucket</value>
                             </entry>
                             <entry>
 <key>Content Type</key>
@@ -2645,7 +2678,7 @@
                             </entry>
                             <entry>
 <key>Region</key>
-<value>ap-south-1</value>
+<value>us-east-1</value>
                             </entry>
                             <entry>
 <key>Communications Timeout</key>
@@ -2765,5 +2798,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>03/25/2023 15:40:30 IST</timestamp>
+    <timestamp>04/20/2023 16:46:52 IST</timestamp>
 </template>
