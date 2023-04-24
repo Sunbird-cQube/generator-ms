@@ -19,12 +19,9 @@ for i in col_list:
     else:
         final_col_list.append(i)
 df_data = df_data[col_list]
-print(df_data)
 df_data.columns = final_col_list
-print(df_data.columns.tolist())
 df_data['date']=date
 df_data['month']=month
-print(df_data)
 
 def total_meal_served():
     df_snap = df_data[['date','District Code', 'MealServed']]
