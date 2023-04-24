@@ -3,7 +3,6 @@ import os
 import io
 import sys
 import boto3
-import zipfile
 import oci
 import configparser
 import pandas as pd
@@ -22,8 +21,7 @@ class CollectData:
         '''
         self.program      = sys.argv[1]
         self.input_file   = sys.argv[2]
-        # self.date_today = datetime.now().strftime('%d-%b-%Y')
-        self.date_today = '20-Apr-2023'
+        self.date_today = datetime.now().strftime('%d-%b-%Y')
         self.env          = config['CREDs']['storage_type']
         self.input_folder = 'emission/' + self.date_today+'/'+self.input_file
         self.output_folder = 'process_input/' + self.program + '/' + self.date_today
@@ -164,10 +162,5 @@ class CollectData:
         else:
             print(f'Message : Storage type {self.env} is not valid')
 
-    def read_for_dimensions(self):
-        if self.env == 'azure':
-            blobs_list = self.container_client.list_blobs(name_starts_with='emission/'+self.date_today)
-            print(blobs_list)
 
-obj=CollectData()
-obj.read_for_dimensions()
+
