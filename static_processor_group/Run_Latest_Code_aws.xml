@@ -571,6 +571,7 @@
                         <y>-872.0</y>
                     </position>
                     <height>2160.0</height>
+                    <label></label>
                     <style>
                         <entry>
                             <key>background-color</key>
@@ -864,7 +865,7 @@
                             </entry>
                             <entry>
 <key>directory</key>
-<value>/opt/nifi/nifi-current/Sunbird-cQube-grammar-ms-178386a/c-qube/ingest/dimensions/</value>
+<value>/opt/nifi/nifi-current/Sunbird-cQube-processing-ms-97fc3d0/impl/c-qube/ingest/dimensions/</value>
                             </entry>
                             <entry>
 <key>filename</key>
@@ -877,7 +878,7 @@
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
                     <executionNodeRestricted>false</executionNodeRestricted>
-                    <name>UpdateAttribute</name>
+                    <name>update_dimension_directory</name>
                     <relationships>
                         <autoTerminate>false</autoTerminate>
                         <name>success</name>
@@ -1520,7 +1521,7 @@
                             </entry>
                             <entry>
 <key>directory</key>
-<value>/opt/nifi/nifi-current/Sunbird-cQube-grammar-ms-178386a/c-qube/ingest/programs/</value>
+<value>/opt/nifi/nifi-current/Sunbird-cQube-processing-ms-97fc3d0/impl/c-qube/ingest/programs/</value>
                             </entry>
                             <entry>
 <key>filename</key>
@@ -1533,7 +1534,7 @@
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
                     <executionNodeRestricted>false</executionNodeRestricted>
-                    <name>update_directory</name>
+                    <name>update_program_directory</name>
                     <relationships>
                         <autoTerminate>false</autoTerminate>
                         <name>success</name>
@@ -2473,5 +2474,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>04/20/2023 13:24:25 IST</timestamp>
+    <timestamp>04/24/2023 15:18:13 IST</timestamp>
 </template>
