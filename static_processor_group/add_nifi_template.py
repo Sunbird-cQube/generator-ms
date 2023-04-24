@@ -1,9 +1,6 @@
 import configparser
-import random
-
 import requests
 import os
-
 
 configuartion_path = os.path.dirname(os.path.abspath(__file__))+"/config.ini"
 config = configparser.ConfigParser()
@@ -121,8 +118,24 @@ def instantiate_template(processor_group):
             "originY": -1072,
             "disconnectedNodeAcknowledged": "false"
         }
-    if processor_group.__contains__('Code'):
-        template_id = get_template_id('Run Latest Code')
+    if processor_group.__contains__('Code_aws') :
+        template_id = get_template_id('Run Latest Code aws')
+        data = {
+        "templateId": template_id,
+        "originX": -1296,
+        "originY": -784,
+        "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('Code_local'):
+        template_id = get_template_id('Run Latest Code local')
+        data = {
+        "templateId": template_id,
+        "originX": -1296,
+        "originY": -784,
+        "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('Code_Oracle'):
+        template_id = get_template_id('Run Latest Code Oracle')
         data = {
         "templateId": template_id,
         "originX": -1296,
@@ -314,7 +327,91 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
-                if processor_name == 'GenerateFlowFile_adapter':
+                if processor_name == 'update_dimension_directory':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "directory": config['CREDs']['dimension_path']
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+                if processor_name == 'update_program_directory':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "directory": config['CREDs']['program_path']
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+
+                if processor_name == 'run_adapter_code':
+                    if config['CREDs']['instance_type'] == 'NVSK':
+                        update_processor_property_body ={
+                            "component": {
+                                "id": i['component']['id'],
+                                "name": i['component']['name'],
+                                "config": {
+                                    "autoTerminatedRelationships": [
+                                        "original"
+                                    ],
+                                "properties": {
+                                    "Command Arguments": "NVSK_data_transformation.sh",
+                                    "Command Path": "bash",
+                                    "Working Directory": "/opt/nifi/nifi-current/adapter/NVSK"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+                    elif config['CREDs']['instance_type'] == 'VSK':
+                        update_processor_property_body ={
+                            "component": {
+                                "id": i['component']['id'],
+                                "name": i['component']['name'],
+                                "config": {
+                                    "autoTerminatedRelationships": [
+                                        "original"
+                                    ],
+                                "properties": {
+                                    "Command Arguments": "VSK_data_transformation.sh",
+                                    "Command Path": "bash",
+                                    "Working Directory": "/opt/nifi/nifi-current/adapter/VSK"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+                if processor_name == 'GenerateFlowFile_adapter' or processor_name == 'GenerateFlowFile_oracle':
                     update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
@@ -459,7 +556,7 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
-                elif processor_name == 'Listlocal':
+                elif processor_name == 'Listlocal' :
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -485,8 +582,33 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
+                elif processor_name == 'Lists3_cluster_rev_local' or processor_name == 'Lists3_dist_rev_local'or processor_name == 'Lists3_block_rev_local':
+                    endpoint_url = config['CREDs']['minio_end_point']
+                    port = config['CREDs']['minio_port']
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": plugin_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "Bucket": config['CREDs']['minio_bucket'],
+                                    "Access Key": config['CREDs']['minio_access_key'],
+                                    "Secret Key": config['CREDs']['minio_secret_key'],
+                                    "Endpoint Override URL": f"{endpoint_url}:{port}",
+                                },
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": "false"
+                    }
 
-                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local' or processor_name == 'Lists3_dist_rev_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local'or processor_name == 'Lists3_block_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'Lists3_cluster_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
+                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -630,6 +752,8 @@ def run_latest_aws():
     instantiate_template_codes('Run_Latest_Code_aws.xml')
     update_processor_property('Run Latest Code aws', 'ListS3Files')
     update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
+    update_processor_property('Run Latest Code aws','update_program_directory')
+    update_processor_property('Run Latest Code aws','update_dimension_directory')
     start_processor_group('Run Latest Code aws', 'RUNNING')
 
 def run_latest_local():
@@ -637,13 +761,22 @@ def run_latest_local():
     instantiate_template_codes('Run_Latest_Code_local.xml')
     update_processor_property('Run Latest Code local', 'Listlocal')
     update_processor_property('Run Latest Code local', 'FetchS3Object_local')
+    update_processor_property('Run Latest Code local', 'update_program_directory')
+    update_processor_property('Run Latest Code local', 'update_dimension_directory')
     start_processor_group('Run Latest Code local', 'RUNNING')
 
 def adapters():
     upload_template('Run_adapters.xml')
     instantiate_template('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
+    update_processor_property('Run_adapters','run_adapter_code')
     start_processor_group('Run_adapters', 'RUNNING')
+
+def oracle():
+    upload_template('Run_Latest_Code_Oracle.xml')
+    instantiate_template('Run_Latest_Code_Oracle.xml')
+    update_processor_property('Run Latest Code Oracle','GenerateFlowFile_oracle')
+    start_processor_group('Run Latest Code Oracle','RUNNING')
 
 
 if __name__ == '__main__':
@@ -655,5 +788,9 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
+    if config['CREDs']['storage_type'] == 'oracle':
+        oracle()
+
+
 
 
