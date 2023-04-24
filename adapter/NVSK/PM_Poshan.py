@@ -24,16 +24,16 @@ df_data['date']=date
 df_data['month']=month
 
 def total_meal_served():
-    df_snap = df_data[['District Code', 'MealServed']]
-    df_snap.columns = ['district_id', 'total_meals_served']
+    df_snap = df_data[['date','District Code', 'MealServed']]
+    df_snap.columns = ['date','district_id', 'total_meals_served']
     obj.upload_file(df_snap, 'totalmealserved-event.data.csv')
 
 def category_event_data():
-    df_melt=df_data.melt(id_vars=['District Code'],
+    df_melt=df_data.melt(id_vars=['month','District Code'],
                      value_vars=['Enrolled','Total Schools'],
                      var_name="category_name",value_name="category_value")
-    df_snap=df_melt[['District Code','category_name','category_value']]
-    df_snap.columns=['district_id','category_name','category_value']
+    df_snap=df_melt[['month','District Code','category_name','category_value']]
+    df_snap.columns=['month','district_id','category_name','category_value']
     return df_snap
 
 def category_dimenstion_data():
