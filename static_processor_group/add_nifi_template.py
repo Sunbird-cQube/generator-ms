@@ -2,7 +2,6 @@ import configparser
 import requests
 import os
 
-
 configuartion_path = os.path.dirname(os.path.abspath(__file__))+"/config.ini"
 config = configparser.ConfigParser()
 config.read(configuartion_path);
@@ -328,6 +327,43 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'update_dimension_directory':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "directory": config['CREDs']['dimension_path']
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+                if processor_name == 'update_program_directory':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "directory": config['CREDs']['program_path']
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+
                 if processor_name == 'run_adapter_code':
                     if config['CREDs']['instance_type'] == 'NVSK':
                         update_processor_property_body ={
@@ -716,6 +752,8 @@ def run_latest_aws():
     instantiate_template_codes('Run_Latest_Code_aws.xml')
     update_processor_property('Run Latest Code aws', 'ListS3Files')
     update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
+    update_processor_property('Run Latest Code aws','update_program_directory')
+    update_processor_property('Run Latest Code aws','update_dimension_directory')
     start_processor_group('Run Latest Code aws', 'RUNNING')
 
 def run_latest_local():
@@ -723,6 +761,8 @@ def run_latest_local():
     instantiate_template_codes('Run_Latest_Code_local.xml')
     update_processor_property('Run Latest Code local', 'Listlocal')
     update_processor_property('Run Latest Code local', 'FetchS3Object_local')
+    update_processor_property('Run Latest Code local', 'update_program_directory')
+    update_processor_property('Run Latest Code local', 'update_dimension_directory')
     start_processor_group('Run Latest Code local', 'RUNNING')
 
 def adapters():
