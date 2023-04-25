@@ -21,7 +21,7 @@ def student_event_data():
 
 def performance_event_data():
     df_snap = df_data[['State Code', 'District Code', 'Grade', 'Subject', 'Indicator Code', 'Performance']]
-    df_snap.columns = ['state_id', 'district_id', 'grade_diksha', 'subject_diksha', 'indicator_code', 'performance']
+    df_snap.columns = ['state_id', 'district_id', 'grade', 'subject', 'indicator_code', 'performance']
     obj.upload_file(df_snap, 'performance-event.data.csv')
 
 def learning_outcome_dimension_data():
