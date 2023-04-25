@@ -31,16 +31,9 @@ def program_dimension_data():
     df_snap.columns = ['program_id', 'program_name']
     obj.upload_file(df_snap, 'programnishtha-dimension.data.csv')
 
-def district_dimension():
-    df_snap = df_data[['District Code','User District_Correct','State Code','State','Latitude', 'Longitude']].drop_duplicates()
-    df_snap.columns = ['district_id','district_name','state_id','state_name','latitude','longitude']
-    obj.upload_file(df_snap, 'district-dimension.data.csv')
-
-
 if df_data is not None:
     totalenrolment_event_data()
     totalcompletion_event_data()
     totalcertification_event_data()
     perccertification_event_data()
     program_dimension_data()
-    district_dimension()
