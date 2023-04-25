@@ -14,6 +14,7 @@ def language_dimension():
     df_snap['language_id'] = range(1, len(df_snap) + 1)
     df_snap = df_snap[['language_id', 'Language']]
     df_snap.columns = ['language_id', 'language_name']
+    df_snap.update(df_snap[['language_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'languagencf-dimension.data.csv')
 
 if df_data is not None:

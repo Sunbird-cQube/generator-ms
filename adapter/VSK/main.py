@@ -161,6 +161,3 @@ class CollectData:
             print(f"Message : File {output_file} uploaded successfully to the folder {self.output_folder}.")
         else:
             print(f'Message : Storage type {self.env} is not valid')
-
-
-
