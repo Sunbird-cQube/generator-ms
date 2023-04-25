@@ -21,7 +21,7 @@ def total_certificates_issued():
 
 def total_courses():
     df_snap = df_data[['State Code','Program', 'Total Courses']]
-    df_snap.columns = ['state_id','program_name',  'total_courses']
+    df_snap.columns = ['state_id','program_name','total_courses']
     obj.upload_file(df_snap, 'totalcourses-event.data.csv')
 
 def doe_event_data():
@@ -31,7 +31,7 @@ def doe_event_data():
 
 def localbody_event_data():
     df_snap = df_data[['State Code', 'Program','Local Body']]
-    df_snap.columns = ['state_id','program_name',  'local_body']
+    df_snap.columns = ['state_id','program_name','local_body']
     obj.upload_file(df_snap, 'localbody-event.data.csv')
 
 def target_achieved_enrolment():
