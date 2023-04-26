@@ -27,6 +27,7 @@ if df_data is not None:
 def plays_per_capita():
     df_snap = df_data[['date','State Code','Plays per capita']]
     df_snap.columns = ['date','state_id','plays_per_capita']
+    df_snap.update(df_snap[['date']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'playspercapita-event.data.csv')
 
 if df_data is not None:

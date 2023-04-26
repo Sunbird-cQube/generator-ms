@@ -29,6 +29,7 @@ def program_dimension_data():
     df_snap['program_id'] = range(1, len(df_snap) + 1)
     df_snap = df_snap[['program_id', 'Program']]
     df_snap.columns = ['program_id', 'program_name']
+    df_snap.update(df_snap[['program_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'programnishtha-dimension.data.csv')
 
 

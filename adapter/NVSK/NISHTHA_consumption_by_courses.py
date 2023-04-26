@@ -24,6 +24,7 @@ def course_dimension():
     df_snap['course_id'] = range(1, len(df_snap) + 1)
     df_snap = df_snap[['course_id', 'Course Name']]
     df_snap.columns = ['course_id', 'course_name']
+    df_snap.update(df_snap[['course_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'coursenishtha-dimension.data.csv')
 
 
