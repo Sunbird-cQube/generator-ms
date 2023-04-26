@@ -14,6 +14,7 @@ def textbook_dimension():
     df_snap['textbook_id'] = range(1, len(df_snap) + 1)
     df_snap = df_snap[['textbook_id', 'Textbook Name']]
     df_snap.columns = ['textbook_id', 'textbook_name']
+    df_snap.update(df_snap[['textbook_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'textbooknipun-dimension.data.csv')
 
 if df_data is not None:

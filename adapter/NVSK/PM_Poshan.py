@@ -27,6 +27,7 @@ if df_data is not None:
 def total_meal_served():
     df_snap = df_data[['date','District Code', 'MealServed']]
     df_snap.columns = ['date','district_id', 'total_meals_served']
+    df_snap.update(df_snap[['date']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'mealserved-event.data.csv')
 
 def category_event_data():
@@ -35,6 +36,7 @@ def category_event_data():
                      var_name="category_name",value_name="category_value")
     df_snap=df_melt[['date','District Code','category_name','category_value']]
     df_snap.columns=['date','district_id','category_name','category_value']
+    df_snap.update(df_snap[['date','category_name']].applymap("'{}'".format))
     return df_snap
 
 def category_dimenstion_data():
@@ -43,6 +45,7 @@ def category_dimenstion_data():
     df_data=df_data[['category_name']].drop_duplicates()
     df_data['category_id']= range(1, len(df_data) + 1)
     df_snap=df_data[['category_id','category_name']]
+    df_snap.update(df_snap[['category_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'categorypm-dimension.data.csv')
 
 if df_data is not None:
