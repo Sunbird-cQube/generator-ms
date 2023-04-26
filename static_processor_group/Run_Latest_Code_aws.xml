@@ -44,8 +44,8 @@
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <bends>
-                        <x>392.0</x>
-                        <y>-344.0</y>
+                        <x>400.0</x>
+                        <y>-336.0</y>
                     </bends>
                     <destination>
                         <groupId>b824701a-f09c-3aef-0000-000000000000</groupId>
@@ -2031,7 +2031,7 @@
                         <properties>
                             <entry>
 <key>Bucket</key>
-<value>testing-bucket</value>
+<value>s3-cqube-edu</value>
                             </entry>
                             <entry>
 <key>Region</key>
@@ -2354,7 +2354,7 @@
                         <properties>
                             <entry>
 <key>Directory</key>
-<value>${directory}/</value>
+<value>${directory}</value>
                             </entry>
                             <entry>
 <key>Conflict Resolution Strategy</key>
@@ -2474,5 +2474,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>04/24/2023 15:18:13 IST</timestamp>
+    <timestamp>04/26/2023 16:55:16 IST</timestamp>
 </template>
