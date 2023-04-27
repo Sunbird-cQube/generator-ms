@@ -841,7 +841,7 @@ def azure():
 
 
 if __name__ == '__main__':
-    # adapters()
+    adapters()
     if config['CREDs']['storage_type'] == 'aws':
         plugins_aws()
         run_latest_aws()
