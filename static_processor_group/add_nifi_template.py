@@ -118,12 +118,20 @@ def instantiate_template(processor_group):
             "originY": -1072,
             "disconnectedNodeAcknowledged": "false"
         }
-    if processor_group.__contains__('Code_aws') :
+    elif processor_group.__contains__('Code_azure') :
+        template_id = get_template_id('Run Latest Code azure')
+        data = {
+        "templateId": template_id,
+        "originX": -1296,
+        "originY": -832,
+        "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('Code_aws') :
         template_id = get_template_id('Run Latest Code aws')
         data = {
         "templateId": template_id,
         "originX": -1296,
-        "originY": -784,
+        "originY": -832,
         "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Code_local'):
@@ -131,7 +139,7 @@ def instantiate_template(processor_group):
         data = {
         "templateId": template_id,
         "originX": -1296,
-        "originY": -784,
+        "originY": -832,
         "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Code_Oracle'):
@@ -139,7 +147,7 @@ def instantiate_template(processor_group):
         data = {
         "templateId": template_id,
         "originX": -1296,
-        "originY": -784,
+        "originY": -832,
         "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Student'):
@@ -327,6 +335,50 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'ListAzure':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "schedulingPeriod": processing_time,
+                                "schedulingStrategy": "CRON_DRIVEN",
+                                "properties": {
+                                    "container-name": config['CREDs']['azure_container_name'],
+                                    "storage-account-name": config['CREDs']['azure_account_name'],
+                                    "storage-account-key": config['CREDs']['azure_account_key'],
+                                    "prefix": "process_input/"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+                if processor_name == 'FetchAzure':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "properties": {
+                                    "container-name": config['CREDs']['azure_container_name'],
+                                    "storage-account-name": config['CREDs']['azure_account_name'],
+                                    "storage-account-key": config['CREDs']['azure_account_key'],
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+
                 if processor_name == 'update_dimension_directory':
                     update_processor_property_body = {
                         "component": {
@@ -769,14 +821,23 @@ def adapters():
     upload_template('Run_adapters.xml')
     instantiate_template('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
-    update_processor_property('Run_adapters','run_adapter_code')
+    update_processor_property('Run_adapters', 'run_adapter_code')
     start_processor_group('Run_adapters', 'RUNNING')
 
 def oracle():
     upload_template('Run_Latest_Code_Oracle.xml')
     instantiate_template('Run_Latest_Code_Oracle.xml')
-    update_processor_property('Run Latest Code Oracle','GenerateFlowFile_oracle')
-    start_processor_group('Run Latest Code Oracle','RUNNING')
+    update_processor_property('Run Latest Code Oracle', 'GenerateFlowFile_oracle')
+    start_processor_group('Run Latest Code Oracle', 'RUNNING')
+
+def azure():
+    upload_template('Run_Latest_Code_azure.xml')
+    instantiate_template('Run_Latest_Code_azure.xml')
+    update_processor_property('Run Latest Code azure', 'ListAzure')
+    update_processor_property('Run Latest Code azure', 'FetchAzure')
+    update_processor_property('Run Latest Code azure', 'update_program_directory')
+    update_processor_property('Run Latest Code azure', 'update_dimension_directory')
+    start_processor_group('Run Latest Code azure','RUNNING')
 
 
 if __name__ == '__main__':
@@ -784,12 +845,13 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'aws':
         plugins_aws()
         run_latest_aws()
-
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
     if config['CREDs']['storage_type'] == 'oracle':
         oracle()
+    if config['CREDs']['storage_type'] == 'azure':
+        azure()
 
 
 
