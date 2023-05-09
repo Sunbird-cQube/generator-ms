@@ -509,7 +509,9 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "Bucket": config['CREDs']['s3_input_bucket']
+                                    "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "Access Key": config['CREDs']['s3_access_key'],
+                                    "Secret Key": config['CREDs']['s3_secret_key']
                                 },
                             },
                             "state": "STOPPED"
@@ -546,7 +548,9 @@ def update_processor_property(processor_group_name, processor_name):
                                 "schedulingPeriod": processing_time,
                                 "schedulingStrategy": "CRON_DRIVEN",
                                 "properties": {
-                                    "Bucket": config['CREDs']['s3_input_bucket']
+                                    "Bucket": config['CREDs']['s3_input_bucket'],
+                                    "Access Key": config['CREDs']['s3_access_key'],
+                                    "Secret Key": config['CREDs']['s3_secret_key']
                                 },
                             },
                             "state": "STOPPED"
@@ -717,18 +721,6 @@ def plugins_aws():
     instantiate_template('block-review-meetings-aws.xml')
     instantiate_template('cluster-review-meetings-aws.xml')
     instantiate_template('district-review-meetings-aws.xml')
-
-    controller_service_disable('block-review-meetings-aws')
-    update_controller_service_property('block-review-meetings-aws', 'aws_rev-mon')
-    controller_service_enable('block-review-meetings-aws')
-
-    controller_service_disable('district-review-meetings-aws')
-    update_controller_service_property('district-review-meetings-aws', 'aws_rev-mon')
-    controller_service_enable('district-review-meetings-aws')
-
-    controller_service_disable('cluster-review-meetings-aws')
-    update_controller_service_property('cluster-review-meetings-aws', 'aws_rev-mon')
-    controller_service_enable('cluster-review-meetings-aws')
 
     upload_template('Plugin_Student_Attendance_aws.xml')
     instantiate_template('Plugin_Student_Attendance_aws.xml')
