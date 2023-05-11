@@ -21,8 +21,8 @@ def state_energised_etb():
 
 def total_curriculum_textbooks():
     df_snap = df_data[['State Code','Total Physical textbooks excluding adopted (Curriculum+Supplementary)']]
-    df_snap.columns = ['state_id','total_physical_textbooks_excl_adopted_curr_supp']
-    obj.upload_file(df_snap, 'totalcurriculumtextbooks-event.data.csv')
+    df_snap.columns = ['state_id','total_curriculum_textbook']
+    obj.upload_file(df_snap, 'totalcurriculumtextbook-event.data.csv')
 
 def perc_etb_coverage():
     df_snap = df_data[['State Code','ETB Coverage %']]
