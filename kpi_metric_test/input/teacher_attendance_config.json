@@ -1,0 +1,55 @@
+[
+  {
+    "program_name": "school-attendance",
+    "input": {
+      "dimensions": {
+        "date": "2023-04-24",
+        "district_id": 101,
+        "block_id": 10101,
+        "cluster_id": [
+          101010111,
+          101010112
+        ],
+        "school_id": [
+          1000000000,
+          1000000001,
+          1000000002,
+          1000000006,
+          1000000008,
+          1000000009
+        ],
+        "schoolcategory_id": [
+          1,
+          2,
+          3,
+          4,
+          1,
+          2
+        ],
+        "grade_state": [
+          1,
+          7,
+          9,
+          12,
+          2,
+          6
+        ]
+      },
+      "metrics":
+      {
+        "teachers_marked": {
+          "min": 5,
+          "max": 12
+        },
+        "teachers_marked_present": {
+          "min": 3,
+          "max": 10
+        },
+        "total_teachers": {
+          "min": 15,
+          "max": 15
+        }
+      }
+
+    }
+  }]
