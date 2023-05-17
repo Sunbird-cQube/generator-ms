@@ -691,7 +691,7 @@ def update_processor_property(processor_group_name, processor_name):
                                     "Bucket": config['CREDs']['minio_bucket'],
                                     "Access Key": config['CREDs']['minio_access_key'],
                                     "Secret Key": config['CREDs']['minio_secret_key'],
-                                    "Endpoint Override URL": f"{endpoint_url}:{port}"
+                                    "Endpoint Override URL": f"{endpoint_url}:{port}",
                                 },
                             },
                             "state": "STOPPED"
@@ -963,25 +963,25 @@ def azure():
 
 
 if __name__ == '__main__':
-    # adapters()
+    adapters()
     if config['CREDs']['storage_type'] == 'aws':
-        # plugins_aws()
+        plugins_aws()
         run_latest_aws()
-        run_school_attendance_aws()
-        run_school_Infrastructure_aws()
-        run_student_assessment_aws()
-        run_student_progression_aws()
+        # run_school_attendance_aws()
+        # run_school_Infrastructure_aws()
+        # run_student_assessment_aws()
+        # run_student_progression_aws()
     if config['CREDs']['storage_type'] == 'local':
-    #     plugins_local()
-    #     run_latest_local()
-        run_school_attendance_local()
-        run_school_Infrastructure_local()
-        run_student_assessment_local()
-        run_student_progression_local()
-    # if config['CREDs']['storage_type'] == 'oracle':
-    #     oracle()
-    # if config['CREDs']['storage_type'] == 'azure':
-    #     azure()
+        plugins_local()
+        run_latest_local()
+        # run_school_attendance_local()
+        # run_school_Infrastructure_local()
+        # run_student_assessment_local()
+        # run_student_progression_local()
+    if config['CREDs']['storage_type'] == 'oracle':
+        oracle()
+    if config['CREDs']['storage_type'] == 'azure':
+        azure()
 
 
 
