@@ -118,6 +118,55 @@ def instantiate_template(processor_group):
             "disconnectedNodeAcknowledged": "false"
         }
 
+    elif processor_group.__contains__('diksha_local'):
+        template_id = get_template_id('diksha_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pm_poshan_local'):
+        template_id = get_template_id('pm_poshan_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nas_local'):
+        template_id = get_template_id('nas_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('udise_local'):
+        template_id = get_template_id('udise_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pgi_local'):
+        template_id = get_template_id('pgi_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nishtha_local'):
+        template_id = get_template_id('nishtha_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
     elif processor_group.__contains__('school_attendance_aws'):
         template_id = get_template_id('school_attendance_aws')
         data = {
@@ -453,7 +502,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": config['CREDs']['dimension_path']
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['state_name']+'/dimensions/'
                                 }
                             },
                             "state": "STOPPED"
@@ -471,7 +520,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": config['CREDs']['program_path']+config['CREDs']['state_name']+'/'
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['state_name']+'/programs/'
                                 }
                             },
                             "state": "STOPPED"
@@ -930,6 +979,51 @@ def run_student_progression_local():
     update_processor_property('student_progression_local', 'update_program_directory')
     update_processor_property('student_progression_local', 'update_dimension_directory')
 
+def run_diksha_local():
+    upload_template('diksha_local.xml')
+    instantiate_template('diksha_local.xml')
+    update_processor_property('diksha_local', 'Listlocal')
+    update_processor_property('diksha_local', 'FetchS3Object_local')
+    update_processor_property('diksha_local', 'update_program_directory')
+    update_processor_property('diksha_local', 'update_dimension_directory')
+
+def run_pm_poshan_local():
+    upload_template('pm_poshan_local.xml')
+    instantiate_template('pm_poshan_local.xml')
+    update_processor_property('pm_poshan_local', 'Listlocal')
+    update_processor_property('pm_poshan_local', 'FetchS3Object_local')
+    update_processor_property('pm_poshan_local', 'update_program_directory')
+    update_processor_property('pm_poshan_local', 'update_dimension_directory')
+def run_nas_local():
+    upload_template('nas_local.xml')
+    instantiate_template('nas_local.xml')
+    update_processor_property('nas_local', 'Listlocal')
+    update_processor_property('nas_local', 'FetchS3Object_local')
+    update_processor_property('nas_local', 'update_program_directory')
+    update_processor_property('nas_local', 'update_dimension_directory')
+def run_udise_local():
+    upload_template('udise_local.xml')
+    instantiate_template('udise_local.xml')
+    update_processor_property('udise_local', 'Listlocal')
+    update_processor_property('udise_local', 'FetchS3Object_local')
+    update_processor_property('udise_local', 'update_program_directory')
+    update_processor_property('udise_local', 'update_dimension_directory')
+def run_pgi_local():
+    upload_template('pgi_local.xml')
+    instantiate_template('pgi_local.xml')
+    update_processor_property('pgi_local', 'Listlocal')
+    update_processor_property('pgi_local', 'FetchS3Object_local')
+    update_processor_property('pgi_local', 'update_program_directory')
+    update_processor_property('pgi_local', 'update_dimension_directory')
+
+def run_nishtha_local():
+    upload_template('nishtha_local.xml')
+    instantiate_template('nishtha_local.xml')
+    update_processor_property('nishtha_local', 'Listlocal')
+    update_processor_property('nishtha_local', 'FetchS3Object_local')
+    update_processor_property('nishtha_local', 'update_program_directory')
+    update_processor_property('nishtha_local', 'update_dimension_directory')
+
 def run_latest_local():
     upload_template('Run_Latest_Code_local.xml')
     instantiate_template('Run_Latest_Code_local.xml')
@@ -967,17 +1061,23 @@ if __name__ == '__main__':
     if config['CREDs']['storage_type'] == 'aws':
         plugins_aws()
         run_latest_aws()
-        # run_school_attendance_aws()
-        # run_school_Infrastructure_aws()
-        # run_student_assessment_aws()
-        # run_student_progression_aws()
+        run_school_attendance_aws()
+        run_school_Infrastructure_aws()
+        run_student_assessment_aws()
+        run_student_progression_aws()
     if config['CREDs']['storage_type'] == 'local':
         plugins_local()
         run_latest_local()
-        # run_school_attendance_local()
-        # run_school_Infrastructure_local()
-        # run_student_assessment_local()
-        # run_student_progression_local()
+        run_school_attendance_local()
+        run_school_Infrastructure_local()
+        run_student_assessment_local()
+        run_student_progression_local()
+        run_diksha_local()
+        run_nas_local()
+        run_udise_local()
+        run_nishtha_local()
+        run_pm_poshan_local()
+        run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
         oracle()
     if config['CREDs']['storage_type'] == 'azure':
