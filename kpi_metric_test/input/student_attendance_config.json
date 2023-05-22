@@ -1,0 +1,62 @@
+[
+  {
+    "program_name": "school-attendance",
+    "input": {
+      "dimensions": {
+        "date": "2023-04-10",
+        "district_id": 101,
+        "block_id": 10101,
+        "cluster_id": [
+          101010111,
+          101010112
+        ],
+        "school_id": [
+          1000000000,
+          1000000001,
+          1000000002,
+          1000000006,
+          1000000008,
+          1000000009
+        ],
+        "grade_state": [
+          1,
+          7,
+          9,
+          12,
+          2,
+          6
+        ],
+        "schoolcategory_id": [
+          1,
+          2,
+          3,
+          4,
+          1,
+          2
+        ],
+        "gender": [
+          "male",
+          "female"
+        ]
+      },
+      "metrics":
+      {
+        "student_attendance_marked": {
+          "min": 50,
+          "max": 55
+        },
+        "students_marked_present": {
+          "min": 30,
+          "max": 50
+        },
+        "total_students": {
+          "min": 60,
+          "max": 60
+        }
+      }
+
+    }
+  },
+  {
+    "program_name": "test"
+  }]
