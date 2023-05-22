@@ -864,9 +864,6 @@ def plugins_aws():
     update_processor_property('cluster-review-meetings-aws', 'Puts3_cluster_rev_aws')
 
     processor_list = ['Plugin Student Attendance aws','Plugin Teachers Attendance aws','district-review-meetings-aws','block-review-meetings-aws','cluster-review-meetings-aws']
-    for i in processor_list:
-        start_processor_group(i, 'RUNNING')
-
 
 def plugins_local():
     #Uploading the templates
@@ -902,8 +899,6 @@ def plugins_local():
         update_processor_property('Plugin Student Attendance local', i)
         update_processor_property('Plugin Teachers Attendance local', i)
     processor_group_list = ['Plugin Teachers Attendance local', 'Plugin Student Attendance local','district-review-meetings-local','block-review-meetings-local','cluster-review-meetings-local']
-    for i in processor_group_list:
-        start_processor_group(i, 'RUNNING')
 
 def run_latest_aws():
     upload_template('Run_Latest_Code_aws.xml')
@@ -912,7 +907,7 @@ def run_latest_aws():
     update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
     update_processor_property('Run Latest Code aws','update_program_directory')
     update_processor_property('Run Latest Code aws','update_dimension_directory')
-    start_processor_group('Run Latest Code aws', 'RUNNING')
+
 
 def run_school_attendance_aws():
     upload_template('school_attendance_aws.xml')
@@ -1031,20 +1026,17 @@ def run_latest_local():
     update_processor_property('Run Latest Code local', 'FetchS3Object_local')
     update_processor_property('Run Latest Code local', 'update_program_directory')
     update_processor_property('Run Latest Code local', 'update_dimension_directory')
-    start_processor_group('Run Latest Code local', 'RUNNING')
 
 def adapters():
     upload_template('Run_adapters.xml')
     instantiate_template('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
     update_processor_property('Run_adapters', 'run_adapter_code')
-    start_processor_group('Run_adapters', 'RUNNING')
 
 def oracle():
     upload_template('Run_Latest_Code_Oracle.xml')
     instantiate_template('Run_Latest_Code_Oracle.xml')
     update_processor_property('Run Latest Code Oracle', 'GenerateFlowFile_oracle')
-    start_processor_group('Run Latest Code Oracle', 'RUNNING')
 
 def azure():
     upload_template('Run_Latest_Code_azure.xml')
@@ -1053,8 +1045,6 @@ def azure():
     update_processor_property('Run Latest Code azure', 'FetchAzure')
     update_processor_property('Run Latest Code azure', 'update_program_directory')
     update_processor_property('Run Latest Code azure', 'update_dimension_directory')
-    start_processor_group('Run Latest Code azure','RUNNING')
-
 
 if __name__ == '__main__':
     adapters()
@@ -1082,7 +1072,3 @@ if __name__ == '__main__':
         oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
-
-
-
-
