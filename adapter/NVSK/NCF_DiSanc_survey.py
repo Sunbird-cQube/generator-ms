@@ -7,7 +7,7 @@ df_data=obj.get_file()
 def no_of_participants_language():
     df_snap = df_data[['Language', 'Number of Participants']]
     df_snap.columns = ['language_name', 'number_of_participants']
-    obj.upload_file(df_snap, 'noofparticipantslanguage-event.data.csv')
+    obj.upload_file(df_snap, 'languagewiseparticipants-event.data.csv')
 
 def language_dimension():
     df_snap = df_data[['Language']].drop_duplicates()

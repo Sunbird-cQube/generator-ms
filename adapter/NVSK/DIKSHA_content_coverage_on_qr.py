@@ -7,7 +7,7 @@ df_data=obj.get_file()
 def qr_coverage():
     df_snap = df_data[['State Code', 'QR Coverage']]
     df_snap.columns = ['state_id', 'qr_coverage']
-    obj.upload_file(df_snap, 'etbqrcoverage-event.data.csv')
+    obj.upload_file(df_snap, 'qrcontentcoverage-event.data.csv')
 
 def qr_covered():
     df_snap = df_data[['State Code','QR covered']]
