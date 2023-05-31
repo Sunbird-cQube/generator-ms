@@ -5,18 +5,18 @@ program = obj.program
 df_data = obj.get_file()
 
 def school_event_data():
-    df_snap = df_data[['State Code', 'District Code', 'Number of Schools']]
-    df_snap.columns = ['state_id', 'district_id', 'no_of_schools']
+    df_snap = df_data[['State Code', 'District Code', 'Grade', 'Subject', 'Learning Outcome Code','Number of Schools']].drop_duplicates()
+    df_snap.columns = ['state_id', 'district_id', 'grade', 'subject', 'lo_code', 'no_of_schools']
     obj.upload_file(df_snap, 'schools-event.data.csv')
 
 def teacher_event_data():
-    df_snap = df_data[['State Code', 'District Code', 'Number of Teachers']]
-    df_snap.columns = ['state_id', 'district_id', 'no_of_teachers']
+    df_snap = df_data[['State Code', 'District Code', 'Grade', 'Subject', 'Learning Outcome Code','Number of Teachers']].drop_duplicates()
+    df_snap.columns = ['state_id', 'district_id', 'grade', 'subject', 'lo_code', 'no_of_teachers']
     obj.upload_file(df_snap, 'teachers-event.data.csv')
 
 def student_event_data():
-    df_snap = df_data[['State Code', 'District Code', 'Students Surveyed']]
-    df_snap.columns = ['state_id', 'district_id', 'students_surveyed']
+    df_snap = df_data[['State Code', 'District Code', 'Grade', 'Subject', 'Learning Outcome Code','Students Surveyed']]
+    df_snap.columns = ['state_id', 'district_id', 'grade', 'subject', 'lo_code', 'students_surveyed']
     obj.upload_file(df_snap, 'studentssurveyed-event.data.csv')
 
 def performance_event_data():
