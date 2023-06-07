@@ -5,7 +5,7 @@ program=obj.program
 df_data=obj.get_file()
 
 def started_event_data():
-    df_snap = df_data[['State Code','Program','Started']].drop_duplicates()
+    df_snap = df_data[['state_code','program','started']].drop_duplicates()
     df_snap.columns = ['state_id','program_name','started']
     obj.upload_file(df_snap, 'programstarted-event.data.csv')
 
