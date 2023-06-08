@@ -5,7 +5,7 @@ program=obj.program
 df_data=obj.get_file()
 
 def school_event_data():
-    df_snap = df_data[['State Code','District Code','Grade','Subject','learning_outcome_code','number_of_schools']].drop_duplicates()
+    df_snap = df_data[['state_code','district_code','grade','subject','learning_outcome_code','number_of_schools']].drop_duplicates()
     df_snap.columns = ['state_id','district_id','grade','subject','lo_code','no_of_schools']
     obj.upload_file(df_snap, 'schools-event.data.csv')
 
