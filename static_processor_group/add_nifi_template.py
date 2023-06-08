@@ -1175,7 +1175,7 @@ def run_all_programs_oracle():
 
 
     upload_template('udise_oracle.xml')
-    instantiate_template('udise_oracle.xml')sd
+    instantiate_template('udise_oracle.xml')
     update_processor_property('udise_oracle', 'GenerateFlowFile_oracle')
 
     upload_template('pgi_oracle.xml')
@@ -1221,7 +1221,7 @@ if __name__ == '__main__':
         run_pm_poshan_local()
         run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
-        # oracle()
+        oracle()
         run_all_programs_oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
