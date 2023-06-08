@@ -25,7 +25,7 @@ def get_nifi_root_pg():
 
 def get_processor_group_info(processor_group_name):
     """
-    Get procesor group details
+    Get processor group details
     """
     nifi_root_pg_id = get_nifi_root_pg()
     pg_list = requests.get(f'{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{nifi_root_pg_id}')
@@ -57,6 +57,15 @@ def get_processor_group_id(processor_group_name):
             if i['component']['name'] == processor_group_name:
                 id = i['component']['id']
                 return id
+
+def get_processor_id(processor_group_name,processor_name):
+    pg_source = get_processor_group_ports(processor_group_name)
+    if pg_source.status_code == 200:
+        for i in pg_source.json()['processGroupFlow']['flow']['processors']:
+            # Get the required processor details
+            if i['component']['name'] == processor_name:
+                processor_id = i['component']['id']
+                return processor_id
 
 def upload_template(template_files):
     root_pg_id = get_nifi_root_pg()
@@ -117,6 +126,87 @@ def instantiate_template(processor_group):
             "originY": -1072,
             "disconnectedNodeAcknowledged": "false"
         }
+    elif processor_group.__contains__('diksha_oracle'):
+        template_id = get_template_id('diksha_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pm_poshan_oracle'):
+        template_id = get_template_id('pm_poshan_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nas_oracle'):
+        template_id = get_template_id('nas_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('udise_oracle'):
+        template_id = get_template_id('udise_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pgi_oracle'):
+        template_id = get_template_id('pgi_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nishtha_oracle'):
+        template_id = get_template_id('nishtha_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('school_attendance_oracle'):
+        template_id = get_template_id('school_attendance_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -104,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
+    elif processor_group.__contains__('student_assessment_oracle'):
+        template_id = get_template_id('student_assessment_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -104,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('school_Infrastructure_oracle'):
+        template_id = get_template_id('school_Infrastructure_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('student_progression_oracle'):
+        template_id = get_template_id('student_progression_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
 
     elif processor_group.__contains__('diksha_local'):
         template_id = get_template_id('diksha_local')
@@ -166,6 +256,39 @@ def instantiate_template(processor_group):
             "originY": -888,
             "disconnectedNodeAcknowledged": "false"
         }
+    elif processor_group.__contains__('school_attendance_local'):
+        template_id = get_template_id('school_attendance_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -104,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
+    elif processor_group.__contains__('student_assessment_local'):
+        template_id = get_template_id('student_assessment_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -104,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('school_Infrastructure_local'):
+        template_id = get_template_id('school_Infrastructure_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('student_progression_local'):
+        template_id = get_template_id('student_progression_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
 
     elif processor_group.__contains__('school_attendance_aws'):
         template_id = get_template_id('school_attendance_aws')
@@ -194,39 +317,6 @@ def instantiate_template(processor_group):
         }
     elif processor_group.__contains__('student_progression_aws'):
         template_id = get_template_id('student_progression_aws')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": 200,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('school_attendance_local'):
-        template_id = get_template_id('school_attendance_local')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": -104,
-            "disconnectedNodeAcknowledged": "false"
-        }
-
-    elif processor_group.__contains__('student_assessment_local'):
-        template_id = get_template_id('student_assessment_local')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": -104,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('school_Infrastructure_local'):
-        template_id = get_template_id('school_Infrastructure_local')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": 200,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('student_progression_local'):
-        template_id = get_template_id('student_progression_local')
         data = {
             "templateId": template_id,
             "originX": 1080,
@@ -827,6 +917,26 @@ def start_processor_group(processor_group_name,state):
     else:
         return start_response.text
 
+def delete_processor_group(processor_group_name):
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    processor_group_id = get_processor_group_id(processor_group_name)
+    nifi_root_pg_id = get_nifi_root_pg()
+    pg_list = requests.get(f'{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{nifi_root_pg_id}')
+    if pg_list.status_code == 200:
+        # Iterate over processGroups and find the required processor group details
+        for i in pg_list.json()['processGroupFlow']['flow']['processGroups']:
+            if i['component']['name'] == processor_group_name:
+                params = {
+                        'version': i['revision']['version'],
+                        'clientId': "",
+                        'disconnectedNodeAcknowledged': "false"
+                    }
+                delete_api = requests.delete(f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{processor_group_id}",params=params,headers=headers)
+                print(delete_api.status_code)
+
+
 def plugins_aws():
     upload_template('block-review-meetings-aws.xml')
     upload_template('cluster-review-meetings-aws.xml')
@@ -1033,6 +1143,48 @@ def adapters():
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
     update_processor_property('Run_adapters', 'run_adapter_code')
 
+
+def run_all_programs_oracle():
+    upload_template('school_attendance_oracle.xml')
+    instantiate_template('school_attendance_oracle.xml')
+    update_processor_property('school_attendance_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('student_assessment_oracle.xml')
+    instantiate_template('student_assessment_oracle.xml')
+    update_processor_property('student_assessment_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('school_Infrastructure_oracle.xml')
+    instantiate_template('school_Infrastructure_oracle.xml')
+    update_processor_property('school_Infrastructure_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('student_progression_oracle.xml')
+    instantiate_template('student_progression_oracle.xml')
+    update_processor_property('student_progression_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('diksha_oracle.xml')
+    instantiate_template('diksha_oracle.xml')
+    update_processor_property('diksha_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('pm_poshan_oracle.xml')
+    instantiate_template('pm_poshan_oracle.xml')
+    update_processor_property('pm_poshan_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('nas_oracle.xml')
+    instantiate_template('nas_oracle.xml')
+    update_processor_property('nas_oracle', 'GenerateFlowFile_oracle')
+
+
+    upload_template('udise_oracle.xml')
+    instantiate_template('udise_oracle.xml')sd
+    update_processor_property('udise_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('pgi_oracle.xml')
+    instantiate_template('pgi_oracle.xml')
+    update_processor_property('pgi_oracle', 'GenerateFlowFile_oracle')
+
+    upload_template('nishtha_oracle.xml')
+    instantiate_template('nishtha_oracle.xml')
+    update_processor_property('nishtha_oracle', 'GenerateFlowFile_oracle')
 def oracle():
     upload_template('Run_Latest_Code_Oracle.xml')
     instantiate_template('Run_Latest_Code_Oracle.xml')
@@ -1069,6 +1221,7 @@ if __name__ == '__main__':
         run_pm_poshan_local()
         run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
-        oracle()
+        # oracle()
+        run_all_programs_oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
