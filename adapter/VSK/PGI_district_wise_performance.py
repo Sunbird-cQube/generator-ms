@@ -5,7 +5,7 @@ program=obj.program
 df_data = obj.get_file()
 
 def category_event_data():
-    df_data['Overall']=df_data["Grand Total"]
+    df_data['overall']=df_data["grand_total"]
     df_melt=df_data.melt(id_vars=['district_code','state_code'],
                      value_vars=["outcome","effective_classroom_transaction","infrastructure_facilities_studententitlements","school_safety_and_child_protection","digital_learning","governance_processes","overall"],
                      var_name="category_name",value_name="category_value")
