@@ -27,7 +27,7 @@ def performance_event_data():
 def learning_outcome_dimension_data():
     df_snap = df_data[['learning_outcome_code', 'grade', 'subject', 'learning_outcome']].drop_duplicates()
     df_snap.columns = ['lo_code', 'grade', 'subject', 'lo_name']
-    obj.upload_file(df_snap, 'lo-dimension.data.csv')
+    obj.upload_file(df_snap, 'lonas-dimension.data.csv')
 
 if df_data is not None:
     school_event_data()
