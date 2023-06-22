@@ -592,7 +592,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['access_type']+'/dimensions/'
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['instance_type']+'/dimensions/'
                                 }
                             },
                             "state": "STOPPED"
@@ -610,7 +610,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['access_type']+'/programs/'
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['instance_type']+'/programs/'
                                 }
                             },
                             "state": "STOPPED"
