@@ -5,16 +5,17 @@ program=obj.program
 df_data=obj.get_file()
 
 def category_event_data():
-    df_melt = df_data.melt(id_vars=['State Code'],
-                           value_vars=["Total Micro Improvements Projects","Total Micro Improvements Started",
-                                       "Total Micro Improvements In progress","Total Micro improvement submitted","Total Micro improvement submitted with evidence"],
+    df_melt = df_data.melt(id_vars=['state_code'],
+                           value_vars=["total_micro_improvement_projects","total_micro_improvement_started",
+                                       "total_micro_improvement_inprogress","total_micro_improvement_submitted",
+                                       "total_micro_improvement_submitted_with_evidence"],
                            var_name="category_name", value_name="category_value")
-    df_snap = df_melt[['State Code','category_name', 'category_value']]
+    df_snap = df_melt[['state_code','category_name', 'category_value']]
     df_snap.columns = ['state_id','category_name', 'category_value']
     df_snap.update(df_snap[['category_name']].applymap("'{}'".format))
     return df_snap
 
-def category_dimenstion_data():
+def category_dimension_data():
     df_data = category_event_data()
     obj.upload_file(df_data, 'categorymicro-event.data.csv')
     df_data = df_data[['category_name']].drop_duplicates()
@@ -25,4 +26,4 @@ def category_dimenstion_data():
 
 if df_data is not None:
     category_event_data()
-    category_dimenstion_data()
+    category_dimension_data()
