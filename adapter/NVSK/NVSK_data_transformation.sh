@@ -1,6 +1,6 @@
 python3 DIKSHA_etb_coverage_state_wise.py diksha diksha_etb_etb-coverage.csv
 python3 DIKSHA_etb_coverage_status.py diksha diksha_etb_coverage-status.csv
-python3 DIKSHA_etb_plays_per_captia.py diksha diksha_etb_plays-per-capita.csv
+python3 DIKSHA_etb_plays_per_capita.py diksha diksha_etb_plays-per-capita.csv
 python3 DIKSHA_etb_learning_session.py diksha diksha_etb_learning-session.csv
 python3 DIKSHA_etb_program_started.py diksha diksha_etb_program-started.csv
 python3 DIKSHA_etb_qr_coverage.py diksha vsk_diksha_etb_qr-coverage.csv
@@ -13,9 +13,9 @@ python3 MICRO_Improvement_status.py micro-improvements micro-improvement_distric
 python3 NAS_implementation_status.py nas nas_program-started.csv
 python3 NAS_state_wise_performance.py nas nas_all-dashboard.csv
 
-python3 NCERT_implementation_status.py ncert diksha_quiz_program-started.csv
-python3 NCERT_participation_status.py ncert diksha_quiz_state-participation.csv
-python3 NCERT_quiz_wise_status.py ncert diksha_quiz-started-plan.csv
+python3 NCERT_implementation_status.py ncert-quiz diksha_quiz_program-started.csv
+python3 NCERT_participation_status.py ncert-quiz diksha_quiz_state-participation.csv
+python3 NCERT_quiz_wise_status.py ncert-quiz diksha_quiz-started-plan.csv
 
 python3 NCF_progress_status.py ncf ncf_all-dashboard.csv
 python3 NCF_DiSanc_survey.py ncf language_wise_count.csv
