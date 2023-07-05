@@ -6,7 +6,8 @@ df_data = obj.get_file()
 
 def category_event_data():
     df_melt=df_data.melt(id_vars=['state_code'],
-                     value_vars=["learning_outcomes_&_quality","access","infrastructure_&_facilities","equity","governance_processes"],
+                     value_vars=["learning_outcomes_&_quality","access","infrastructure_&_facilities",
+                                 "equity","governance_processes"],
                      var_name="category_name",value_name="category_value")
     df_snap=df_melt[['state_code','category_name','category_value']]
     df_snap.columns=['state_id','category_name','category_value']
