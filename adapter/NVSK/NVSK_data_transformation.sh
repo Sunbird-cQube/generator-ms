@@ -1,11 +1,8 @@
-python3 DIKSHA_etb_coverage_state_wise.py diksha diksha_etb_etb-coverage.csv
-python3 DIKSHA_etb_coverage_status.py diksha diksha_etb_coverage-status.csv
-python3 DIKSHA_etb_plays_per_capita.py diksha diksha_etb_plays-per-capita.csv
+python3 DIKSHA_content_coverage_on_qr.py diksha diksha_etb_qr-coverage.csv
+python3 DIKSHA_etb_coverage_status.py diksha diksha_etb_etb-coverage.csv
 python3 DIKSHA_etb_learning_session.py diksha diksha_etb_learning-session.csv
-python3 DIKSHA_etb_program_started.py diksha diksha_etb_program-started.csv
-python3 DIKSHA_etb_qr_coverage.py diksha vsk_diksha_etb_qr-coverage.csv
-python3 DIKSHA_etb_qr_coverage_state.py diksha diksha_etb_qr-coverage.csv
-
+python3 DIKSHA_implementation_status.py diksha diksha_etb_program-started.csv
+python3 DIKSHA_learning_session_potential_user.py diksha diksha_etb_plays-per-capita.csv
 
 python3 MICRO_Implementation_status.py micro-improvements micro-improvement_all-dashboard.csv
 python3 MICRO_Improvement_status.py micro-improvements micro-improvement_district.csv

@@ -9,10 +9,6 @@ def totalenrolment_event_data():
     df_snap.columns = ['state_id','program_name','course_name','total_enrolment']
     obj.upload_file(df_snap, 'courseenrolment-event.data.csv')
 
-def totalcompletion_event_data():
-    df_snap = df_data[['state_code','program','course_name','completion']]
-    df_snap.columns = [ 'state_id','program_name','course_name','total_completion']
-    obj.upload_file(df_snap, 'coursecompletion-event.data.csv')
 
 def totalcertification_event_data():
     df_snap = df_data[['state_code','program','course_name', 'certification']]
@@ -30,6 +26,5 @@ def course_dimension():
 
 if df_data is not None:
     totalenrolment_event_data()
-    totalcompletion_event_data()
     totalcertification_event_data()
     course_dimension()
