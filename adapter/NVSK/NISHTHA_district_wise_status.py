@@ -25,7 +25,5 @@ def program_dimension_data():
 
 if df_data is not None:
     totalenrolment_event_data()
-    totalcompletion_event_data()
     totalcertification_event_data()
-    perccertification_event_data()
     program_dimension_data()
