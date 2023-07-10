@@ -11,7 +11,11 @@ def students_event_data():
 
 def category_event_data():
     df_melt = df_data.melt(id_vars=['district_code', 'state_code'],
-                           value_vars=["ptr","%_schools_having_toilet","%_schools_having_drinking_water","%_schools_having_electricity","%_schools_having_library","%_govt_aided_schools_received_textbook","%_schools_with_ramp"],
+                           value_vars=["ptr","%_schools_having_toilet",
+                                       "%_schools_having_drinking_water",
+                                       "%_schools_having_electricity","%_schools_having_library",
+                                       "%_govt_aided_schools_received_textbook",
+                                       "%_schools_with_ramp"],
                            var_name="category_name", value_name="category_value")
     df_snap = df_melt[['state_code', 'district_code', 'category_name', 'category_value']]
     df_snap.columns = ['state_id', 'district_id', 'category_name', 'category_value']

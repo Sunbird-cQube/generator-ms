@@ -5,13 +5,13 @@ program=obj.program
 df_data=obj.get_file()
 
 def category_event_data():
-    df_melt = df_data.melt(id_vars=['district_code'],
+    df_melt = df_data.melt(id_vars=['state_code'],
                            value_vars=["total_micro_improvement_projects","total_micro_improvement_started",
                                        "total_micro_improvement_inprogress","total_micro_improvement_submitted",
                                        "total_micro_improvement_submitted_with_evidence"],
                            var_name="category_name", value_name="category_value")
-    df_snap = df_melt[['district_code','category_name', 'category_value']]
-    df_snap.columns = ['district_id','category_name', 'category_value']
+    df_snap = df_melt[['state_code','category_name', 'category_value']]
+    df_snap.columns = ['state_id','category_name', 'category_value']
     df_snap.update(df_snap[['category_name']].applymap("'{}'".format))
     return df_snap
 
