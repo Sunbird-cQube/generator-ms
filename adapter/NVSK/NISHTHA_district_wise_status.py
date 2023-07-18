@@ -22,8 +22,13 @@ def program_dimension_data():
     df_snap.update(df_snap[['program_id']].applymap("'{}'".format))
     obj.upload_file(df_snap, 'programnishtha-dimension.data.csv')
 
+def totalcompletion_event_data():
+    df_snap = df_data[['state_code', 'district_code', 'program', 'total_completion']]
+    df_snap.columns = ['state_id','district_id','program_name', 'total_completion']
+    obj.upload_file(df_snap, 'districtwisecompletion-event.data.csv')
 
 if df_data is not None:
     totalenrolment_event_data()
     totalcertification_event_data()
+    totalcompletion_event_data()
     program_dimension_data()
