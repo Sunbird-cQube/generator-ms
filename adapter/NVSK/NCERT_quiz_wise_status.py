@@ -15,7 +15,7 @@ def certificate_issued():
     obj.upload_file(df_snap, 'certificateissued-event.data.csv')
 
 def completion_perc():
-    df_snap = df_data[['collection_name', 'medium', 'completion_%']]
+    df_snap = df_data[['collection_name', 'medium', 'completion%']]
     df_snap.columns = ['quiz_name', 'medium', 'completion_perc']
     obj.upload_file(df_snap, 'completionperc-event.data.csv')
 
