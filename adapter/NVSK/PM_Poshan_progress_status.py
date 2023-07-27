@@ -11,7 +11,7 @@ def total_meal_served():
 
 def category_event_data():
     df_melt=df_data.melt(id_vars=['date','state_code','district_code'],
-                     value_vars=['enrolled','total_schools'],
+                     value_vars=['total_schools'],
                      var_name="category_name",value_name="category_value")
     df_snap=df_melt[['date','state_code','district_code','category_name','category_value']]
     df_snap.columns=['date','state_id','district_id','category_name','category_value']
