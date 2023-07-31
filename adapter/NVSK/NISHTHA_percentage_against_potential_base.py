@@ -9,6 +9,6 @@ def total_participants():
     obj.upload_file(df_snap,'totalparticipants-event.data.csv')
 
 if df_data is not None:
-    total_certificates_achieved()
+    total_participants()
 
 

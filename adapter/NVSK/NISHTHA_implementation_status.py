@@ -25,7 +25,6 @@ def program_status_dimension_data():
 
 if df_data is not None:
     started_event_data()
-    program_dimension_data()
     program_status_dimension_data()
 
 
