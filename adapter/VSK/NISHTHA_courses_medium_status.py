@@ -4,18 +4,20 @@ obj=CollectData()
 program=obj.program
 df_data=obj.get_file()
 
-def totalmedium_event_data():
-    df_snap = df_data[['state_code','program_name','total_medium']]
-    df_snap.columns = ['state_id','program_name','total_medium']
+def medium_instruction_event_data():
+    df_snap = df_data[['state_code','program_name','language','status']]
+    df_snap.columns = ['state_id','program_name','language','status']
     obj.upload_file(df_snap, 'totalmedium-event.data.csv')
 
-def totalcourses_event_data():
-    df_snap = df_data[['state_code','program_name','total_courses']]
-    df_snap.columns = ['state_id','program_name','total_courses']
-    obj.upload_file(df_snap, 'mediumtotalcourses-event.data.csv')
+def language_dimension():
+    df_snap = df_data[['language']].drop_duplicates()
+    df_snap['language_id'] = range(1, len(df_snap) + 1)
+    df_snap = df_snap[['language_id', 'language']]
+    df_snap.update(df_snap[['language_id']].applymap("'{}'".format))
+    obj.upload_file(df_snap, 'languagenishtha-dimension.data.csv')
 
 if df_data is not None:
-    totalmedium_event_data()
-    totalcourses_event_data()
+    medium_instruction_event_data()
+    language_dimension()
 
 
