@@ -5,16 +5,16 @@ program=obj.program
 df_data = obj.get_file()
 
 def total_meal_served():
-    df_snap = df_data[['district_code', 'meal_served']]
-    df_snap.columns = ['district_id', 'total_meals_served']
+    df_snap = df_data[['date','district_code', 'meal_served']]
+    df_snap.columns = ['date','district_id', 'total_meals_served']
     obj.upload_file(df_snap, 'mealserved-event.data.csv')
 
 def category_event_data():
     df_melt=df_data.melt(id_vars=['district_code'],
                      value_vars=['enrolled','total_schools'],
                      var_name="category_name",value_name="category_value")
-    df_snap=df_melt[['district_code','category_name','category_value']]
-    df_snap.columns=['district_id','category_name','category_value']
+    df_snap=df_melt[['date','district_code','category_name','category_value']]
+    df_snap.columns=['date','district_id','category_name','category_value']
     df_snap.update(df_snap[['category_name']].applymap("'{}'".format))
     return df_snap
 
