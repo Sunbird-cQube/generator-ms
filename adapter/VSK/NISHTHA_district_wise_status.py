@@ -5,8 +5,8 @@ program=obj.program
 df_data=obj.get_file()
 
 def total_certificates_achieved():
-    df_snap = df_data[['state_code','program_name','total_certifications_achieved']]
-    df_snap.columns = ['state_id','program_name','total_certifications_achieved']
+    df_snap = df_data[['district_code','program_name','total_certifications_achieved']]
+    df_snap.columns = ['district_id','program_name','total_certifications_achieved']
     obj.upload_file(df_snap, 'achievedcertification-event.data.csv')
 
 def program_dimension_data():
