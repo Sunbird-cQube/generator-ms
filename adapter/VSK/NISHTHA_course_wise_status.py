@@ -18,3 +18,5 @@ def course_dimension():
 if df_data is not None:
     totalcertification_event_data()
     course_dimension()
+
+    
