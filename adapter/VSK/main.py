@@ -8,8 +8,7 @@ import configparser
 import pandas as pd
 from minio import Minio
 from datetime import datetime
-
-# from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient
 
 configuartion_path = os.path.dirname(os.path.abspath(__file__)) + "/config.ini"
 config = configparser.ConfigParser()
@@ -23,8 +22,7 @@ class CollectData:
         '''
         self.program = sys.argv[1]
         self.input_file = sys.argv[2]
-        # self.date_today = datetime.now().strftime('%d-%b-%Y')
-        self.date_today = '08-Sep-2023'
+        self.date_today = datetime.now().strftime('%d-%b-%Y')
         self.env = config['CREDs']['storage_type']
         self.input_folder = 'emission/' + self.date_today + '/' + self.input_file
         self.output_folder = 'process_input/' + self.program + '/' + self.date_today
