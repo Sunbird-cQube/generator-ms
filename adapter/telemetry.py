@@ -1,4 +1,4 @@
-from main import CollectData
+from adapter.VSK.main import CollectData
 
 obj = CollectData()
 program = obj.program
