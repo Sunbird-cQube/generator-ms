@@ -152,6 +152,14 @@ def instantiate_template(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
+    if processor_group.__contains__('telemetry_data'):
+        template_id = get_template_id('telemetry_data')
+        data = {
+            "templateId": template_id,
+            "originX": -2016,
+            "originY": -800,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('ingest_dimension_data'):
         template_id = get_template_id('ingest_dimension_data')
         data = {
@@ -504,6 +512,30 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'InvokeHTTP':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original",
+                                    "Retry"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "POST",
+                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/captureTelemetry"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+
                 if processor_name == 'ListAzure':
                     update_processor_property_body = {
                         "component": {
@@ -1113,6 +1145,7 @@ def run_latest_local():
     update_processor_property('data_moving_local', 'update_dimension_directory')
     update_processor_property('data_moving_local', 'update_program_directory')
 
+
 def adapters():
     upload_template('Run_adapters.xml')
     instantiate_template_codes('Run_adapters.xml')
@@ -1177,6 +1210,14 @@ def oracle():
     instantiate_template_codes('data_moving_oracle.xml')
     update_processor_property('data_moving_oracle', 'GenerateFlowFile_oracle')
 
+
+def telemetry():
+    upload_template('telemetry_data.xml')
+    instantiate_template('telemetry_data.xml')
+    update_processor_property('telemetry_data', 'GenerateFlowFile')
+    update_processor_property('telemetry_data', 'InvokeHTTP')
+
+
 def azure():
     upload_template('data_moving_azure.xml')
     instantiate_template_codes('data_moving_azure.xml')
@@ -1189,29 +1230,30 @@ def azure():
 if __name__ == '__main__':
     # common_processor_groups()
     # adapters()
-    if config['CREDs']['storage_type'] == 'aws':
-        run_latest_aws()
-        if config['CREDs']['instance_type']!= 'others':
-            run_school_attendance_aws()
-            run_school_Infrastructure_aws()
-            run_student_assessment_aws()
-            run_student_progression_aws()
+    # telemetry()
+    # if config['CREDs']['storage_type'] == 'aws':
+    #     run_latest_aws()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_aws()
+    #         run_school_Infrastructure_aws()
+    #         run_student_assessment_aws()
+    #         run_student_progression_aws()
     if config['CREDs']['storage_type'] == 'local':
         run_latest_local()
-        if config['CREDs']['instance_type'] != 'others':
-            run_school_attendance_local()
-            run_school_Infrastructure_local()
-            run_student_assessment_local()
-            run_student_progression_local()
-            run_diksha_local()
-            run_nas_local()
-            run_udise_local()
-            run_nishtha_local()
-            run_pm_poshan_local()
-            run_pgi_local()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_local()
+    #         run_school_Infrastructure_local()
+    #         run_student_assessment_local()
+    #         run_student_progression_local()
+    #         run_diksha_local()
+    #         run_nas_local()
+    #         run_udise_local()
+    #         run_nishtha_local()
+    #         run_pm_poshan_local()
+    #         run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
         oracle()
-        if config['CREDs']['instance_type'] != 'others':
-            run_all_programs_oracle()
-    if config['CREDs']['storage_type'] == 'azure':
-        azure()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_all_programs_oracle()
+    # if config['CREDs']['storage_type'] == 'azure':
+    #     azure()
