@@ -539,7 +539,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/captureTelemetry"
+                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL']+"/captureTelemetry"
                                 }
                             },
                             "state": "STOPPED"
