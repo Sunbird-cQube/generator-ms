@@ -99,6 +99,14 @@ def instantiate_template_codes(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
+    if processor_group.__contains__('onestep_dataingestion_aws'):
+        template_id = get_template_id('onestep_dataingestion_aws')
+        data = {
+            "templateId": template_id,
+            "originX": -550,
+            "originY": -520,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('adapters'):
         template_id = get_template_id('Run_adapters')
         data = {
@@ -331,70 +339,6 @@ def instantiate_template(processor_group):
             "originY": -888,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('school_Infrastructure_aws'):
-        template_id = get_template_id('school_Infrastructure_aws')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": 200,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('student_progression_aws'):
-        template_id = get_template_id('student_progression_aws')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": 200,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('diksha_local'):
-        template_id = get_template_id('diksha_local')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": -368,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('pm_poshan_local'):
-        template_id = get_template_id('pm_poshan_local')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": -368,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('nas_local'):
-        template_id = get_template_id('nas_local')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": -624,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('udise_local'):
-        template_id = get_template_id('udise_local')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": -624,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('pgi_local'):
-        template_id = get_template_id('pgi_local')
-        data = {
-            "templateId": template_id,
-            "originX": 592,
-            "originY": -888,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('nishtha_local'):
-        template_id = get_template_id('nishtha_local')
-        data = {
-            "templateId": template_id,
-            "originX": 1080,
-            "originY": -888,
-            "disconnectedNodeAcknowledged": "false"
-        }
     elif processor_group.__contains__('school_attendance_local'):
         template_id = get_template_id('school_attendance_local')
         data = {
@@ -426,6 +370,54 @@ def instantiate_template(processor_group):
             "templateId": template_id,
             "originX": 1080,
             "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('diksha_aws'):
+        template_id = get_template_id('diksha_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pm_poshan_aws'):
+        template_id = get_template_id('pm_poshan_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nas_aws'):
+        template_id = get_template_id('nas_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('udise_aws'):
+        template_id = get_template_id('udise_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pgi_aws'):
+        template_id = get_template_id('pgi_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nishtha_aws'):
+        template_id = get_template_id('nishtha_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -888,
             "disconnectedNodeAcknowledged": "false"
         }
 
@@ -512,6 +504,29 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'onestepInvokeHTTP':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original",
+                                    "Retry"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "POST",
+                                    "Remote URL": config['CREDs']['SPEC_URL']+"/schedule"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
                 if processor_name == 'InvokeHTTP':
                     update_processor_property_body = {
                         "component": {
@@ -980,8 +995,58 @@ def run_student_progression_aws():
     update_processor_property('student_progression_aws', 'FetchS3Object_aws')
     update_processor_property('student_progression_aws', 'update_program_directory')
     update_processor_property('student_progression_aws', 'update_dimension_directory')
+def run_diksha_aws():
+    upload_template('diksha_aws.xml')
+    instantiate_template('diksha_aws.xml')
+    update_processor_property('diksha_aws', 'ListS3Files')
+    update_processor_property('diksha_aws', 'FetchS3Object_aws')
+    update_processor_property('diksha_aws', 'update_program_directory')
+    update_processor_property('diksha_aws', 'update_dimension_directory')
 
 
+def run_pm_poshan_aws():
+    upload_template('pm_poshan_aws.xml')
+    instantiate_template('pm_poshan_aws.xml')
+    update_processor_property('pm_poshan_aws', 'ListS3Files')
+    update_processor_property('pm_poshan_aws', 'FetchS3Object_aws')
+    update_processor_property('pm_poshan_aws', 'update_program_directory')
+    update_processor_property('pm_poshan_aws', 'update_dimension_directory')
+
+
+def run_nas_aws():
+    upload_template('nas_aws.xml')
+    instantiate_template('nas_aws.xml')
+    update_processor_property('nas_aws', 'ListS3Files')
+    update_processor_property('nas_aws', 'FetchS3Object_aws')
+    update_processor_property('nas_aws', 'update_program_directory')
+    update_processor_property('nas_aws', 'update_dimension_directory')
+
+
+def run_udise_aws():
+    upload_template('udise_aws.xml')
+    instantiate_template('udise_aws.xml')
+    update_processor_property('udise_aws', 'ListS3Files')
+    update_processor_property('udise_aws', 'FetchS3Object_aws')
+    update_processor_property('udise_aws', 'update_program_directory')
+    update_processor_property('udise_aws', 'update_dimension_directory')
+
+
+def run_pgi_aws():
+    upload_template('pgi_aws.xml')
+    instantiate_template('pgi_aws.xml')
+    update_processor_property('pgi_aws', 'ListS3Files')
+    update_processor_property('pgi_aws', 'FetchS3Object_aws')
+    update_processor_property('pgi_aws', 'update_program_directory')
+    update_processor_property('pgi_aws', 'update_dimension_directory')
+
+
+def run_nishtha_aws():
+    upload_template('nishtha_aws.xml')
+    instantiate_template('nishtha_aws.xml')
+    update_processor_property('nishtha_aws', 'ListS3Files')
+    update_processor_property('nishtha_aws', 'FetchS3Object_aws')
+    update_processor_property('nishtha_aws', 'update_program_directory')
+    update_processor_property('nishtha_aws', 'update_dimension_directory')
 def run_school_attendance_local():
     upload_template('school_attendance_local.xml')
     instantiate_template('school_attendance_local.xml')
@@ -1226,34 +1291,48 @@ def azure():
     update_processor_property('data_moving_azure', 'update_program_directory')
     update_processor_property('data_moving_azure', 'update_dimension_directory')
 
-
+def onestep_aws():
+    upload_template('onestep_dataingestion_aws.xml')
+    instantiate_template_codes('onestep_dataingestion_aws.xml')
+    update_processor_property('onestep_dataingestion_aws', 'ListS3Files')
+    update_processor_property('onestep_dataingestion_aws', 'FetchS3Object_aws')
+    update_processor_property('onestep_dataingestion_aws', 'update_program_directory')
+    update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
+    update_processor_property('onestep_dataingestion_aws','onestepInvokeHTTP')
 if __name__ == '__main__':
-    # common_processor_groups()
-    # adapters()
-    # telemetry()
-    # if config['CREDs']['storage_type'] == 'aws':
-    #     run_latest_aws()
-    #     if config['CREDs']['instance_type'] != 'others':
-    #         run_school_attendance_aws()
-    #         run_school_Infrastructure_aws()
-    #         run_student_assessment_aws()
-    #         run_student_progression_aws()
+    common_processor_groups()
+    adapters()
+    telemetry()
+    if config['CREDs']['storage_type'] == 'aws':
+        run_latest_aws()
+        onestep_aws()
+        if config['CREDs']['instance_type'] != 'others':
+            run_school_attendance_aws()
+            run_school_Infrastructure_aws()
+            run_student_assessment_aws()
+            run_student_progression_aws()
+            run_diksha_aws()
+            run_nas_aws()
+            run_udise_aws()
+            run_nishtha_aws()
+            run_pm_poshan_aws()
+            run_pgi_aws()
     if config['CREDs']['storage_type'] == 'local':
         run_latest_local()
-    #     if config['CREDs']['instance_type'] != 'others':
-    #         run_school_attendance_local()
-    #         run_school_Infrastructure_local()
-    #         run_student_assessment_local()
-    #         run_student_progression_local()
-    #         run_diksha_local()
-    #         run_nas_local()
-    #         run_udise_local()
-    #         run_nishtha_local()
-    #         run_pm_poshan_local()
-    #         run_pgi_local()
+        if config['CREDs']['instance_type'] != 'others':
+            run_school_attendance_local()
+            run_school_Infrastructure_local()
+            run_student_assessment_local()
+            run_student_progression_local()
+            run_diksha_local()
+            run_nas_local()
+            run_udise_local()
+            run_nishtha_local()
+            run_pm_poshan_local()
+            run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
         oracle()
-    #     if config['CREDs']['instance_type'] != 'others':
-    #         run_all_programs_oracle()
-    # if config['CREDs']['storage_type'] == 'azure':
-    #     azure()
+        if config['CREDs']['instance_type'] != 'others':
+            run_all_programs_oracle()
+    if config['CREDs']['storage_type'] == 'azure':
+        azure()
