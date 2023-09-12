@@ -21,9 +21,9 @@ python3 NCF_state_wise.py ncf state_wise_count.csv
 python3 NIPUN_learning_session.py nipun-bharat nipunbharat_content-consumption.csv
 python3 NIPUN_textbook_status.py nipun-bharat nipunbharat_lo-covered-by-textbook.csv
 
-python3 NISHTHA_course_wise_status.py nishtha NISHTHA_course-wise_certifications.csv
-python3 NISHTHA_medium_instruction.py nishtha NISHTHA_Medium_of_instruction.csv
-python3 NISHTHA_district_wise_status.py nishtha NISHTHA_program-wise_achieved_certification.csv
+python3 NISHTHA_course_wise_status.py nishtha NISHTHA_course-wise_certification.csv
+python3 NISHTHA_medium_instruction.py nishtha NISHTHA_medium_of_instructions.csv
+python3 NISHTHA_district_wise_status.py nishtha NISHTHA_Program-wise_achieved_certificates.csv
 python3 NISHTHA_implementation_status.py nishtha NISHTHA_program_implementation_status.csv
 python3 NISHTHA_percentage_against_potential_base.py nishtha NISHTHA_participants_per_program.csv
 

@@ -2,7 +2,7 @@ import configparser
 import requests
 import os
 
-configuartion_path = os.path.dirname(os.path.abspath(__file__))+"/config.ini"
+configuartion_path = os.path.dirname(os.path.abspath(__file__)) + "/config.ini"
 config = configparser.ConfigParser()
 config.read(configuartion_path);
 
@@ -12,9 +12,10 @@ processing_time = config['CREDs']['processing_time']
 plugin_time = config['CREDs']['plugin_time']
 header = {"Content-Type": "application/json"}
 
+
 def get_nifi_root_pg():
     """ Fetch nifi root processor group ID"""
-    res = requests.get(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/root',  verify=True)
+    res = requests.get(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/root', verify=True)
     if res.status_code == 200:
         global nifi_root_pg_id
         nifi_root_pg_id = res.json()['component']['id']
@@ -22,6 +23,7 @@ def get_nifi_root_pg():
         return res.json()['component']['id']
     else:
         return res.text
+
 
 def get_processor_group_info(processor_group_name):
     """
@@ -39,6 +41,7 @@ def get_processor_group_info(processor_group_name):
     else:
         return 'failed to list the processor groups'
 
+
 def get_processor_group_ports(processor_group_name):
     # Get processor group details
     global pg_source
@@ -48,6 +51,8 @@ def get_processor_group_ports(processor_group_name):
         return pg_details.text
     else:
         return pg_details
+
+
 def get_processor_group_id(processor_group_name):
     nifi_root_pg_id = get_nifi_root_pg()
     pg_list = requests.get(f'{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{nifi_root_pg_id}')
@@ -58,7 +63,8 @@ def get_processor_group_id(processor_group_name):
                 id = i['component']['id']
                 return id
 
-def get_processor_id(processor_group_name,processor_name):
+
+def get_processor_id(processor_group_name, processor_name):
     pg_source = get_processor_group_ports(processor_group_name)
     if pg_source.status_code == 200:
         for i in pg_source.json()['processGroupFlow']['flow']['processors']:
@@ -67,14 +73,17 @@ def get_processor_id(processor_group_name,processor_name):
                 processor_id = i['component']['id']
                 return processor_id
 
+
 def upload_template(template_files):
     root_pg_id = get_nifi_root_pg()
     payload = {'template': open(template_files, 'rb')}
-    get_template_upload = requests.post(f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/templates/upload", files=payload)
+    get_template_upload = requests.post(
+        f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/templates/upload", files=payload)
     if get_template_upload.ok:
-        print('Successfully uploaded the template',template_files)
+        print('Successfully uploaded the template', template_files)
     else:
-        print("Failed to upload the template ",get_template_upload.text)
+        print("Failed to upload the template ", get_template_upload.text)
+
 
 def get_template_id(processor_group):
     '''Get template id '''
@@ -85,24 +94,50 @@ def get_template_id(processor_group):
             template_id = template['template']['id']
             return template_id
 
+
 def instantiate_template_codes(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
-    if processor_group.__contains__('aws'):
-        template_id = get_template_id('Run Latest Code aws')
+    if processor_group.__contains__('adapters'):
+        template_id = get_template_id('Run_adapters')
         data = {
             "templateId": template_id,
-            "originX": -1120,
-            "originY": -1080,
+            "originX": -1296,
+            "originY": -1400,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('local'):
-        template_id = get_template_id('Run Latest Code local')
+    elif processor_group.__contains__('data_moving_oracle'):
+        template_id = get_template_id('data_moving_oracle')
         data = {
             "templateId": template_id,
-            "originX": -1120,
-            "originY": -1080,
+            "originX": -1296,
+            "originY": -1090,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('data_moving_azure'):
+        template_id = get_template_id('data_moving_azure')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -1090,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
+    elif processor_group.__contains__('data_moving_aws'):
+        template_id = get_template_id('data_moving_aws')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -1090,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('data_moving_local'):
+        template_id = get_template_id('data_moving_local')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -1090,
             "disconnectedNodeAcknowledged": "false"
         }
     get_import_template = requests.post(
@@ -113,20 +148,60 @@ def instantiate_template_codes(processor_group):
         print(f"Failed to instantiate the {processor_group} in nifi canvas ", get_import_template.text)
 
 
-
 def instantiate_template(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
-    if processor_group.__contains__('adapters'):
-        template_id = get_template_id('Run_adapters')
+    if processor_group.__contains__('telemetry_data'):
+        template_id = get_template_id('telemetry_data')
+        data = {
+            "templateId": template_id,
+            "originX": -2016,
+            "originY": -800,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    if processor_group.__contains__('ingest_dimension_data'):
+        template_id = get_template_id('ingest_dimension_data')
         data = {
             "templateId": template_id,
             "originX": -1296,
-            "originY": -1072,
+            "originY": -512,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('diksha_oracle'):
+    if processor_group.__contains__('ingest_all_data'):
+        template_id = get_template_id('ingest_all_data')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -216,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    if processor_group.__contains__('ingest_programwise_data'):
+        template_id = get_template_id('ingest_programwise_data')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": 10,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    if processor_group.__contains__('ingest_event_grammar'):
+        template_id = get_template_id('ingest_event_grammar')
+        data = {
+            "templateId": template_id,
+            "originX": -552,
+            "originY": -800,
+            "disconnectedNodeAcknowledged": "false"
+        }
+
+    if processor_group.__contains__('ingest_dimension_grammar'):
+        template_id = get_template_id('ingest_dimension_grammar')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -800,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    if processor_group.__contains__('diksha_oracle'):
         template_id = get_template_id('diksha_oracle')
         data = {
             "templateId": template_id,
@@ -256,6 +331,70 @@ def instantiate_template(processor_group):
             "originY": -888,
             "disconnectedNodeAcknowledged": "false"
         }
+    elif processor_group.__contains__('school_Infrastructure_aws'):
+        template_id = get_template_id('school_Infrastructure_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('student_progression_aws'):
+        template_id = get_template_id('student_progression_aws')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": 200,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('diksha_local'):
+        template_id = get_template_id('diksha_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pm_poshan_local'):
+        template_id = get_template_id('pm_poshan_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nas_local'):
+        template_id = get_template_id('nas_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('udise_local'):
+        template_id = get_template_id('udise_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('pgi_local'):
+        template_id = get_template_id('pgi_local')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nishtha_local'):
+        template_id = get_template_id('nishtha_local')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -888,
+            "disconnectedNodeAcknowledged": "false"
+        }
     elif processor_group.__contains__('school_attendance_local'):
         template_id = get_template_id('school_attendance_local')
         data = {
@@ -323,215 +462,47 @@ def instantiate_template(processor_group):
             "originY": 200,
             "disconnectedNodeAcknowledged": "false"
         }
-
-    elif processor_group.__contains__('Code_azure') :
+    elif processor_group.__contains__('Code_azure'):
         template_id = get_template_id('Run Latest Code azure')
         data = {
-        "templateId": template_id,
-        "originX": -1296,
-        "originY": -832,
-        "disconnectedNodeAcknowledged": "false"
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -832,
+            "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('Code_aws') :
+    elif processor_group.__contains__('Code_aws'):
         template_id = get_template_id('Run Latest Code aws')
         data = {
-        "templateId": template_id,
-        "originX": -1296,
-        "originY": -832,
-        "disconnectedNodeAcknowledged": "false"
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -832,
+            "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Code_local'):
         template_id = get_template_id('Run Latest Code local')
         data = {
-        "templateId": template_id,
-        "originX": -1296,
-        "originY": -832,
-        "disconnectedNodeAcknowledged": "false"
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -832,
+            "disconnectedNodeAcknowledged": "false"
         }
     elif processor_group.__contains__('Code_Oracle'):
         template_id = get_template_id('Run Latest Code Oracle')
         data = {
-        "templateId": template_id,
-        "originX": -1296,
-        "originY": -832,
-        "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('Student'):
-        template_id = get_template_id('Plugin Student Attendance aws')
-        data = {
-            "templateId": template_id,
-            "originX": -1520,
-            "originY": -1608,
-            "disconnectedNodeAcknowledged": "false"
-        }
-
-    elif processor_group.__contains__('Teachers'):
-        template_id = get_template_id('Plugin Teachers Attendance aws')
-        data = {
-            "templateId": template_id,
-            "originX": -1024,
-            "originY": -1608,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('block-review'):
-        template_id = get_template_id('block-review-meetings-aws')
-        data = {
             "templateId": template_id,
             "originX": -1296,
-            "originY": -1360,
+            "originY": -832,
             "disconnectedNodeAcknowledged": "false"
         }
-    elif processor_group.__contains__('cluster-review'):
-        template_id = get_template_id('cluster-review-meetings-aws')
-        data = {
-            "templateId": template_id,
-            "originX": -808,
-            "originY": -1360,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('district-review'):
-        template_id = get_template_id('district-review-meetings-aws')
-        data = {
-            "templateId": template_id,
-            "originX": -1752,
-            "originY": -1360,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
+    get_import_template = requests.post(
+        f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
     if get_import_template.ok:
         print(f"Successfully instantiated the {processor_group} in nifi canvas")
     else:
         print(f"Failed to instantiate the {processor_group} in nifi canvas ", get_import_template.text)
 
-def instantiate_template_local(processor_group):
-    # Instantiates template
-    root_pg_id = get_nifi_root_pg()
-    data = {}
-    if processor_group.__contains__('Student'):
-        template_id = get_template_id('Plugin Student Attendance local')
-        data = {
-            "templateId": template_id,
-            "originX": -1520,
-            "originY": -1608,
-            "disconnectedNodeAcknowledged": "false"
-        }
 
-    elif processor_group.__contains__('Teachers'):
-        template_id = get_template_id('Plugin Teachers Attendance local')
-        data = {
-            "templateId": template_id,
-            "originX": -1024,
-            "originY": -1608,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('block-review'):
-        template_id = get_template_id('block-review-meetings-local')
-        data = {
-            "templateId": template_id,
-            "originX": -1296,
-            "originY": -1360,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('cluster-review'):
-        template_id = get_template_id('cluster-review-meetings-local')
-        data = {
-            "templateId": template_id,
-            "originX": -808,
-            "originY": -1360,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    elif processor_group.__contains__('district-review'):
-        template_id = get_template_id('district-review-meetings-local')
-        data = {
-            "templateId": template_id,
-            "originX": -1752,
-            "originY": -1360,
-            "disconnectedNodeAcknowledged": "false"
-        }
-    get_import_template = requests.post(f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
-    if get_import_template.ok:
-        print(f"Successfully instantiated the {processor_group} in nifi canvas")
-    else:
-        print(f"Failed to instantiate the {processor_group} in nifi canvas ", get_import_template.text)
-
-def get_controller_services_id(processor_group_name,controllers):
-    processor_group_id = get_processor_group_id(processor_group_name)
-    list_controllers = requests.get(f"{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{processor_group_id}/controller-services")
-    controllers_list = list_controllers.json()
-    for i in controllers_list['controllerServices']:
-        if i['component']['name'] == controllers:
-            controllers_list_id = i['component']['id']
-            return controllers_list_id
-
-def get_controller_services_details(processor_group_name):
-    processor_group_id = get_processor_group_id(processor_group_name)
-    list_controllers = requests.get(
-        f"{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{processor_group_id}/controller-services")
-    controllers_list = list_controllers.json()
-    return controllers_list
-
-def update_controller_service_property(processor_group_name, controller_name):
-    controller_details = get_controller_services_details(processor_group_name)
-    for i in controller_details['controllerServices']:
-        if i['component']['name'] == controller_name:
-            # Request body for aws controller
-            update_controller_body_aws = {"revision": {
-                "version": i['revision']['version'],
-                "lastModifier": "Python"
-            },
-                "component": {
-                    "id": i['component']['id'],
-                    "name": controller_name,
-                    "properties":
-                        {
-                            "Access Key": config['CREDs']['s3_access_key'],
-                            "Secret Key": config['CREDs']['s3_secret_key']
-                        }
-                }
-
-            }
-            # controller body selection based on controller name
-            update_controller_body = update_controller_body_aws
-
-            update_controller_res = requests.put(
-                f"{nifi_host}:{nifi_port}/nifi-api/controller-services/{i['component']['id']}",
-                json=update_controller_body, headers=header)
-            if update_controller_res.status_code == 200:
-                return True
-            else:
-                return update_controller_res.text
-
-# Enabling the controller service
-def controller_service_enable(processor_group_name):
-    controller_details = get_controller_services_details(processor_group_name)
-    for i in controller_details['controllerServices']:
-        if i['component']['state'] == 'DISABLED':
-
-            controller_service_enable_body = {"revision": {
-                "version": i['revision']['version'], }, "state": "ENABLED"}
-            controller_service_enable_res = requests.put(f"{nifi_host}:{nifi_port}/nifi-api/controller-services/{i['component']['id']}/run-status",
-                                                   json=controller_service_enable_body, headers=header)
-            if controller_service_enable_res.status_code == 200:
-                print("Successfully enabled the controll services in ", processor_group_name)
-            else:
-                print("Failed to enabled in ",processor_group_name)
-
-# Disabling the controller service
-def controller_service_disable(processor_group_name):
-    controller_details = get_controller_services_details(processor_group_name)
-    for i in controller_details['controllerServices']:
-        if i['component']['state'] == 'ENABLED':
-
-            controller_service_enable_body = {"revision": {
-                "version": i['revision']['version'], }, "state": "DISABLED"}
-            controller_service_enable_res = requests.put(f"{nifi_host}:{nifi_port}/nifi-api/controller-services/{i['component']['id']}/run-status",
-                                                   json=controller_service_enable_body, headers=header)
-            if controller_service_enable_res.status_code == 200:
-                print("Successfully enabled the controll services in ", processor_group_name)
-            else:
-                print("Failed to enabled in ",processor_group_name)
-
-#Updating the processor property
+# Updating the processor property
 def update_processor_property(processor_group_name, processor_name):
     # Get the processors in the processor group
     pg_source = get_processor_group_ports(processor_group_name)
@@ -541,6 +512,30 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'InvokeHTTP':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original",
+                                    "Retry"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "POST",
+                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/captureTelemetry"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
+
                 if processor_name == 'ListAzure':
                     update_processor_property_body = {
                         "component": {
@@ -592,7 +587,8 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['instance_type']+'/dimensions/'
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/' +
+                                                 config['CREDs']['instance_type'] + '/dimensions/'
                                 }
                             },
                             "state": "STOPPED"
@@ -610,7 +606,8 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/'+config['CREDs']['instance_type']+'/programs/'
+                                    "directory": '/opt/nifi/nifi-current/Sunbird-cQube-processing-ms/impl/c-qube/ingest/' +
+                                                 config['CREDs']['instance_type'] + '/programs/'
                                 }
                             },
                             "state": "STOPPED"
@@ -624,7 +621,7 @@ def update_processor_property(processor_group_name, processor_name):
 
                 if processor_name == 'run_adapter_code':
                     if config['CREDs']['instance_type'] == 'NVSK':
-                        update_processor_property_body ={
+                        update_processor_property_body = {
                             "component": {
                                 "id": i['component']['id'],
                                 "name": i['component']['name'],
@@ -632,22 +629,22 @@ def update_processor_property(processor_group_name, processor_name):
                                     "autoTerminatedRelationships": [
                                         "original"
                                     ],
-                                "properties": {
-                                    "Command Arguments": "NVSK_data_transformation.sh",
-                                    "Command Path": "bash",
-                                    "Working Directory": "/opt/nifi/nifi-current/adapter/NVSK"
-                                }
+                                    "properties": {
+                                        "Command Arguments": "NVSK_data_transformation.sh",
+                                        "Command Path": "bash",
+                                        "Working Directory": "/opt/nifi/nifi-current/adapter/NVSK"
+                                    }
+                                },
+                                "state": "STOPPED"
                             },
-                            "state": "STOPPED"
-                        },
-                        "revision": {
-                            "clientId": "",
-                            "version": i['revision']['version']
-                        },
-                        "disconnectedNodeAcknowledged": 'false'
-                    }
+                            "revision": {
+                                "clientId": "",
+                                "version": i['revision']['version']
+                            },
+                            "disconnectedNodeAcknowledged": 'false'
+                        }
                     elif config['CREDs']['instance_type'] == 'VSK':
-                        update_processor_property_body ={
+                        update_processor_property_body = {
                             "component": {
                                 "id": i['component']['id'],
                                 "name": i['component']['name'],
@@ -655,20 +652,20 @@ def update_processor_property(processor_group_name, processor_name):
                                     "autoTerminatedRelationships": [
                                         "original"
                                     ],
-                                "properties": {
-                                    "Command Arguments": "VSK_data_transformation.sh",
-                                    "Command Path": "bash",
-                                    "Working Directory": "/opt/nifi/nifi-current/adapter/VSK"
-                                }
+                                    "properties": {
+                                        "Command Arguments": "VSK_data_transformation.sh",
+                                        "Command Path": "bash",
+                                        "Working Directory": "/opt/nifi/nifi-current/adapter/VSK"
+                                    }
+                                },
+                                "state": "STOPPED"
                             },
-                            "state": "STOPPED"
-                        },
-                        "revision": {
-                            "clientId": "",
-                            "version": i['revision']['version']
-                        },
-                        "disconnectedNodeAcknowledged": 'false'
-                    }
+                            "revision": {
+                                "clientId": "",
+                                "version": i['revision']['version']
+                            },
+                            "disconnectedNodeAcknowledged": 'false'
+                        }
                 if processor_name == 'GenerateFlowFile_adapter' or processor_name == 'GenerateFlowFile_oracle':
                     update_processor_property_body = {
                         "component": {
@@ -708,7 +705,7 @@ def update_processor_property(processor_group_name, processor_name):
                         "disconnectedNodeAcknowledged": "false"
                     }
 
-                elif processor_name == 'FetchS3_dist_rev_aws' or processor_name == 'Puts3_dist_rev_aws' or processor_name == 'FetchS3_block_rev_aws' or processor_name == 'Puts3_block_rev_aws' or processor_name == 'FetchS3_cluster_rev_aws' or processor_name == 'Puts3_cluster_rev_aws' or processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or  processor_name == 'Puts3Processing1'or  processor_name == 'Puts3Processing2'or  processor_name == 'Puts3Processing3':
+                elif processor_name == 'FetchS3_dist_rev_aws' or processor_name == 'Puts3_dist_rev_aws' or processor_name == 'FetchS3_block_rev_aws' or processor_name == 'Puts3_block_rev_aws' or processor_name == 'FetchS3_cluster_rev_aws' or processor_name == 'Puts3_cluster_rev_aws' or processor_name == 'FetchS3Object' or processor_name == 'FetchS3Object' or processor_name == 'Puts3Processing1' or processor_name == 'Puts3Processing2' or processor_name == 'Puts3Processing3':
                     update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
@@ -728,8 +725,8 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
-                elif processor_name == 'GenerateFlowFile':
-                    update_processor_property_body ={
+                elif processor_name == 'GenerateFlowFile' or processor_name == 'ExecuteProcess':
+                    update_processor_property_body = {
                         "component": {
                             "id": i['component']['id'],
                             "name": i['component']['name'],
@@ -816,7 +813,7 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
-                elif processor_name == 'Listlocal' :
+                elif processor_name == 'Listlocal':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -841,7 +838,7 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": "false"
                     }
-                elif processor_name == 'Lists3_cluster_rev_local' or processor_name == 'Lists3_dist_rev_local'or processor_name == 'Lists3_block_rev_local':
+                elif processor_name == 'Lists3_cluster_rev_local' or processor_name == 'Lists3_dist_rev_local' or processor_name == 'Lists3_block_rev_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -867,7 +864,7 @@ def update_processor_property(processor_group_name, processor_name):
                         "disconnectedNodeAcknowledged": "false"
                     }
 
-                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or  processor_name == 'Puts3Processing1_local'or  processor_name == 'Puts3Processing2_local'or  processor_name == 'Puts3Processing3_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
+                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or processor_name == 'Puts3Processing1_local' or processor_name == 'Puts3Processing2_local' or processor_name == 'Puts3Processing3_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -902,20 +899,23 @@ def update_processor_property(processor_group_name, processor_name):
                 else:
                     return update_processor_res.text
 
-def start_processor_group(processor_group_name,state):
+
+def start_processor_group(processor_group_name, state):
     header = {"Content-Type": "application/json"}
     pg_source = get_processor_group_info(processor_group_name)
     start_body = {
         "id": pg_source['component']['id'],
         "state": state,
         "disconnectedNodeAcknowledged": False}
-    start_response = requests.put(f"{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{pg_source['component']['id']}",
-                            json=start_body, headers=header)
+    start_response = requests.put(
+        f"{nifi_host}:{nifi_port}/nifi-api/flow/process-groups/{pg_source['component']['id']}",
+        json=start_body, headers=header)
     if start_response.status_code == 200:
         print(f"Successfully {state} {pg_source['component']['name']} Processor Group.")
         return True
     else:
         return start_response.text
+
 
 def delete_processor_group(processor_group_name):
     headers = {
@@ -929,94 +929,21 @@ def delete_processor_group(processor_group_name):
         for i in pg_list.json()['processGroupFlow']['flow']['processGroups']:
             if i['component']['name'] == processor_group_name:
                 params = {
-                        'version': i['revision']['version'],
-                        'clientId': "",
-                        'disconnectedNodeAcknowledged': "false"
-                    }
-                delete_api = requests.delete(f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{processor_group_id}",params=params,headers=headers)
-                print(delete_api.status_code)
+                    'version': i['revision']['version'],
+                    'clientId': "",
+                    'disconnectedNodeAcknowledged': "false"
+                }
+                delete_api = requests.delete(f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{processor_group_id}",
+                                             params=params, headers=headers)
 
-
-def plugins_aws():
-    upload_template('block-review-meetings-aws.xml')
-    upload_template('cluster-review-meetings-aws.xml')
-    upload_template('district-review-meetings-aws.xml')
-    instantiate_template('block-review-meetings-aws.xml')
-    instantiate_template('cluster-review-meetings-aws.xml')
-    instantiate_template('district-review-meetings-aws.xml')
-
-    upload_template('Plugin_Student_Attendance_aws.xml')
-    instantiate_template('Plugin_Student_Attendance_aws.xml')
-    controller_service_disable('Plugin Student Attendance aws')
-    update_controller_service_property('Plugin Student Attendance aws', 'aws_credentials_students')
-    controller_service_enable('Plugin Student Attendance aws')
-
-    upload_template('Plugin_Teachers_Attendance_aws.xml')
-    instantiate_template('Plugin_Teachers_Attendance_aws.xml')
-    controller_service_disable('Plugin Teachers Attendance aws')
-    update_controller_service_property('Plugin Teachers Attendance aws', 'aws_credentials_teachers')
-    controller_service_enable('Plugin Teachers Attendance aws')
-
-    processors = ['Lists3', 'FetchS3Object', 'Puts3Processing1', 'Puts3Processing2', 'Puts3Processing3']
-    for i in processors:
-        update_processor_property('Plugin Student Attendance aws', i)
-        update_processor_property('Plugin Teachers Attendance aws', i)
-    update_processor_property('block-review-meetings-aws', 'Lists3')
-    update_processor_property('block-review-meetings-aws','FetchS3_block_rev_aws')
-    update_processor_property('block-review-meetings-aws','Puts3_block_rev_aws')
-
-    update_processor_property('district-review-meetings-aws', 'Lists3')
-    update_processor_property('district-review-meetings-aws', 'FetchS3_dist_rev_aws')
-    update_processor_property('district-review-meetings-aws', 'Puts3_dist_rev_aws')
-
-    update_processor_property('cluster-review-meetings-aws', 'Lists3')
-    update_processor_property('cluster-review-meetings-aws', 'FetchS3_cluster_rev_aws')
-    update_processor_property('cluster-review-meetings-aws', 'Puts3_cluster_rev_aws')
-
-    processor_list = ['Plugin Student Attendance aws','Plugin Teachers Attendance aws','district-review-meetings-aws','block-review-meetings-aws','cluster-review-meetings-aws']
-
-def plugins_local():
-    #Uploading the templates
-    upload_template('block-review-meetings-local.xml')
-    upload_template('cluster-review-meetings-local.xml')
-    upload_template('district-review-meetings-local.xml')
-
-    instantiate_template_local('block-review-meetings-local.xml')
-    instantiate_template_local('cluster-review-meetings-local.xml')
-    instantiate_template_local('district-review-meetings-local.xml')
-    update_processor_property('district-review-meetings-local', 'Lists3_dist_rev_local')
-    update_processor_property('district-review-meetings-local', 'FetchS3_dist_rev_local')
-    update_processor_property('district-review-meetings-local', 'Puts3_dist_rev_local')
-    update_processor_property('block-review-meetings-local','Lists3_block_rev_local')
-    update_processor_property('block-review-meetings-local','FetchS3_block_rev_local')
-    update_processor_property('block-review-meetings-local','Puts3_block_rev_local')
-    update_processor_property('cluster-review-meetings-local', 'Lists3_cluster_rev_local')
-    update_processor_property('cluster-review-meetings-local', 'FetchS3_cluster_rev_local')
-    update_processor_property('cluster-review-meetings-local', 'Puts3_cluster_rev_local')
-
-    upload_template('Plugin_Student_Attendance_local.xml')
-    instantiate_template_local('Plugin_Student_Attendance_local.xml')
-    controller_service_disable('Plugin Student Attendance local')
-    controller_service_enable('Plugin Student Attendance local')
-
-    upload_template('Plugin_Teachers_Attendance_local.xml')
-    instantiate_template_local('Plugin_Teachers_Attendance_local.xml')
-    controller_service_disable('Plugin Teachers Attendance local')
-    controller_service_enable('Plugin Teachers Attendance local')
-
-    processors = ['Lists3_local', 'FetchS3Object_local', 'Puts3Processing1_local', 'Puts3Processing2_local', 'Puts3Processing3_local']
-    for i in processors:
-        update_processor_property('Plugin Student Attendance local', i)
-        update_processor_property('Plugin Teachers Attendance local', i)
-    processor_group_list = ['Plugin Teachers Attendance local', 'Plugin Student Attendance local','district-review-meetings-local','block-review-meetings-local','cluster-review-meetings-local']
 
 def run_latest_aws():
-    upload_template('Run_Latest_Code_aws.xml')
-    instantiate_template('Run_Latest_Code_aws.xml')
-    update_processor_property('Run Latest Code aws', 'ListS3Files')
-    update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
-    update_processor_property('Run Latest Code aws','update_program_directory')
-    update_processor_property('Run Latest Code aws','update_dimension_directory')
+    upload_template('data_moving_aws.xml')
+    instantiate_template_codes('data_moving_aws.xml')
+    update_processor_property('data_moving_aws', 'ListS3Files')
+    update_processor_property('data_moving_aws', 'FetchS3Object_aws')
+    update_processor_property('data_moving_aws', 'update_program_directory')
+    update_processor_property('data_moving_aws', 'update_dimension_directory')
 
 
 def run_school_attendance_aws():
@@ -1027,6 +954,7 @@ def run_school_attendance_aws():
     update_processor_property('school_attendance_aws', 'update_program_directory')
     update_processor_property('school_attendance_aws', 'update_dimension_directory')
 
+
 def run_student_assessment_aws():
     upload_template('student_assessment_aws.xml')
     instantiate_template('student_assessment_aws.xml')
@@ -1035,6 +963,7 @@ def run_student_assessment_aws():
     update_processor_property('student_assessment_aws', 'update_program_directory')
     update_processor_property('student_assessment_aws', 'update_dimension_directory')
 
+
 def run_school_Infrastructure_aws():
     upload_template('school_Infrastructure_aws.xml')
     instantiate_template('school_Infrastructure_aws.xml')
@@ -1042,6 +971,7 @@ def run_school_Infrastructure_aws():
     update_processor_property('school_Infrastructure_aws', 'FetchS3Object_aws')
     update_processor_property('school_Infrastructure_aws', 'update_program_directory')
     update_processor_property('school_Infrastructure_aws', 'update_dimension_directory')
+
 
 def run_student_progression_aws():
     upload_template('student_progression_aws.xml')
@@ -1060,6 +990,7 @@ def run_school_attendance_local():
     update_processor_property('school_attendance_local', 'update_program_directory')
     update_processor_property('school_attendance_local', 'update_dimension_directory')
 
+
 def run_student_assessment_local():
     upload_template('student_assessment_local.xml')
     instantiate_template('student_assessment_local.xml')
@@ -1067,6 +998,7 @@ def run_student_assessment_local():
     update_processor_property('student_assessment_local', 'FetchS3Object_local')
     update_processor_property('student_assessment_local', 'update_program_directory')
     update_processor_property('student_assessment_local', 'update_dimension_directory')
+
 
 def run_school_Infrastructure_local():
     upload_template('school_Infrastructure_local.xml')
@@ -1076,6 +1008,7 @@ def run_school_Infrastructure_local():
     update_processor_property('school_Infrastructure_local', 'update_program_directory')
     update_processor_property('school_Infrastructure_local', 'update_dimension_directory')
 
+
 def run_student_progression_local():
     upload_template('student_progression_local.xml')
     instantiate_template('student_progression_local.xml')
@@ -1083,6 +1016,7 @@ def run_student_progression_local():
     update_processor_property('student_progression_local', 'FetchS3Object_local')
     update_processor_property('student_progression_local', 'update_program_directory')
     update_processor_property('student_progression_local', 'update_dimension_directory')
+
 
 def run_diksha_local():
     upload_template('diksha_local.xml')
@@ -1092,6 +1026,7 @@ def run_diksha_local():
     update_processor_property('diksha_local', 'update_program_directory')
     update_processor_property('diksha_local', 'update_dimension_directory')
 
+
 def run_pm_poshan_local():
     upload_template('pm_poshan_local.xml')
     instantiate_template('pm_poshan_local.xml')
@@ -1099,6 +1034,8 @@ def run_pm_poshan_local():
     update_processor_property('pm_poshan_local', 'FetchS3Object_local')
     update_processor_property('pm_poshan_local', 'update_program_directory')
     update_processor_property('pm_poshan_local', 'update_dimension_directory')
+
+
 def run_nas_local():
     upload_template('nas_local.xml')
     instantiate_template('nas_local.xml')
@@ -1106,6 +1043,8 @@ def run_nas_local():
     update_processor_property('nas_local', 'FetchS3Object_local')
     update_processor_property('nas_local', 'update_program_directory')
     update_processor_property('nas_local', 'update_dimension_directory')
+
+
 def run_udise_local():
     upload_template('udise_local.xml')
     instantiate_template('udise_local.xml')
@@ -1113,6 +1052,8 @@ def run_udise_local():
     update_processor_property('udise_local', 'FetchS3Object_local')
     update_processor_property('udise_local', 'update_program_directory')
     update_processor_property('udise_local', 'update_dimension_directory')
+
+
 def run_pgi_local():
     upload_template('pgi_local.xml')
     instantiate_template('pgi_local.xml')
@@ -1120,6 +1061,7 @@ def run_pgi_local():
     update_processor_property('pgi_local', 'FetchS3Object_local')
     update_processor_property('pgi_local', 'update_program_directory')
     update_processor_property('pgi_local', 'update_dimension_directory')
+
 
 def run_nishtha_local():
     upload_template('nishtha_local.xml')
@@ -1129,19 +1071,96 @@ def run_nishtha_local():
     update_processor_property('nishtha_local', 'update_program_directory')
     update_processor_property('nishtha_local', 'update_dimension_directory')
 
+
+def get_outputports(processor_group_name, output_port):
+    pg_source = get_processor_group_ports(processor_group_name)
+    for i in pg_source.json()['processGroupFlow']['flow']['outputPorts']:
+        if i['component']['name'] == output_port:
+            id = i['component']['id']
+            return id
+
+
+def get_inputports(processor_group_name, input_port):
+    pg_source = get_processor_group_ports(processor_group_name)
+    for i in pg_source.json()['processGroupFlow']['flow']['inputPorts']:
+        if i['component']['name'] == input_port:
+            id = i['component']['id']
+            return id
+
+
+def connect_ports(processor_group_name, src_groupid, src_id, src_type, des_groupid, des_id, des_type):
+    pg_source = get_processor_group_ports(processor_group_name)
+    root_id = get_nifi_root_pg()
+    for i in pg_source.json()['processGroupFlow']['flow']['connections']:
+        json = {
+            "revision": {
+                "clientId": "",
+                "version": i['revision']['version']
+            },
+            "disconnectedNodeAcknowledged": 'false',
+            "component": {
+                "name": "",
+                "source": {
+                    "id": src_id,
+                    "groupId": src_groupid,
+                    "type": src_type
+                },
+                "destination": {
+                    "id": des_id,
+                    "groupId": des_groupid,
+                    "type": des_type
+                }}}
+        connect_response = requests.post(f"{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_id}/connections",
+                                         json=json)
+        if connect_response.status_code == 200:
+            print(f"Successfully connected the processor_groups")
+            return True
+        else:
+            return connect_response.text
+
+
+def common_processor_groups():
+    upload_template('ingest_dimension_data.xml')
+    instantiate_template('ingest_dimension_data.xml')
+    upload_template('ingest_all_data.xml')
+    instantiate_template('ingest_all_data.xml')
+    upload_template('ingest_programwise_data.xml')
+    instantiate_template('ingest_programwise_data.xml')
+    upload_template('ingest_dimension_grammar.xml')
+    instantiate_template('ingest_dimension_grammar.xml')
+    upload_template('ingest_event_grammar.xml')
+    instantiate_template('ingest_event_grammar.xml')
+
+    src_id = get_outputports('ingest_dimension_grammar', 'dimension_outputport')
+    des_id = get_inputports('ingest_event_grammar', 'event_inputport')
+    src_groupid = get_processor_group_id('ingest_dimension_grammar')
+    des_groupid = get_processor_group_id('ingest_event_grammar')
+    connect_ports('ingest_dimension_grammar', src_groupid, src_id, "OUTPUT_PORT", des_groupid, des_id, "INPUT_PORT")
+
+
 def run_latest_local():
-    upload_template('Run_Latest_Code_local.xml')
-    instantiate_template('Run_Latest_Code_local.xml')
-    update_processor_property('Run Latest Code local', 'Listlocal')
-    update_processor_property('Run Latest Code local', 'FetchS3Object_local')
-    update_processor_property('Run Latest Code local', 'update_program_directory')
-    update_processor_property('Run Latest Code local', 'update_dimension_directory')
+    upload_template('data_moving_local.xml')
+    instantiate_template_codes('data_moving_local.xml')
+    update_processor_property('data_moving_local', 'Listlocal')
+    update_processor_property('data_moving_local', 'update_dimension_directory')
+    update_processor_property('data_moving_local', 'update_program_directory')
+
 
 def adapters():
     upload_template('Run_adapters.xml')
-    instantiate_template('Run_adapters.xml')
+    instantiate_template_codes('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
     update_processor_property('Run_adapters', 'run_adapter_code')
+
+
+def default_pg():
+    adapters()
+    upload_template('ingest_dimension_dataset_schemas.xml')
+    upload_template('ingest_data.xml')
+    instantiate_template_codes('ingest_dimension_dataset_schemas.xml')
+    instantiate_template_codes('ingest_data.xml')
+    update_processor_property('ingest_dimension_dataset_schemas', 'ExecuteProcess')
+    update_processor_property('ingest_data', 'ExecuteProcess')
 
 
 def run_all_programs_oracle():
@@ -1173,7 +1192,6 @@ def run_all_programs_oracle():
     instantiate_template('nas_oracle.xml')
     update_processor_property('nas_oracle', 'GenerateFlowFile_oracle')
 
-
     upload_template('udise_oracle.xml')
     instantiate_template('udise_oracle.xml')
     update_processor_property('udise_oracle', 'GenerateFlowFile_oracle')
@@ -1185,43 +1203,57 @@ def run_all_programs_oracle():
     upload_template('nishtha_oracle.xml')
     instantiate_template('nishtha_oracle.xml')
     update_processor_property('nishtha_oracle', 'GenerateFlowFile_oracle')
+
+
 def oracle():
-    upload_template('Run_Latest_Code_Oracle.xml')
-    instantiate_template('Run_Latest_Code_Oracle.xml')
-    update_processor_property('Run Latest Code Oracle', 'GenerateFlowFile_oracle')
+    upload_template('data_moving_oracle.xml')
+    instantiate_template_codes('data_moving_oracle.xml')
+    update_processor_property('data_moving_oracle', 'GenerateFlowFile_oracle')
+
+
+def telemetry():
+    upload_template('telemetry_data.xml')
+    instantiate_template('telemetry_data.xml')
+    update_processor_property('telemetry_data', 'GenerateFlowFile')
+    update_processor_property('telemetry_data', 'InvokeHTTP')
+
 
 def azure():
-    upload_template('Run_Latest_Code_azure.xml')
-    instantiate_template('Run_Latest_Code_azure.xml')
-    update_processor_property('Run Latest Code azure', 'ListAzure')
-    update_processor_property('Run Latest Code azure', 'FetchAzure')
-    update_processor_property('Run Latest Code azure', 'update_program_directory')
-    update_processor_property('Run Latest Code azure', 'update_dimension_directory')
+    upload_template('data_moving_azure.xml')
+    instantiate_template_codes('data_moving_azure.xml')
+    update_processor_property('data_moving_azure', 'ListAzure')
+    update_processor_property('data_moving_azure', 'FetchAzure')
+    update_processor_property('data_moving_azure', 'update_program_directory')
+    update_processor_property('data_moving_azure', 'update_dimension_directory')
+
 
 if __name__ == '__main__':
-    adapters()
-    if config['CREDs']['storage_type'] == 'aws':
-        plugins_aws()
-        run_latest_aws()
-        run_school_attendance_aws()
-        run_school_Infrastructure_aws()
-        run_student_assessment_aws()
-        run_student_progression_aws()
+    # common_processor_groups()
+    # adapters()
+    # telemetry()
+    # if config['CREDs']['storage_type'] == 'aws':
+    #     run_latest_aws()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_aws()
+    #         run_school_Infrastructure_aws()
+    #         run_student_assessment_aws()
+    #         run_student_progression_aws()
     if config['CREDs']['storage_type'] == 'local':
-        plugins_local()
         run_latest_local()
-        run_school_attendance_local()
-        run_school_Infrastructure_local()
-        run_student_assessment_local()
-        run_student_progression_local()
-        run_diksha_local()
-        run_nas_local()
-        run_udise_local()
-        run_nishtha_local()
-        run_pm_poshan_local()
-        run_pgi_local()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_local()
+    #         run_school_Infrastructure_local()
+    #         run_student_assessment_local()
+    #         run_student_progression_local()
+    #         run_diksha_local()
+    #         run_nas_local()
+    #         run_udise_local()
+    #         run_nishtha_local()
+    #         run_pm_poshan_local()
+    #         run_pgi_local()
     if config['CREDs']['storage_type'] == 'oracle':
         oracle()
-        run_all_programs_oracle()
-    if config['CREDs']['storage_type'] == 'azure':
-        azure()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_all_programs_oracle()
+    # if config['CREDs']['storage_type'] == 'azure':
+    #     azure()
