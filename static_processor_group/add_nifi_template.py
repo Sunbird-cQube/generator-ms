@@ -504,6 +504,28 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'InvokeHTTPjwt':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "GET",
+                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/captureTelemetry"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
                 if processor_name == 'onestepInvokeHTTP':
                     update_processor_property_body = {
                         "component": {
@@ -539,7 +561,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/captureTelemetry"
+                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL']+"/captureTelemetry"
                                 }
                             },
                             "state": "STOPPED"
@@ -1281,6 +1303,7 @@ def telemetry():
     instantiate_template('telemetry_data.xml')
     update_processor_property('telemetry_data', 'GenerateFlowFile')
     update_processor_property('telemetry_data', 'InvokeHTTP')
+    update_processor_property('telemetry_data','InvokeHTTPjwt')
 
 
 def azure():
@@ -1299,6 +1322,7 @@ def onestep_aws():
     update_processor_property('onestep_dataingestion_aws', 'update_program_directory')
     update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
     update_processor_property('onestep_dataingestion_aws','onestepInvokeHTTP')
+
 if __name__ == '__main__':
     common_processor_groups()
     adapters()
