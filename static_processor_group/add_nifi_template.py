@@ -176,14 +176,14 @@ def instantiate_template(processor_group):
             "originY": -512,
             "disconnectedNodeAcknowledged": "false"
         }
-    if processor_group.__contains__('ingest_all_data'):
-        template_id = get_template_id('ingest_all_data')
-        data = {
-            "templateId": template_id,
-            "originX": -1296,
-            "originY": -216,
-            "disconnectedNodeAcknowledged": "false"
-        }
+    # if processor_group.__contains__('ingest_all_data'):
+    #     template_id = get_template_id('ingest_all_data')
+    #     data = {
+    #         "templateId": template_id,
+    #         "originX": -1296,
+    #         "originY": -216,
+    #         "disconnectedNodeAcknowledged": "false"
+    #     }
     if processor_group.__contains__('ingest_programwise_data'):
         template_id = get_template_id('ingest_programwise_data')
         data = {
@@ -201,8 +201,8 @@ def instantiate_template(processor_group):
             "disconnectedNodeAcknowledged": "false"
         }
 
-    if processor_group.__contains__('ingest_dimension_grammar'):
-        template_id = get_template_id('ingest_dimension_grammar')
+    if processor_group.__contains__('ingest_all_data'):
+        template_id = get_template_id('ingest_all_data')
         data = {
             "templateId": template_id,
             "originX": -1296,
@@ -1211,22 +1211,22 @@ def connect_ports(processor_group_name, src_groupid, src_id, src_type, des_group
 
 
 def common_processor_groups():
-    upload_template('ingest_dimension_data.xml')
-    instantiate_template('ingest_dimension_data.xml')
+    # upload_template('ingest_dimension_data.xml')
+    # instantiate_template('ingest_dimension_data.xml')
     upload_template('ingest_all_data.xml')
     instantiate_template('ingest_all_data.xml')
-    upload_template('ingest_programwise_data.xml')
-    instantiate_template('ingest_programwise_data.xml')
-    upload_template('ingest_dimension_grammar.xml')
-    instantiate_template('ingest_dimension_grammar.xml')
-    upload_template('ingest_event_grammar.xml')
-    instantiate_template('ingest_event_grammar.xml')
+    # upload_template('ingest_programwise_data.xml')
+    # instantiate_template('ingest_programwise_data.xml')
+    # upload_template('ingest_dimension_grammar.xml')
+    # instantiate_template('ingest_dimension_grammar.xml')
+    # upload_template('ingest_event_grammar.xml')
+    # instantiate_template('ingest_event_grammar.xml')
 
-    src_id = get_outputports('ingest_dimension_grammar', 'dimension_outputport')
-    des_id = get_inputports('ingest_event_grammar', 'event_inputport')
-    src_groupid = get_processor_group_id('ingest_dimension_grammar')
-    des_groupid = get_processor_group_id('ingest_event_grammar')
-    connect_ports('ingest_dimension_grammar', src_groupid, src_id, "OUTPUT_PORT", des_groupid, des_id, "INPUT_PORT")
+    # src_id = get_outputports('ingest_dimension_grammar', 'dimension_outputport')
+    # des_id = get_inputports('ingest_event_grammar', 'event_inputport')
+    # src_groupid = get_processor_group_id('ingest_dimension_grammar')
+    # des_groupid = get_processor_group_id('ingest_event_grammar')
+    # connect_ports('ingest_dimension_grammar', src_groupid, src_id, "OUTPUT_PORT", des_groupid, des_id, "INPUT_PORT")
 
 
 def run_latest_local():
