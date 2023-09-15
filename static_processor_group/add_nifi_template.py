@@ -504,6 +504,28 @@ def update_processor_property(processor_group_name, processor_name):
             if i['component']['name'] == processor_name:
                 # Request body creation to update processor property.
                 global update_processor_property_body
+                if processor_name == 'InvokeHTTPjwt':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "GET",
+                                    "Remote URL": config['CREDs']['INGESTION_URL'] + "/generatejwt"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
                 if processor_name == 'onestepInvokeHTTP':
                     update_processor_property_body = {
                         "component": {
@@ -512,11 +534,11 @@ def update_processor_property(processor_group_name, processor_name):
                             "config": {
                                 "autoTerminatedRelationships": [
                                     "Original",
-                                    "Retry"
+                                    "No Retry"
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['SPEC_URL']+"/schedule"
+                                    "Remote URL": config['CREDs']['SPEC_URL'] + "/schedule"
                                 }
                             },
                             "state": "STOPPED"
@@ -539,7 +561,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL']+"/captureTelemetry"
+                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL'] + "/captureTelemetry"
                                 }
                             },
                             "state": "STOPPED"
@@ -995,6 +1017,8 @@ def run_student_progression_aws():
     update_processor_property('student_progression_aws', 'FetchS3Object_aws')
     update_processor_property('student_progression_aws', 'update_program_directory')
     update_processor_property('student_progression_aws', 'update_dimension_directory')
+
+
 def run_diksha_aws():
     upload_template('diksha_aws.xml')
     instantiate_template('diksha_aws.xml')
@@ -1047,6 +1071,8 @@ def run_nishtha_aws():
     update_processor_property('nishtha_aws', 'FetchS3Object_aws')
     update_processor_property('nishtha_aws', 'update_program_directory')
     update_processor_property('nishtha_aws', 'update_dimension_directory')
+
+
 def run_school_attendance_local():
     upload_template('school_attendance_local.xml')
     instantiate_template('school_attendance_local.xml')
@@ -1281,6 +1307,8 @@ def telemetry():
     instantiate_template('telemetry_data.xml')
     update_processor_property('telemetry_data', 'GenerateFlowFile')
     update_processor_property('telemetry_data', 'InvokeHTTP')
+    update_processor_property('telemetry_data', 'InvokeHTTPjwt')
+    start_processor_group('telemetry_data', 'RUNNING')
 
 
 def azure():
@@ -1291,6 +1319,7 @@ def azure():
     update_processor_property('data_moving_azure', 'update_program_directory')
     update_processor_property('data_moving_azure', 'update_dimension_directory')
 
+
 def onestep_aws():
     upload_template('onestep_dataingestion_aws.xml')
     instantiate_template_codes('onestep_dataingestion_aws.xml')
@@ -1298,41 +1327,44 @@ def onestep_aws():
     update_processor_property('onestep_dataingestion_aws', 'FetchS3Object_aws')
     update_processor_property('onestep_dataingestion_aws', 'update_program_directory')
     update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
-    update_processor_property('onestep_dataingestion_aws','onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_aws', 'onestepInvokeHTTP')
+
+
 if __name__ == '__main__':
-    common_processor_groups()
-    adapters()
-    telemetry()
-    if config['CREDs']['storage_type'] == 'aws':
-        run_latest_aws()
-        onestep_aws()
-        if config['CREDs']['instance_type'] != 'others':
-            run_school_attendance_aws()
-            run_school_Infrastructure_aws()
-            run_student_assessment_aws()
-            run_student_progression_aws()
-            run_diksha_aws()
-            run_nas_aws()
-            run_udise_aws()
-            run_nishtha_aws()
-            run_pm_poshan_aws()
-            run_pgi_aws()
-    if config['CREDs']['storage_type'] == 'local':
-        run_latest_local()
-        if config['CREDs']['instance_type'] != 'others':
-            run_school_attendance_local()
-            run_school_Infrastructure_local()
-            run_student_assessment_local()
-            run_student_progression_local()
-            run_diksha_local()
-            run_nas_local()
-            run_udise_local()
-            run_nishtha_local()
-            run_pm_poshan_local()
-            run_pgi_local()
-    if config['CREDs']['storage_type'] == 'oracle':
-        oracle()
-        if config['CREDs']['instance_type'] != 'others':
-            run_all_programs_oracle()
-    if config['CREDs']['storage_type'] == 'azure':
-        azure()
+    if config['CREDs']['data_pull'] == 'true':
+        common_processor_groups()
+        adapters()
+        telemetry()
+        if config['CREDs']['storage_type'] == 'aws':
+            run_latest_aws()
+            onestep_aws()
+            if config['CREDs']['instance_type'] != 'others':
+                run_school_attendance_aws()
+                run_school_Infrastructure_aws()
+                run_student_assessment_aws()
+                run_student_progression_aws()
+                run_diksha_aws()
+                run_nas_aws()
+                run_udise_aws()
+                run_nishtha_aws()
+                run_pm_poshan_aws()
+                run_pgi_aws()
+        if config['CREDs']['storage_type'] == 'local':
+            run_latest_local()
+            if config['CREDs']['instance_type'] != 'others':
+                run_school_attendance_local()
+                run_school_Infrastructure_local()
+                run_student_assessment_local()
+                run_student_progression_local()
+                run_diksha_local()
+                run_nas_local()
+                run_udise_local()
+                run_nishtha_local()
+                run_pm_poshan_local()
+                run_pgi_local()
+        if config['CREDs']['storage_type'] == 'oracle':
+            oracle()
+            if config['CREDs']['instance_type'] != 'others':
+                run_all_programs_oracle()
+        if config['CREDs']['storage_type'] == 'azure':
+            azure()

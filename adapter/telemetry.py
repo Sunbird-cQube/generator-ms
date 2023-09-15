@@ -1,4 +1,4 @@
-from adapter.VSK.main import CollectData
+from VSK.main import CollectData
 
 obj = CollectData()
 program = obj.program
@@ -46,7 +46,7 @@ def device_event():
     df_snap = df_data[['date', 'userId', 'deviceType']]
     df_snap['deviceCount'] = '1'
     df_snap.columns = ['date', 'userId', 'deviceName', 'deviceCount']
-    obj.upload_file(df_snap, 'deviceCount-event.data.csv')
+    obj.upload_file(df_snap, 'devicesCount-event.data.csv')
 
 
 def pageEvents_event():
@@ -65,7 +65,7 @@ def pageNames_event():
 
 def timeSpent_event():
     df_snap = df_data[['date', 'userId', 'pageName', 'timeSpent']]
-    obj.upload_file(df_snap, 'timeSpent-event.data.csv')
+    obj.upload_file(df_snap, 'timespent-event.data.csv')
 
 
 def userCount_event():
