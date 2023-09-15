@@ -1331,40 +1331,41 @@ def onestep_aws():
 
 
 if __name__ == '__main__':
+    common_processor_groups()
+    adapters()
+    telemetry()
+    if config['CREDs']['storage_type'] == 'aws':
+        run_latest_aws()
+        if config['CREDs']['instance_type'] != 'others':
+            run_school_attendance_aws()
+            run_school_Infrastructure_aws()
+            run_student_assessment_aws()
+            run_student_progression_aws()
+            run_diksha_aws()
+            run_nas_aws()
+            run_udise_aws()
+            run_nishtha_aws()
+            run_pm_poshan_aws()
+            run_pgi_aws()
+    if config['CREDs']['storage_type'] == 'local':
+        run_latest_local()
+        if config['CREDs']['instance_type'] != 'others':
+            run_school_attendance_local()
+            run_school_Infrastructure_local()
+            run_student_assessment_local()
+            run_student_progression_local()
+            run_diksha_local()
+            run_nas_local()
+            run_udise_local()
+            run_nishtha_local()
+            run_pm_poshan_local()
+            run_pgi_local()
+    if config['CREDs']['storage_type'] == 'oracle':
+        oracle()
+        if config['CREDs']['instance_type'] != 'others':
+            run_all_programs_oracle()
+    if config['CREDs']['storage_type'] == 'azure':
+        azure()
     if config['CREDs']['data_pull'] == 'true':
-        common_processor_groups()
-        adapters()
-        telemetry()
         if config['CREDs']['storage_type'] == 'aws':
-            run_latest_aws()
             onestep_aws()
-            if config['CREDs']['instance_type'] != 'others':
-                run_school_attendance_aws()
-                run_school_Infrastructure_aws()
-                run_student_assessment_aws()
-                run_student_progression_aws()
-                run_diksha_aws()
-                run_nas_aws()
-                run_udise_aws()
-                run_nishtha_aws()
-                run_pm_poshan_aws()
-                run_pgi_aws()
-        if config['CREDs']['storage_type'] == 'local':
-            run_latest_local()
-            if config['CREDs']['instance_type'] != 'others':
-                run_school_attendance_local()
-                run_school_Infrastructure_local()
-                run_student_assessment_local()
-                run_student_progression_local()
-                run_diksha_local()
-                run_nas_local()
-                run_udise_local()
-                run_nishtha_local()
-                run_pm_poshan_local()
-                run_pgi_local()
-        if config['CREDs']['storage_type'] == 'oracle':
-            oracle()
-            if config['CREDs']['instance_type'] != 'others':
-                run_all_programs_oracle()
-        if config['CREDs']['storage_type'] == 'azure':
-            azure()
