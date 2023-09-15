@@ -515,7 +515,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "GET",
-                                    "Remote URL": config['CREDs']['INGESTION_URL']+"/generatejwt"
+                                    "Remote URL": config['CREDs']['INGESTION_URL'] + "/generatejwt"
                                 }
                             },
                             "state": "STOPPED"
@@ -538,7 +538,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['SPEC_URL']+"/schedule"
+                                    "Remote URL": config['CREDs']['SPEC_URL'] + "/schedule"
                                 }
                             },
                             "state": "STOPPED"
@@ -561,7 +561,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 ],
                                 "properties": {
                                     "HTTP Method": "POST",
-                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL']+"/captureTelemetry"
+                                    "Remote URL": config['CREDs']['QUERY_BUILDER_URL'] + "/captureTelemetry"
                                 }
                             },
                             "state": "STOPPED"
@@ -1017,6 +1017,8 @@ def run_student_progression_aws():
     update_processor_property('student_progression_aws', 'FetchS3Object_aws')
     update_processor_property('student_progression_aws', 'update_program_directory')
     update_processor_property('student_progression_aws', 'update_dimension_directory')
+
+
 def run_diksha_aws():
     upload_template('diksha_aws.xml')
     instantiate_template('diksha_aws.xml')
@@ -1069,6 +1071,8 @@ def run_nishtha_aws():
     update_processor_property('nishtha_aws', 'FetchS3Object_aws')
     update_processor_property('nishtha_aws', 'update_program_directory')
     update_processor_property('nishtha_aws', 'update_dimension_directory')
+
+
 def run_school_attendance_local():
     upload_template('school_attendance_local.xml')
     instantiate_template('school_attendance_local.xml')
@@ -1303,7 +1307,8 @@ def telemetry():
     instantiate_template('telemetry_data.xml')
     update_processor_property('telemetry_data', 'GenerateFlowFile')
     update_processor_property('telemetry_data', 'InvokeHTTP')
-    update_processor_property('telemetry_data','InvokeHTTPjwt')
+    update_processor_property('telemetry_data', 'InvokeHTTPjwt')
+    start_processor_group('telemetry_data', 'RUNNING')
 
 
 def azure():
@@ -1314,6 +1319,7 @@ def azure():
     update_processor_property('data_moving_azure', 'update_program_directory')
     update_processor_property('data_moving_azure', 'update_dimension_directory')
 
+
 def onestep_aws():
     upload_template('onestep_dataingestion_aws.xml')
     instantiate_template_codes('onestep_dataingestion_aws.xml')
@@ -1321,7 +1327,8 @@ def onestep_aws():
     update_processor_property('onestep_dataingestion_aws', 'FetchS3Object_aws')
     update_processor_property('onestep_dataingestion_aws', 'update_program_directory')
     update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
-    update_processor_property('onestep_dataingestion_aws','onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_aws', 'onestepInvokeHTTP')
+
 
 if __name__ == '__main__':
     if config['CREDs']['data_pull'] == 'true':
