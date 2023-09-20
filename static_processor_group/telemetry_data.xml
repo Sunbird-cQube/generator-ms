@@ -638,7 +638,7 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 */5 * * * ?</schedulingPeriod>
+                        <schedulingPeriod>0 0 23 * * ?</schedulingPeriod>
                         <schedulingStrategy>CRON_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
