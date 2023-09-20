@@ -1336,7 +1336,7 @@ if __name__ == '__main__':
     telemetry()
     if config['CREDs']['storage_type'] == 'aws':
         run_latest_aws()
-        onestep_aws()
+        #onestep_aws()
         if config['CREDs']['instance_type'] != 'others':
             run_school_attendance_aws()
             run_school_Infrastructure_aws()
