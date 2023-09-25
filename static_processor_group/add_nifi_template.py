@@ -901,7 +901,7 @@ def update_processor_property(processor_group_name, processor_name):
                         "disconnectedNodeAcknowledged": "false"
                     }
 
-                elif processor_name == 'FetchS3Object_local' or processor_name == 'FetchS3Object_local' or processor_name == 'Puts3Processing1_local' or processor_name == 'Puts3Processing2_local' or processor_name == 'Puts3Processing3_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
+                elif processor_name == 'FetchS3Object_local'  or processor_name == 'Puts3Processing1_local' or processor_name == 'Puts3Processing2_local' or processor_name == 'Puts3Processing3_local' or processor_name == 'FetchS3_dist_rev_local' or processor_name == 'Puts3_dist_rev_local' or processor_name == 'FetchS3_block_rev_local' or processor_name == 'Puts3_block_rev_local' or processor_name == 'FetchS3_cluster_rev_local' or processor_name == 'Puts3_cluster_rev_local':
                     endpoint_url = config['CREDs']['minio_end_point']
                     port = config['CREDs']['minio_port']
                     update_processor_property_body = {
@@ -1233,11 +1233,12 @@ def run_latest_local():
     upload_template('data_moving_local.xml')
     instantiate_template_codes('data_moving_local.xml')
     update_processor_property('data_moving_local', 'Listlocal')
+    update_processor_property(('data_moving_local'),'FetchS3Object_local')
     update_processor_property('data_moving_local', 'update_dimension_directory')
     update_processor_property('data_moving_local', 'update_program_directory')
 
 
-def adapters():
+def adapters(): 
     upload_template('Run_adapters.xml')
     instantiate_template_codes('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
