@@ -160,6 +160,14 @@ def instantiate_template(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
+    if processor_group.__contains__('ingest_data'):
+        template_id = get_template_id('ingest_data')
+        data = {
+            "templateId": template_id,
+            "originX": -1296,
+            "originY": -264,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('telemetry_data'):
         template_id = get_template_id('telemetry_data')
         data = {
@@ -201,8 +209,8 @@ def instantiate_template(processor_group):
             "disconnectedNodeAcknowledged": "false"
         }
 
-    if processor_group.__contains__('ingest_all_data'):
-        template_id = get_template_id('ingest_all_data')
+    if processor_group.__contains__('ingest_all_grammars'):
+        template_id = get_template_id('ingest_all_grammars')
         data = {
             "templateId": template_id,
             "originX": -1296,
@@ -1213,8 +1221,10 @@ def connect_ports(processor_group_name, src_groupid, src_id, src_type, des_group
 def common_processor_groups():
     # upload_template('ingest_dimension_data.xml')
     # instantiate_template('ingest_dimension_data.xml')
-    upload_template('ingest_all_data.xml')
-    instantiate_template('ingest_all_data.xml')
+    upload_template('ingest_all_grammars.xml')
+    instantiate_template('ingest_all_grammars.xml')
+    upload_template('ingest_data.xml')
+    instantiate_template('ingest_data.xml')
     # upload_template('ingest_programwise_data.xml')
     # instantiate_template('ingest_programwise_data.xml')
     # upload_template('ingest_dimension_grammar.xml')
@@ -1238,7 +1248,7 @@ def run_latest_local():
     update_processor_property('data_moving_local', 'update_program_directory')
 
 
-def adapters(): 
+def adapters():
     upload_template('Run_adapters.xml')
     instantiate_template_codes('Run_adapters.xml')
     update_processor_property('Run_adapters', 'GenerateFlowFile_adapter')
@@ -1333,41 +1343,41 @@ def onestep_aws():
 
 if __name__ == '__main__':
     common_processor_groups()
-    adapters()
-    telemetry()
-    if config['CREDs']['storage_type'] == 'aws':
-        run_latest_aws()
-        onestep_aws()
-        if config['CREDs']['instance_type'] != 'others':
-            run_school_attendance_aws()
-            run_school_Infrastructure_aws()
-            run_student_assessment_aws()
-            run_student_progression_aws()
-            run_diksha_aws()
-            run_nas_aws()
-            run_udise_aws()
-            run_nishtha_aws()
-            run_pm_poshan_aws()
-            run_pgi_aws()
-    if config['CREDs']['storage_type'] == 'local':
-        run_latest_local()
-        if config['CREDs']['instance_type'] != 'others':
-            run_school_attendance_local()
-            run_school_Infrastructure_local()
-            run_student_assessment_local()
-            run_student_progression_local()
-            run_diksha_local()
-            run_nas_local()
-            run_udise_local()
-            run_nishtha_local()
-            run_pm_poshan_local()
-            run_pgi_local()
-    if config['CREDs']['storage_type'] == 'oracle':
-        oracle()
-        if config['CREDs']['instance_type'] != 'others':
-            run_all_programs_oracle()
-    if config['CREDs']['storage_type'] == 'azure':
-        azure()
-    if config['CREDs']['data_pull'] == 'true':
-        if config['CREDs']['storage_type'] == 'aws':
-            onestep_aws()
+    # adapters()
+    # telemetry()
+    # if config['CREDs']['storage_type'] == 'aws':
+    #     run_latest_aws()
+    #     onestep_aws()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_aws()
+    #         run_school_Infrastructure_aws()
+    #         run_student_assessment_aws()
+    #         run_student_progression_aws()
+    #         run_diksha_aws()
+    #         run_nas_aws()
+    #         run_udise_aws()
+    #         run_nishtha_aws()
+    #         run_pm_poshan_aws()
+    #         run_pgi_aws()
+    # if config['CREDs']['storage_type'] == 'local':
+    #     run_latest_local()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_school_attendance_local()
+    #         run_school_Infrastructure_local()
+    #         run_student_assessment_local()
+    #         run_student_progression_local()
+    #         run_diksha_local()
+    #         run_nas_local()
+    #         run_udise_local()
+    #         run_nishtha_local()
+    #         run_pm_poshan_local()
+    #         run_pgi_local()
+    # if config['CREDs']['storage_type'] == 'oracle':
+    #     oracle()
+    #     if config['CREDs']['instance_type'] != 'others':
+    #         run_all_programs_oracle()
+    # if config['CREDs']['storage_type'] == 'azure':
+    #     azure()
+    # if config['CREDs']['data_pull'] == 'true':
+    #     if config['CREDs']['storage_type'] == 'aws':
+    #         onestep_aws()
