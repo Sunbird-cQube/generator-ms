@@ -214,7 +214,7 @@ def instantiate_template(processor_group):
         data = {
             "templateId": template_id,
             "originX": -1296,
-            "originY": -800,
+            "originY": -552,
             "disconnectedNodeAcknowledged": "false"
         }
     if processor_group.__contains__('diksha_oracle'):
@@ -983,6 +983,12 @@ def delete_processor_group(processor_group_name):
 
 
 def run_latest_aws():
+    upload_template('Run_Latest_Code_aws.xml')
+    instantiate_template('Run_Latest_Code_aws.xml')
+    update_processor_property('Run Latest Code aws', 'ListS3Files')
+    update_processor_property('Run Latest Code aws', 'FetchS3Object_aws')
+    update_processor_property('Run Latest Code aws', 'update_program_directory')
+    update_processor_property('Run Latest Code aws', 'update_dimension_directory')
     upload_template('data_moving_aws.xml')
     instantiate_template_codes('data_moving_aws.xml')
     update_processor_property('data_moving_aws', 'ListS3Files')
@@ -1240,6 +1246,12 @@ def common_processor_groups():
 
 
 def run_latest_local():
+    upload_template('Run_Latest_Code_local.xml')
+    instantiate_template('Run_Latest_Code_local.xml')
+    update_processor_property('Run Latest Code local', 'Listlocal')
+    update_processor_property('Run Latest Code local', 'FetchS3Object_local')
+    update_processor_property('Run Latest Code local', 'update_program_directory')
+    update_processor_property('Run Latest Code local', 'update_dimension_directory')
     upload_template('data_moving_local.xml')
     instantiate_template_codes('data_moving_local.xml')
     update_processor_property('data_moving_local', 'Listlocal')
@@ -1308,6 +1320,9 @@ def run_all_programs_oracle():
 
 
 def oracle():
+    upload_template('Run_Latest_Code_Oracle.xml')
+    instantiate_template('Run_Latest_Code_Oracle.xml')
+    update_processor_property('Run Latest Code Oracle', 'GenerateFlowFile_oracle')
     upload_template('data_moving_oracle.xml')
     instantiate_template_codes('data_moving_oracle.xml')
     update_processor_property('data_moving_oracle', 'GenerateFlowFile_oracle')
@@ -1323,6 +1338,12 @@ def telemetry():
 
 
 def azure():
+    upload_template('Run_Latest_Code_azure.xml')
+    instantiate_template('Run_Latest_Code_azure.xml')
+    update_processor_property('Run Latest Code azure', 'ListAzure')
+    update_processor_property('Run Latest Code azure', 'FetchAzure')
+    update_processor_property('Run Latest Code azure', 'update_program_directory')
+    update_processor_property('Run Latest Code azure', 'update_dimension_directory')
     upload_template('data_moving_azure.xml')
     instantiate_template_codes('data_moving_azure.xml')
     update_processor_property('data_moving_azure', 'ListAzure')
@@ -1347,7 +1368,7 @@ if __name__ == '__main__':
     telemetry()
     if config['CREDs']['storage_type'] == 'aws':
         run_latest_aws()
-        #onestep_aws()
+        onestep_aws()
         if config['CREDs']['instance_type'] != 'others':
             run_school_attendance_aws()
             run_school_Infrastructure_aws()
