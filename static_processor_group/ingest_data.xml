@@ -5,7 +5,7 @@
     <name>ingest_data</name>
     <snippet>
         <processGroups>
-            <id>f7bfa0d9-0ca6-366e-0000-000000000000</id>
+            <id>2aa425e4-6136-33b5-0000-000000000000</id>
             <parentGroupId>0220e898-0ab5-36bf-0000-000000000000</parentGroupId>
             <position>
                 <x>0.0</x>
@@ -14,13 +14,13 @@
             <comments></comments>
             <contents>
                 <connections>
-                    <id>48b35798-ea77-30fe-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>40621de5-46aa-3c5c-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>ba3d9518-6450-3737-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>e7724231-f631-353b-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -32,20 +32,20 @@
                     <name></name>
                     <selectedRelationships>nonzero status</selectedRelationships>
                     <source>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>e9cbad78-d749-312c-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>f40322d1-f705-3ae7-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <connections>
-                    <id>d2055366-5b52-34d9-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>57b41bcf-5d84-3975-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>e9cbad78-d749-312c-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>f40322d1-f705-3ae7-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -57,20 +57,20 @@
                     <name></name>
                     <selectedRelationships>success</selectedRelationships>
                     <source>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>97809896-bf81-3729-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>1c1a5de9-82b7-368e-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <connections>
-                    <id>ef40def9-0bf3-3b74-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>f9a79a17-7a1f-306d-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
                     <backPressureObjectThreshold>10000</backPressureObjectThreshold>
                     <destination>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>a8c51c80-a525-3051-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>53562371-97d5-3dc0-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </destination>
                     <flowFileExpiration>0 sec</flowFileExpiration>
@@ -82,15 +82,15 @@
                     <name></name>
                     <selectedRelationships>output stream</selectedRelationships>
                     <source>
-                        <groupId>f7bfa0d9-0ca6-366e-0000-000000000000</groupId>
-                        <id>e9cbad78-d749-312c-0000-000000000000</id>
+                        <groupId>2aa425e4-6136-33b5-0000-000000000000</groupId>
+                        <id>f40322d1-f705-3ae7-0000-000000000000</id>
                         <type>PROCESSOR</type>
                     </source>
                     <zIndex>0</zIndex>
                 </connections>
                 <processors>
-                    <id>97809896-bf81-3729-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>1c1a5de9-82b7-368e-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <position>
                         <x>640.0</x>
                         <y>48.0</y>
@@ -195,8 +195,8 @@
                     <type>org.apache.nifi.processors.standard.GenerateFlowFile</type>
                 </processors>
                 <processors>
-                    <id>a8c51c80-a525-3051-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>53562371-97d5-3dc0-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <position>
                         <x>648.0</x>
                         <y>592.0</y>
@@ -261,8 +261,8 @@
                     <type>org.apache.nifi.processors.standard.LogMessage</type>
                 </processors>
                 <processors>
-                    <id>ba3d9518-6450-3737-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>e7724231-f631-353b-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <position>
                         <x>1184.0</x>
                         <y>312.0</y>
@@ -327,8 +327,8 @@
                     <type>org.apache.nifi.processors.standard.LogMessage</type>
                 </processors>
                 <processors>
-                    <id>e9cbad78-d749-312c-0000-000000000000</id>
-                    <parentGroupId>f7bfa0d9-0ca6-366e-0000-000000000000</parentGroupId>
+                    <id>f40322d1-f705-3ae7-0000-000000000000</id>
+                    <parentGroupId>2aa425e4-6136-33b5-0000-000000000000</parentGroupId>
                     <position>
                         <x>640.0</x>
                         <y>320.0</y>
@@ -434,7 +434,7 @@
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
                     <executionNodeRestricted>false</executionNodeRestricted>
-                    <name>run_yarn_cli</name>
+                    <name>run_generic_yarn_cli</name>
                     <relationships>
                         <autoTerminate>false</autoTerminate>
                         <name>nonzero status</name>
@@ -458,5 +458,5 @@
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>09/28/2023 12:47:06 IST</timestamp>
+    <timestamp>10/09/2023 16:28:35 IST</timestamp>
 </template>
