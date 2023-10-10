@@ -550,7 +550,7 @@ def update_processor_property(processor_group_name, processor_name):
                                 "schedulingPeriod": processing_time,
                                 "schedulingStrategy": "CRON_DRIVEN",
                                 "properties": {
-                                    "container-name": config['CREDs']['azure_container_name'],
+                                    "container-name": config['CREDs']['azure_container'],
                                     "storage-account-name": config['CREDs']['azure_account_name'],
                                     "storage-account-key": config['CREDs']['azure_account_key'],
                                     "prefix": "process_input/"
@@ -571,7 +571,7 @@ def update_processor_property(processor_group_name, processor_name):
                             "name": i['component']['name'],
                             "config": {
                                 "properties": {
-                                    "container-name": config['CREDs']['azure_container_name'],
+                                    "container-name": config['CREDs']['azure_container'],
                                     "storage-account-name": config['CREDs']['azure_account_name'],
                                     "storage-account-key": config['CREDs']['azure_account_key'],
                                 }
