@@ -36,3 +36,6 @@ python3 PM_Poshan_progress_status.py pm-poshan pm-poshan_access-across-india.csv
 
 python3 UDISE_implementation_status.py udise udise_program-started.csv
 python3 UDISE_state_wise_performance.py udise udise-all-dashboard.csv
+
+python3 PM_SHRI_implementation_status.py pm-shri pmshri_program-started.csv
+python3 PM_SHRI_state_wise_performance.py pm-shri pmshri-all-dashboard.csv
