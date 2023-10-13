@@ -1,0 +1,1 @@
+python3 telemetry.py telemetry telemetry.csv
