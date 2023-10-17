@@ -5,8 +5,8 @@ program=obj.program
 df_data=obj.get_file()
 
 def medium_instruction_event_data():
-    df_snap = df_data[['district_code','program_name','language','status']]
-    df_snap.columns = ['district_id','program_name','language','status']
+    df_snap = df_data[['state_code','program_name','language','status']]
+    df_snap.columns = ['state_id','program_name','language','status']
     obj.upload_file(df_snap, 'totalmedium-event.data.csv')
 
 def language_dimension():
