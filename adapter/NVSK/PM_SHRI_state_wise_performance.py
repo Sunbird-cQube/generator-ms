@@ -9,11 +9,24 @@ def schools_event_data():
     df_snap.columns=['state_id','total_schools']
     obj.upload_file(df_snap, 'schools-event.data.csv')
 
+def total_boys_event():
+    df_snap = df_data[['state_code','total_boys_in_schools']]
+    df_snap.columns=['state_id','total_boys_in_schools']
+    obj.upload_file(df_snap, 'totalboys-event.data.csv')
+
+def total_girls_event():
+    df_snap = df_data[['state_code','total_girls_in_schools']]
+    df_snap.columns=['state_id','total_girls_in_schools']
+    obj.upload_file(df_snap, 'totalgirls-event.data.csv')
+
+def total_instructional_classroom_event():    
+    df_snap = df_data[['state_code','total_instructional_classrooms']]
+    df_snap.columns=['state_id','total_instructional_classrooms']
+    obj.upload_file(df_snap, 'totalclassroom-event.data.csv')
+
 def category_event_data():
     df_melt = df_data.melt(id_vars=['state_code'],
-                           value_vars=[ "total_instructional_classrooms",
-                            "total_boys_in_schools",
-                            "total_girls_in_schools",
+                           value_vars=[ 
                             "total_schools_having_library",
                             "total_schools_having_handwash_facility",
                             "total_schools_having_drinking_water_facility",
@@ -41,5 +54,8 @@ def category_dimension_data():
 
 if df_data is not None:
     schools_event_data()
+    total_boys_event()
+    total_girls_event()
     category_event_data()
     category_dimension_data()
+    total_instructional_classroom_event()
