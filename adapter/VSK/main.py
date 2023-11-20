@@ -94,9 +94,9 @@ class CollectData:
         self.rep_list = []
 
     def column_rename(self, data):
-        df = pd.read_csv(data)
+        df = pd.read_csv(data,on_bad_lines='skip',lineterminator='\n')
         for col in df.columns.tolist():
-            x = re.sub(r'^[\d.\s]+|[\d.\s]+$]+', '', col)
+            x = re.sub(r'^[\d.\s]+|[\d.\s]+$', '', col)
             self.rep_list.append(x)
         col_list = df.columns.tolist()
         df_snap = df[col_list]

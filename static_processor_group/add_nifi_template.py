@@ -99,6 +99,14 @@ def instantiate_template_codes(processor_group):
     # Instantiates template
     root_pg_id = get_nifi_root_pg()
     data = {}
+    if processor_group.__contains__('onestep_dataingestion_local'):
+        template_id = get_template_id('onestep_dataingestion_local')
+        data = {
+            "templateId": template_id,
+            "originX": -550,
+            "originY": -520,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('onestep_dataingestion_aws'):
         template_id = get_template_id('onestep_dataingestion_aws')
         data = {
@@ -1361,6 +1369,15 @@ def onestep_aws():
     update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
     update_processor_property('onestep_dataingestion_aws', 'onestepInvokeHTTP')
 
+def onestep_local():
+    upload_template('onestep_dataingestion_local.xml')
+    instantiate_template_codes('onestep_dataingestion_local.xml')
+    update_processor_property('onestep_dataingestion_local', 'Listlocal')
+    update_processor_property('onestep_dataingestion_local', 'FetchS3Object_local')
+    update_processor_property('onestep_dataingestion_local', 'update_program_directory')
+    update_processor_property('onestep_dataingestion_local', 'update_dimension_directory')
+    update_processor_property('onestep_dataingestion_local', 'onestepInvokeHTTP')
+
 
 if __name__ == '__main__':
     common_processor_groups()
@@ -1401,3 +1418,6 @@ if __name__ == '__main__':
     if config['CREDs']['data_pull'] == 'true':
         if config['CREDs']['storage_type'] == 'aws':
             onestep_aws()
+        if config['CREDs']['storage_type'] == 'local':
+            onestep_local()
+            
