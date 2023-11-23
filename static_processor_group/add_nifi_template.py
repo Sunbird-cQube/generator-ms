@@ -565,6 +565,29 @@ def update_processor_property(processor_group_name, processor_name):
                         },
                         "disconnectedNodeAcknowledged": 'false'
                     }
+                if processor_name == 'stop_processor_group':
+                    update_processor_property_body = {
+                        "component": {
+                            "id": i['component']['id'],
+                            "name": i['component']['name'],
+                            "config": {
+                                "autoTerminatedRelationships": [
+                                    "Original",
+                                    "No Retry"
+                                ],
+                                "properties": {
+                                    "HTTP Method": "POST",
+                                    "Remote URL": config['CREDs']['SPEC_URL'] + "/change-state"
+                                }
+                            },
+                            "state": "STOPPED"
+                        },
+                        "revision": {
+                            "clientId": "",
+                            "version": i['revision']['version']
+                        },
+                        "disconnectedNodeAcknowledged": 'false'
+                    }
                 if processor_name == 'InvokeHTTP':
                     update_processor_property_body = {
                         "component": {
@@ -1057,6 +1080,7 @@ def run_pm_poshan_aws():
     update_processor_property('pm_poshan_aws', 'FetchS3Object_aws')
     update_processor_property('pm_poshan_aws', 'update_program_directory')
     update_processor_property('pm_poshan_aws', 'update_dimension_directory')
+    update_processor_property('pm_poshan_aws', 'stop_processor_group')
 
 
 def run_nas_aws():
@@ -1066,6 +1090,8 @@ def run_nas_aws():
     update_processor_property('nas_aws', 'FetchS3Object_aws')
     update_processor_property('nas_aws', 'update_program_directory')
     update_processor_property('nas_aws', 'update_dimension_directory')
+    update_processor_property('nas_aws', 'stop_processor_group')
+
 
 
 def run_udise_aws():
@@ -1075,6 +1101,7 @@ def run_udise_aws():
     update_processor_property('udise_aws', 'FetchS3Object_aws')
     update_processor_property('udise_aws', 'update_program_directory')
     update_processor_property('udise_aws', 'update_dimension_directory')
+    update_processor_property('udise_aws', 'stop_processor_group')
 
 
 def run_pgi_aws():
@@ -1093,6 +1120,7 @@ def run_nishtha_aws():
     update_processor_property('nishtha_aws', 'FetchS3Object_aws')
     update_processor_property('nishtha_aws', 'update_program_directory')
     update_processor_property('nishtha_aws', 'update_dimension_directory')
+    update_processor_property('nishtha_aws', 'stop_processor_group')
 
 
 def run_school_attendance_local():
@@ -1368,6 +1396,7 @@ def onestep_aws():
     update_processor_property('onestep_dataingestion_aws', 'update_program_directory')
     update_processor_property('onestep_dataingestion_aws', 'update_dimension_directory')
     update_processor_property('onestep_dataingestion_aws', 'onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_aws','stop_processor_group')
 
 def onestep_local():
     upload_template('onestep_dataingestion_local.xml')
