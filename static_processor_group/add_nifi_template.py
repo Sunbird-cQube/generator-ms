@@ -1444,7 +1444,7 @@ if __name__ == '__main__':
             run_all_programs_oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
-      if config['CREDs']['data_pull'] == 'true':
+    if config['CREDs']['data_pull'] == 'true':
         if config['CREDs']['storage_type'] == 'aws':
             onestep_aws()
         if config['CREDs']['storage_type'] == 'local':
