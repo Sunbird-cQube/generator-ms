@@ -1080,7 +1080,7 @@ def run_pm_poshan_aws():
     update_processor_property('pm_poshan_aws', 'FetchS3Object_aws')
     update_processor_property('pm_poshan_aws', 'update_program_directory')
     update_processor_property('pm_poshan_aws', 'update_dimension_directory')
-    update_processor_property('pm_poshan_aws', 'stop_processor_group')
+    # update_processor_property('pm_poshan_aws', 'stop_processor_group')
 
 
 def run_nas_aws():
@@ -1090,7 +1090,7 @@ def run_nas_aws():
     update_processor_property('nas_aws', 'FetchS3Object_aws')
     update_processor_property('nas_aws', 'update_program_directory')
     update_processor_property('nas_aws', 'update_dimension_directory')
-    update_processor_property('nas_aws', 'stop_processor_group')
+    # update_processor_property('nas_aws', 'stop_processor_group')
 
 
 
@@ -1101,7 +1101,7 @@ def run_udise_aws():
     update_processor_property('udise_aws', 'FetchS3Object_aws')
     update_processor_property('udise_aws', 'update_program_directory')
     update_processor_property('udise_aws', 'update_dimension_directory')
-    update_processor_property('udise_aws', 'stop_processor_group')
+    # update_processor_property('udise_aws', 'stop_processor_group')
 
 
 def run_pgi_aws():
@@ -1444,7 +1444,7 @@ if __name__ == '__main__':
             run_all_programs_oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
-    if config['CREDs']['data_pull'] == 'true':
+      if config['CREDs']['data_pull'] == 'true':
         if config['CREDs']['storage_type'] == 'aws':
             onestep_aws()
         if config['CREDs']['storage_type'] == 'local':
