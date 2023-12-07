@@ -1080,7 +1080,7 @@ def run_pm_poshan_aws():
     update_processor_property('pm_poshan_aws', 'FetchS3Object_aws')
     update_processor_property('pm_poshan_aws', 'update_program_directory')
     update_processor_property('pm_poshan_aws', 'update_dimension_directory')
-    # update_processor_property('pm_poshan_aws', 'stop_processor_group')
+    update_processor_property('pm_poshan_aws', 'stop_processor_group')
 
 
 def run_nas_aws():
@@ -1090,7 +1090,7 @@ def run_nas_aws():
     update_processor_property('nas_aws', 'FetchS3Object_aws')
     update_processor_property('nas_aws', 'update_program_directory')
     update_processor_property('nas_aws', 'update_dimension_directory')
-    # update_processor_property('nas_aws', 'stop_processor_group')
+    update_processor_property('nas_aws', 'stop_processor_group')
 
 
 
@@ -1101,7 +1101,7 @@ def run_udise_aws():
     update_processor_property('udise_aws', 'FetchS3Object_aws')
     update_processor_property('udise_aws', 'update_program_directory')
     update_processor_property('udise_aws', 'update_dimension_directory')
-    # update_processor_property('udise_aws', 'stop_processor_group')
+    update_processor_property('udise_aws', 'stop_processor_group')
 
 
 def run_pgi_aws():
