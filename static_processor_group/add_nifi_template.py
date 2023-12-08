@@ -1175,6 +1175,7 @@ def run_pm_poshan_local():
     update_processor_property('pm_poshan_local', 'FetchS3Object_local')
     update_processor_property('pm_poshan_local', 'update_program_directory')
     update_processor_property('pm_poshan_local', 'update_dimension_directory')
+    update_processor_property('pm_poshan_local', 'stop_processor_group')
 
 
 def run_nas_local():
@@ -1184,6 +1185,7 @@ def run_nas_local():
     update_processor_property('nas_local', 'FetchS3Object_local')
     update_processor_property('nas_local', 'update_program_directory')
     update_processor_property('nas_local', 'update_dimension_directory')
+    update_processor_property('nas_local', 'stop_processor_group')
 
 
 def run_udise_local():
@@ -1193,6 +1195,7 @@ def run_udise_local():
     update_processor_property('udise_local', 'FetchS3Object_local')
     update_processor_property('udise_local', 'update_program_directory')
     update_processor_property('udise_local', 'update_dimension_directory')
+    update_processor_property('udise_local', 'stop_processor_group')
 
 
 def run_pgi_local():
@@ -1211,6 +1214,7 @@ def run_nishtha_local():
     update_processor_property('nishtha_local', 'FetchS3Object_local')
     update_processor_property('nishtha_local', 'update_program_directory')
     update_processor_property('nishtha_local', 'update_dimension_directory')
+    update_processor_property('nishtha_local', 'stop_processor_group')
 
 
 def get_outputports(processor_group_name, output_port):
@@ -1406,6 +1410,7 @@ def onestep_local():
     update_processor_property('onestep_dataingestion_local', 'update_program_directory')
     update_processor_property('onestep_dataingestion_local', 'update_dimension_directory')
     update_processor_property('onestep_dataingestion_local', 'onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_local', 'stop_processor_group')
 
 
 if __name__ == '__main__':
