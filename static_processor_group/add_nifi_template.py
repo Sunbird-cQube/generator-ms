@@ -1349,14 +1349,20 @@ def run_all_programs_oracle():
     upload_template('pm_poshan_oracle.xml')
     instantiate_template('pm_poshan_oracle.xml')
     update_processor_property('pm_poshan_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('pm_poshan_oracle', 'stop_processor_group')
+
 
     upload_template('nas_oracle.xml')
     instantiate_template('nas_oracle.xml')
     update_processor_property('nas_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('nas_oracle', 'stop_processor_group')
+    
 
     upload_template('udise_oracle.xml')
     instantiate_template('udise_oracle.xml')
     update_processor_property('udise_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('udise_oracle', 'stop_processor_group')
+
 
     upload_template('pgi_oracle.xml')
     instantiate_template('pgi_oracle.xml')
@@ -1470,5 +1476,4 @@ if __name__ == '__main__':
         if config['CREDs']['storage_type'] == 'local':
             onestep_local()
         if config['CREDs']['storage_type'] == 'oracle':
-            onestep_oracle()
-            
+            onestep_oracle()            
