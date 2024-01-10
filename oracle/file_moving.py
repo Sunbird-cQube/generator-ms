@@ -23,7 +23,6 @@ class FileMover:
                     shutil.copy(paths, dimension_file_location)
                 else:
                     shutil.copy(paths, file_destination)
-                print('successfully moved the file to ' + file_destination)
 
 file_mover = FileMover()
 file_mover.move_files()
