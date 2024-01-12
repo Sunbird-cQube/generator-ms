@@ -115,6 +115,14 @@ def instantiate_template_codes(processor_group):
             "originY": -520,
             "disconnectedNodeAcknowledged": "false"
         }
+    if processor_group.__contains__('onestep_dataingestion_azure'):
+        template_id = get_template_id('onestep_dataingestion_azure')
+        data = {
+            "templateId": template_id,
+            "originX": -550,
+            "originY": -520,
+            "disconnectedNodeAcknowledged": "false"
+        }
     if processor_group.__contains__('adapters'):
         template_id = get_template_id('Run_adapters')
         data = {
@@ -154,6 +162,14 @@ def instantiate_template_codes(processor_group):
             "templateId": template_id,
             "originX": -1296,
             "originY": -1090,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('onestep_dataingestion_oracle'):
+        template_id = get_template_id('onestep_dataingestion_oracle')
+        data = {
+            "templateId": template_id,
+            "originX": -550,
+            "originY": -520,
             "disconnectedNodeAcknowledged": "false"
         }
     get_import_template = requests.post(
@@ -470,6 +486,30 @@ def instantiate_template(processor_group):
             "originY": 200,
             "disconnectedNodeAcknowledged": "false"
         }
+    elif processor_group.__contains__('pm_poshan_azure'):
+        template_id = get_template_id('pm_poshan_azure')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -368,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('nas_azure'):
+        template_id = get_template_id('nas_azure')
+        data = {
+            "templateId": template_id,
+            "originX": 592,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
+    elif processor_group.__contains__('udise_azure'):
+        template_id = get_template_id('udise_azure')
+        data = {
+            "templateId": template_id,
+            "originX": 1080,
+            "originY": -624,
+            "disconnectedNodeAcknowledged": "false"
+        }
     elif processor_group.__contains__('Code_azure'):
         template_id = get_template_id('Run Latest Code azure')
         data = {
@@ -501,7 +541,7 @@ def instantiate_template(processor_group):
             "originX": -1296,
             "originY": -832,
             "disconnectedNodeAcknowledged": "false"
-        }
+        }    
     get_import_template = requests.post(
         f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
     if get_import_template.ok:
@@ -1216,6 +1256,33 @@ def run_nishtha_local():
     update_processor_property('nishtha_local', 'update_dimension_directory')
     update_processor_property('nishtha_local', 'stop_processor_group')
 
+# Azure Program specific processor group
+def udise_azure():
+    upload_template('udise_azure.xml')
+    instantiate_template('udise_azure.xml')
+    update_processor_property('udise_azure', 'ListAzure')
+    update_processor_property('udise_azure', 'FetchAzure')
+    update_processor_property('udise_azure', 'update_program_directory')
+    update_processor_property('udise_azure', 'update_dimension_directory')
+    update_processor_property('udise_azure', 'stop_processor_group')
+
+def nas_azure():
+    upload_template('nas_azure.xml')
+    instantiate_template('nas_azure.xml')
+    update_processor_property('nas_azure', 'ListAzure')
+    update_processor_property('nas_azure', 'FetchAzure')
+    update_processor_property('nas_azure', 'update_program_directory')
+    update_processor_property('nas_azure', 'update_dimension_directory')
+    update_processor_property('nas_azure', 'stop_processor_group')
+
+def pm_poshan_azure():
+    upload_template('pm_poshan_azure.xml')
+    instantiate_template('pm_poshan_azure.xml')
+    update_processor_property('pm_poshan_azure', 'ListAzure')
+    update_processor_property('pm_poshan_azure', 'FetchAzure')
+    update_processor_property('pm_poshan_azure', 'update_program_directory')
+    update_processor_property('pm_poshan_azure', 'update_dimension_directory')
+    update_processor_property('pm_poshan_azure', 'stop_processor_group')
 
 def get_outputports(processor_group_name, output_port):
     pg_source = get_processor_group_ports(processor_group_name)
@@ -1341,14 +1408,20 @@ def run_all_programs_oracle():
     upload_template('pm_poshan_oracle.xml')
     instantiate_template('pm_poshan_oracle.xml')
     update_processor_property('pm_poshan_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('pm_poshan_oracle', 'stop_processor_group')
+
 
     upload_template('nas_oracle.xml')
     instantiate_template('nas_oracle.xml')
     update_processor_property('nas_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('nas_oracle', 'stop_processor_group')
+    
 
     upload_template('udise_oracle.xml')
     instantiate_template('udise_oracle.xml')
     update_processor_property('udise_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('udise_oracle', 'stop_processor_group')
+
 
     upload_template('pgi_oracle.xml')
     instantiate_template('pgi_oracle.xml')
@@ -1412,11 +1485,28 @@ def onestep_local():
     update_processor_property('onestep_dataingestion_local', 'onestepInvokeHTTP')
     update_processor_property('onestep_dataingestion_local', 'stop_processor_group')
 
+def onestep_azure():
+    upload_template('onestep_dataingestion_azure.xml')
+    instantiate_template_codes('onestep_dataingestion_azure.xml')
+    update_processor_property('onestep_dataingestion_azure', 'ListAzure')
+    update_processor_property('onestep_dataingestion_azure', 'FetchAzure')
+    update_processor_property('onestep_dataingestion_azure', 'update_program_directory')
+    update_processor_property('onestep_dataingestion_azure', 'update_dimension_directory')
+    update_processor_property('onestep_dataingestion_azure', 'onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_azure','stop_processor_group')
+
+def onestep_oracle():
+    upload_template('onestep_dataingestion_oracle.xml')
+    instantiate_template_codes('onestep_dataingestion_oracle.xml')
+    update_processor_property('onestep_dataingestion_oracle', 'GenerateFlowFile_oracle')
+    update_processor_property('onestep_dataingestion_oracle', 'onestepInvokeHTTP')
+    update_processor_property('onestep_dataingestion_oracle', 'stop_processor_group')
+
 
 if __name__ == '__main__':
     common_processor_groups()
     adapters()
-    telemetry()
+    # telemetry()
     if config['CREDs']['storage_type'] == 'aws':
         run_latest_aws()
         if config['CREDs']['instance_type'] != 'others':
@@ -1449,9 +1539,17 @@ if __name__ == '__main__':
             run_all_programs_oracle()
     if config['CREDs']['storage_type'] == 'azure':
         azure()
+        if config['CREDs']['instance_type'] != 'others':
+            nas_azure()
+            pm_poshan_azure()
+            udise_azure()
     if config['CREDs']['data_pull'] == 'true':
         if config['CREDs']['storage_type'] == 'aws':
             onestep_aws()
         if config['CREDs']['storage_type'] == 'local':
             onestep_local()
-            
+        if config['CREDs']['storage_type'] == 'oracle':
+            onestep_oracle()  
+        if config['CREDs']['storage_type'] == 'azure':
+            onestep_azure() 
+                 
