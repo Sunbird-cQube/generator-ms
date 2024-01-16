@@ -104,7 +104,7 @@ def instantiate_template_codes(processor_group):
         data = {
             "templateId": template_id,
             "originX": -550,
-            "originY": -520,
+            "originY": -650,
             "disconnectedNodeAcknowledged": "false"
         }
     if processor_group.__contains__('onestep_dataingestion_aws'):
@@ -172,6 +172,14 @@ def instantiate_template_codes(processor_group):
             "originY": -520,
             "disconnectedNodeAcknowledged": "false"
         }
+    elif processor_group.__contains__('stop_processor'):
+        template_id = get_template_id('stop_processor')
+        data = {
+            "templateId": template_id,
+            "originX": -920,
+            "originY": -550,
+            "disconnectedNodeAcknowledged": "false"
+        }   
     get_import_template = requests.post(
         f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
     if get_import_template.ok:
@@ -541,7 +549,7 @@ def instantiate_template(processor_group):
             "originX": -1296,
             "originY": -832,
             "disconnectedNodeAcknowledged": "false"
-        }    
+        }        
     get_import_template = requests.post(
         f'{nifi_host}:{nifi_port}/nifi-api/process-groups/{root_pg_id}/template-instance', json=data)
     if get_import_template.ok:
@@ -1498,6 +1506,8 @@ def onestep_azure():
 def onestep_oracle():
     upload_template('onestep_dataingestion_oracle.xml')
     instantiate_template_codes('onestep_dataingestion_oracle.xml')
+    upload_template('stop_processor.xml')
+    instantiate_template_codes('stop_processor.xml')
     update_processor_property('onestep_dataingestion_oracle', 'GenerateFlowFile_oracle')
     update_processor_property('onestep_dataingestion_oracle', 'onestepInvokeHTTP')
     update_processor_property('onestep_dataingestion_oracle', 'stop_processor_group')
@@ -1506,7 +1516,7 @@ def onestep_oracle():
 if __name__ == '__main__':
     common_processor_groups()
     adapters()
-    # telemetry()
+    telemetry()
     if config['CREDs']['storage_type'] == 'aws':
         run_latest_aws()
         if config['CREDs']['instance_type'] != 'others':
