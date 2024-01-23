@@ -7,7 +7,7 @@ python3 NISHTHA_course_wise_status.py nishtha NISHTHA_course-wise_certification.
 python3 NISHTHA_medium_instruction.py nishtha NISHTHA_medium_of_instructions.csv
 python3 NISHTHA_district_wise_status.py nishtha NISHTHA_Program-wise_achieved_certificates.csv
 python3 NISHTHA_implementation_status.py nishtha NISHTHA_program_implementation_status.csv
-python3 NISHTHA_percentage_against_potential_base.py nishtha NISHTHA_participants_per_program.csv
+python3 NISHTHA_percentage_against_potential_base.py nishtha NISHTHA_Program-wise_achieved_certificates.csv
 
 python3 NAS_state_wise_performance.py nas nas_all-dashboard.csv
 python3 NAS_implementation_status.py nas nas_program-started.csv
