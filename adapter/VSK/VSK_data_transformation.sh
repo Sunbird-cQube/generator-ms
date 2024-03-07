@@ -13,6 +13,7 @@ python3 NAS_state_wise_performance.py nas nas_all-dashboard.csv
 python3 NAS_implementation_status.py nas nas_program-started.csv
 
 python3 PGI_district_wise_performance.py pgi pgi_all-dashboard.csv
+python3 PGI_state_wise_performance.py pgi pgi_state-wise-performance.csv
 
 python3 PM_Poshan_progress_status.py pm-poshan pm-poshan_access-across-india.csv
 
