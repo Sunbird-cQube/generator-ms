@@ -20,4 +20,6 @@ python3 PM_Poshan_progress_status.py pm-poshan pm-poshan_access-across-india.csv
 python3 UDISE_state_wise_performance.py udise udise-all-dashboard.csv
 python3 UDISE_implementation_status.py udise udise_program-started.csv
 
-python3 School-attendance.py school-attendance school-attendance.csv
+python3 Teachers_marked.py school-attendance teachersmarked.csv
+python3 Teachers_present.py school-attendance teacherspresent.csv
+python3 Total_teachers.py school-attendance totalteachers.csv
